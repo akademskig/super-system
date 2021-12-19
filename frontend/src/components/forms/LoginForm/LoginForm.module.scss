@@ -1,0 +1,26 @@
+@import "../../../styles/variables.scss";
+
+.root {
+  width: 300px;
+  margin: auto;
+}
+.title {
+  text-align: center;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & > :nth-child(n) {
+    margin-bottom: $padding-l;
+  }
+  & > :last-child {
+    margin-bottom: 0;
+  }
+}
+.button {
+  margin-top: $padding-l;
+  margin-bottom: 0;
+  padding: $padding-l;
+}

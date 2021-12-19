@@ -1,0 +1,36 @@
+@import "../../../styles/variables";
+
+.root {
+  display: flex;
+  padding: $padding-m;
+  font-size: 1rem;
+  text-transform: uppercase;
+  background-color: $primary-main;
+  color: white;
+  border: none;
+  justify-content: center;
+  &:active {
+    animation: clickAnimation 100ms 1;
+  }
+
+  transition: $transtion-1;
+}
+
+.button {
+  &:hover {
+    box-shadow: 0 0 5px 2px $primary-light;
+    background-color: lighten($primary-main, 5);
+  }
+}
+.link {
+  text-decoration: none;
+  &:hover {
+    color: $secondary-light;
+  }
+}
+.rounded {
+  border-radius: 4px;
+}
+.active {
+  color: $secondary-light;
+}

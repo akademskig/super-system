@@ -1,0 +1,22 @@
+@import "../../../styles/variables.scss";
+
+.root {
+  width: fit-content;
+  margin: auto;
+  box-shadow: $box-shadow-sm;
+  border-radius: 4px;
+}
+.tabContent {
+  padding: $padding-xl;
+}
+.tabs {
+  border-radius: 4px;
+  min-width: 300px;
+  display: flex;
+}
+.tabButton {
+  padding: $padding-l;
+  &:nth-child(n) {
+    border-left: 1px solid $primary-dark;
+  }
+}

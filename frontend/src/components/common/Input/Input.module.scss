@@ -1,0 +1,27 @@
+@import "../../../styles/variables.scss";
+
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  outline: none;
+}
+.input {
+  border: solid 1px $gray-3;
+  border-radius: 4px;
+  padding: $padding-m;
+  line-height: 25px;
+  font-size: 1rem;
+}
+.error {
+  border: 2px solid red;
+  &:focus-visible {
+    border: 2px solid red;
+  }
+  &:focus {
+    border: 2px solid red;
+  }
+}
+.errorMessage {
+  color: red;
+}

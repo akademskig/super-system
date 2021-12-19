@@ -1,16 +1,19 @@
-import React from "react"
-import { BrowserRouter } from "react-router-dom"
-import styles from "./App.module.scss"
-import { MainRoutes } from "./routes"
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import styles from "./App.module.scss";
+import AuthProvider from "./components/providers/AuthProvider";
+import { MainRoutes } from "./routes";
 
 function App() {
   return (
     <div className={styles.root}>
       <BrowserRouter>
-        <MainRoutes />
+        <AuthProvider>
+          <MainRoutes />
+        </AuthProvider>
       </BrowserRouter>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

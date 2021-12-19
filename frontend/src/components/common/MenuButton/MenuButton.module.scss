@@ -1,0 +1,22 @@
+@import "../../../styles/variables.scss";
+
+.root {
+  position: relative;
+}
+.menu {
+  position: absolute;
+  right: 0;
+  background-color: $primary-main;
+  box-shadow: $box-shadow-sm;
+  transition: $transtion-2;
+  overflow: hidden;
+  opacity: 0;
+  border-radius: 4px;
+  z-index: 1;
+  pointer-events: none;
+  &.opened {
+    pointer-events: all;
+    padding: $padding-m;
+    opacity: 1;
+  }
+}
