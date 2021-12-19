@@ -22,7 +22,7 @@ const LoginForm = () => {
       const { email, password } = values;
       const res = await signIn({ email, password });
       setAuthData(res);
-      navigate("/");
+      navigate("/dashboard");
     },
     [navigate, setAuthData]
   );

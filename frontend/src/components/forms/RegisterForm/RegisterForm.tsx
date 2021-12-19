@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../../api/public/auth";
 import Button from "../../common/Button";
 import Input from "../../common/Input";
@@ -14,14 +15,16 @@ const RegisterForm = () => {
   } = useForm();
 
   const { setAuthData } = useAuth();
+  const navigate = useNavigate()
 
   const onSubmit = useCallback(
     async (values) => {
       const { email, password, username } = values;
       const res = await registerUser({ email, password, username });
       setAuthData(res);
+      navigate('/auth#signIn')
     },
-    [setAuthData]
+    [navigate, setAuthData]
   );
 
   return (

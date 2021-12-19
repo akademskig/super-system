@@ -21,7 +21,6 @@ const Input = (
   }: Props & InputHTMLAttributes<HTMLInputElement>,
   ref: any
 ) => {
-  console.log(error);
   return (
     <div className={styles.root}>
       <label>{label}</label>

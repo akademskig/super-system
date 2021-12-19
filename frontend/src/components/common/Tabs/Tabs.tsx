@@ -1,16 +1,18 @@
-import { ReactNode, useState } from "react";
-import Button from "../Button";
-import styles from "./Tabs.module.scss";
+import { ReactNode, useState } from "react"
+import Button from "../Button"
+import styles from "./Tabs.module.scss"
 
 type Tab = {
-  label: string;
-  content: ReactNode;
-};
+  label: string
+  content: ReactNode
+  active?: boolean
+}
 type Props = {
-  tabs: Tab[];
-};
+  tabs: Tab[]
+}
 const Tabs = ({ tabs }: Props) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const activeTab = tabs.findIndex((tab) => tab.active)
+  const [activeIndex, setActiveIndex] = useState(activeTab > -1 ? activeTab : 0)
   return (
     <div className={styles.root}>
       <div className={styles.tabs}>
@@ -28,12 +30,12 @@ const Tabs = ({ tabs }: Props) => {
                 {" "}
                 {tab.label}
               </Button>
-            );
+            )
           })}
       </div>
       <div className={styles.tabContent}>{tabs[activeIndex].content}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Tabs;
+export default Tabs

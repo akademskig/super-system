@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import classNames from "classnames"
 import {
   createRef,
   PropsWithChildren,
@@ -6,45 +6,45 @@ import {
   useCallback,
   useEffect,
   useState,
-} from "react";
-import { Link } from "react-router-dom";
-import Button from "../Button";
+} from "react"
+import { Link } from "react-router-dom"
+import Button from "../Button"
 
-import styles from "./MenuButton.module.scss";
-import { isClickedOutside } from "./utils";
+import styles from "./MenuButton.module.scss"
+import { isClickedOutside } from "./utils"
 
 type Option = {
-  label: string;
-  link?: string;
-  icon: ReactNode;
-  action?: () => void;
-};
+  label: string
+  link?: string
+  icon: ReactNode
+  action?: () => void
+}
 
 type Props = {
-  options: Option[];
-};
+  options: Option[]
+}
 
 const MenuButton = ({ children, options }: PropsWithChildren<Props>) => {
-  const [opened, setOpened] = useState(false);
-  const ref = createRef<HTMLDivElement>();
+  const [opened, setOpened] = useState(false)
+  const ref = createRef<HTMLDivElement>()
 
   const onClick = useCallback(() => {
-    setOpened(!opened);
-  }, [opened]);
+    setOpened(!opened)
+  }, [opened])
 
   const checkClick = useCallback(
     (e) => {
       if (isClickedOutside(e, ref) && opened) {
-        setOpened(false);
+        setOpened(false)
       }
     },
     [opened, ref]
-  );
+  )
 
   useEffect(() => {
-    window.addEventListener("click", checkClick);
-    return () => window.removeEventListener("click", checkClick);
-  });
+    window.addEventListener("click", checkClick)
+    return () => window.removeEventListener("click", checkClick)
+  })
 
   return (
     <div className={styles.root}>
@@ -59,13 +59,13 @@ const MenuButton = ({ children, options }: PropsWithChildren<Props>) => {
               <Link key={idx} to={option?.link || ""}>
                 <Button link onClick={option?.action}>
                   {option.icon}
-                  {option.label}
+                  <span>{option.label}</span>
                 </Button>
               </Link>
-            );
+            )
           })}
       </div>
     </div>
-  );
-};
-export default MenuButton;
+  )
+}
+export default MenuButton

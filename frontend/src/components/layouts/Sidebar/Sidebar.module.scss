@@ -1,0 +1,34 @@
+@import "../../../styles/variables.scss";
+
+.root {
+  height: calc(100vh - 66px);
+  background-color: $primary-main;
+  width: 185px;
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+  a {
+    width: 100%;
+  }
+  & > :nth-child(n) {
+    button {
+      justify-content: flex-start;
+      width: 100%;
+      padding: $padding-l;
+      border-bottom: solid 2px $primary-dark;
+    }
+  }
+  & > :first-child {
+    border-top: solid 2px $primary-dark;
+  }
+  transition: $transtion-2;
+
+  @media screen and (max-width: $sm) {
+    width: 50px;
+    button {
+      > span {
+        display: none;
+      }
+    }
+  }
+}
