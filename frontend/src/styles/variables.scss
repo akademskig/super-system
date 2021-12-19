@@ -19,6 +19,8 @@ $gray-2: #e5e5e5;
 $gray-3: #ccccce;
 
 $box-shadow-sm: 0 2px 5px -1px $gray-3;
+$box-shadow-bottom-right-sm: 2px 5px 5px -1px $gray-3;
+$box-shadow-md: 0 5px 8px 1px $gray-3;
 
 $transtion: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
   box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
