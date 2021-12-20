@@ -1,17 +1,27 @@
-import { useMemo } from "react"
-import { FaSignInAlt, FaSignOutAlt, FaUserAstronaut } from "react-icons/fa"
-import MenuButton from "../../../common/MenuButton"
-import useAuth from "../../../hooks/useAuth"
+import { useMemo } from 'react'
+import {
+  FaHamburger,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUserAstronaut,
+} from 'react-icons/fa'
+import Button from '../../../common/Button'
+import MenuButton from '../../../common/MenuButton'
+import useAuth from '../../../hooks/useAuth'
 
-import styles from "./Toolbar.module.scss"
+import styles from './Toolbar.module.scss'
 
-const Toolbar = () => {
+type Props = {
+  onMobileOpen: () => void
+  onTabletOpen: () => void
+}
+const Toolbar = ({ onMobileOpen, onTabletOpen }: Props) => {
   const { logout, isAuth, user } = useAuth()
 
   const isAuthOptions = useMemo(
     () => [
       {
-        label: "Logout",
+        label: 'Logout',
         icon: <FaSignOutAlt />,
         action: logout,
       },
@@ -22,9 +32,9 @@ const Toolbar = () => {
   const notAuthOptions = useMemo(
     () => [
       {
-        label: "Sign In",
+        label: 'Sign In',
         icon: <FaSignInAlt />,
-        link: "/auth#signIn",
+        link: '/auth#signIn',
       },
     ],
     []
@@ -32,16 +42,34 @@ const Toolbar = () => {
 
   return (
     <div className={styles.root}>
-      {isAuth ? (
-        <MenuButton options={isAuthOptions}>
-          <FaUserAstronaut />
-          <span>{user?.username}</span>
-        </MenuButton>
-      ) : (
-        <MenuButton options={notAuthOptions}>
-          <FaUserAstronaut />
-        </MenuButton>
-      )}
+      <div>
+        <Button
+          className={styles.hamburgerButtonMobile}
+          link
+          onClick={onMobileOpen}
+        >
+          <FaHamburger />
+        </Button>
+        <Button
+          className={styles.hamburgerButtonTablet}
+          link
+          onClick={onTabletOpen}
+        >
+          <FaHamburger />
+        </Button>
+      </div>
+      <div className={styles.menuItems}>
+        {isAuth ? (
+          <MenuButton options={isAuthOptions}>
+            <FaUserAstronaut />
+            <span>{user?.username}</span>
+          </MenuButton>
+        ) : (
+          <MenuButton options={notAuthOptions}>
+            <FaUserAstronaut />
+          </MenuButton>
+        )}
+      </div>
     </div>
   )
 }

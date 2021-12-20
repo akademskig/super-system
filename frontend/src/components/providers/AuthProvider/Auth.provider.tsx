@@ -7,7 +7,7 @@ import React, {
   Dispatch,
   useEffect,
   useCallback,
-} from "react"
+} from 'react'
 
 interface IAuthProvider {
   children: ReactElement | ReactElement[]
@@ -27,14 +27,14 @@ export type TUser = {
   email: string
   role: string
 }
-const TOKEN_KEY = "accessToken"
-const USER_KEY = "user"
+const TOKEN_KEY = 'accessToken'
+const USER_KEY = 'user'
 
 export const cacheToken = (token: string) => {
   localStorage.setItem(TOKEN_KEY, token)
 }
 export const getToken = () => {
-  return localStorage.getItem(TOKEN_KEY) || ""
+  return localStorage.getItem(TOKEN_KEY) || ''
 }
 export const removeToken = () => {
   return localStorage.removeItem(TOKEN_KEY)
@@ -44,7 +44,7 @@ export const cacheUser = (user: TUser) => {
   return localStorage.setItem(USER_KEY, JSON.stringify(user))
 }
 export const getUser = () => {
-  return JSON.parse(localStorage.getItem(USER_KEY) || "{}")
+  return JSON.parse(localStorage.getItem(USER_KEY) || '{}')
 }
 
 export const isAuth = () => {
@@ -53,7 +53,7 @@ export const isAuth = () => {
 
 const initialValue = {
   user: null,
-  accessToken: "",
+  accessToken: '',
   setAuthData: (v: SetStateAction<any | null>) => (value: any | null) => value,
   isAuth: false,
 }

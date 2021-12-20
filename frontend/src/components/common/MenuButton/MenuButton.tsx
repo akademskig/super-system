@@ -1,4 +1,4 @@
-import classNames from "classnames"
+import classNames from 'classnames'
 import {
   createRef,
   PropsWithChildren,
@@ -6,12 +6,12 @@ import {
   useCallback,
   useEffect,
   useState,
-} from "react"
-import { Link } from "react-router-dom"
-import Button from "../Button"
+} from 'react'
+import { Link } from 'react-router-dom'
+import Button from '../Button'
 
-import styles from "./MenuButton.module.scss"
-import { isClickedOutside } from "./utils"
+import styles from './MenuButton.module.scss'
+import { isClickedOutside } from './utils'
 
 type Option = {
   label: string
@@ -42,8 +42,8 @@ const MenuButton = ({ children, options }: PropsWithChildren<Props>) => {
   )
 
   useEffect(() => {
-    window.addEventListener("click", checkClick)
-    return () => window.removeEventListener("click", checkClick)
+    window.addEventListener('click', checkClick)
+    return () => window.removeEventListener('click', checkClick)
   })
 
   return (
@@ -55,13 +55,18 @@ const MenuButton = ({ children, options }: PropsWithChildren<Props>) => {
       >
         {options.length &&
           options.map((option, idx) => {
-            return (
-              <Link key={idx} to={option?.link || ""}>
+            return option.link ? (
+              <Link key={idx} to={option?.link || ''}>
                 <Button link onClick={option?.action}>
                   {option.icon}
                   <span>{option.label}</span>
                 </Button>
               </Link>
+            ) : (
+              <Button key={idx} link onClick={option?.action}>
+                {option.icon}
+                <span>{option.label}</span>
+              </Button>
             )
           })}
       </div>

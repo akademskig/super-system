@@ -1,0 +1,57 @@
+@import '../../../../styles/variables.scss';
+
+.root {
+  height: 100vh;
+  background-color: $primary-main;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: $box-shadow-bottom-right-sm;
+  transition: $transtion-2;
+  overflow: hidden;
+}
+.opened {
+  width: 100%;
+  @media screen and (min-width: $xs) {
+    width: 0;
+  }
+}
+.topBar {
+  color: white;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: $padding-l;
+  svg {
+    font-size: 1.5rem;
+  }
+  button {
+    padding: 0;
+  }
+  border-bottom: 2px solid $primary-dark;
+}
+
+.items {
+  width: 100%;
+  & > :nth-child(n) {
+    button {
+      justify-content: flex-start;
+      width: 100%;
+      padding: $padding-l;
+      border-bottom: solid 2px $primary-dark;
+    }
+  }
+  & > :first-child {
+    border-top: solid 2px $primary-dark;
+  }
+
+  & a {
+    width: 100%;
+  }
+}

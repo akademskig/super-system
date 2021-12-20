@@ -1,14 +1,24 @@
-import { PropsWithChildren } from "react"
-import Sidebar from "../Sidebar"
-import Toolbar from "./Toolbar"
-import styles from "./MainLayout.module.scss"
+import { PropsWithChildren, useState } from 'react'
+import Sidebar from './Sidebar'
+import Toolbar from './Toolbar'
+import styles from './MainLayout.module.scss'
+import MobileSidebar from './MobileSidebar'
 
 const MainLayout = ({ children }: PropsWithChildren<any>) => {
+  const [mobileOpened, setMobileOpened] = useState(true)
+  const [tabletOpened, setTabletOpened] = useState(true)
   return (
     <div>
-      <Toolbar />
+      <Toolbar
+        onMobileOpen={() => setMobileOpened(true)}
+        onTabletOpen={() => setTabletOpened(!tabletOpened)}
+      />
       <div className={styles.sidebarMain}>
-        <Sidebar />
+        <Sidebar opened={tabletOpened} />
+        <MobileSidebar
+          opened={mobileOpened}
+          onClose={() => setMobileOpened(false)}
+        />
         <main className={styles.content}>{children}</main>
       </div>
     </div>

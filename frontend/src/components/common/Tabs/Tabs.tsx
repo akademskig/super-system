@@ -1,6 +1,6 @@
-import { ReactNode, useState } from "react"
-import Button from "../Button"
-import styles from "./Tabs.module.scss"
+import { ReactNode, useState } from 'react'
+import Button from '../Button'
+import styles from './Tabs.module.scss'
 
 type Tab = {
   label: string
@@ -27,7 +27,7 @@ const Tabs = ({ tabs }: Props) => {
                 onClick={() => setActiveIndex(index)}
                 link
               >
-                {" "}
+                {' '}
                 {tab.label}
               </Button>
             )

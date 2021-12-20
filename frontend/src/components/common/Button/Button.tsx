@@ -1,14 +1,14 @@
-import classNames from "classnames";
-import { ButtonHTMLAttributes, PropsWithChildren, useCallback } from "react";
+import classNames from 'classnames'
+import { ButtonHTMLAttributes, PropsWithChildren, useCallback } from 'react'
 
-import styles from "./Button.module.scss";
+import styles from './Button.module.scss'
 
 type Props = {
-  onClick?: (e: Event) => void;
-  link?: boolean;
-  rounded?: boolean;
-  active?: boolean;
-};
+  onClick?: (e: Event) => void
+  link?: boolean
+  rounded?: boolean
+  active?: boolean
+}
 
 const Button = ({
   children,
@@ -21,10 +21,10 @@ const Button = ({
 }: PropsWithChildren<Props & ButtonHTMLAttributes<HTMLButtonElement>>) => {
   const handleClick = useCallback(
     (e) => {
-      onClick && onClick(e);
+      onClick && onClick(e)
     },
     [onClick]
-  );
+  )
 
   return (
     <button
@@ -41,6 +41,6 @@ const Button = ({
     >
       {children}
     </button>
-  );
-};
-export default Button;
+  )
+}
+export default Button

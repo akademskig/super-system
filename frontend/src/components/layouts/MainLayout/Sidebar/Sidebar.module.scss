@@ -1,16 +1,18 @@
-@import "../../../styles/variables.scss";
+@import '../../../../styles/variables.scss';
 
 .root {
   height: calc(100vh - 66px);
   background-color: $primary-main;
-  width: 185px;
+  width: 50px;
   display: inline-flex;
   align-items: center;
   flex-direction: column;
   box-shadow: $box-shadow-bottom-right-sm;
-
-  a {
-    width: 100%;
+  transition: $transtion-2;
+  button {
+    > span {
+      display: none;
+    }
   }
   & > :nth-child(n) {
     button {
@@ -23,14 +25,28 @@
   & > :first-child {
     border-top: solid 2px $primary-dark;
   }
-  transition: $transtion-2;
+  a {
+    width: 100%;
+  }
 
-  @media screen and (max-width: $sm) {
-    width: 50px;
+  @media screen and (max-width: $xs) {
+    display: none;
+  }
+
+  @media screen and (min-width: $md) {
+    width: 185px;
     button {
       > span {
-        display: none;
+        display: inline-block;
       }
+    }
+  }
+}
+.opened {
+  width: 185px;
+  button {
+    > span {
+      display: inline-block;
     }
   }
 }

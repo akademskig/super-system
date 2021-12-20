@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router-dom"
-import DashboardPage from "../components/pages/DashboardPage"
+import { Route, Routes } from 'react-router-dom'
+import DashboardPage from '../components/pages/DashboardPage'
 
 const AppRoutes = () => {
   return (

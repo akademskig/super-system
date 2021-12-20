@@ -1,9 +1,9 @@
-import { useMemo } from "react"
-import { useLocation } from "react-router-dom"
-import Tabs from "../../common/Tabs/Tabs"
-import LoginForm from "../../forms/LoginForm"
-import RegisterForm from "../../forms/RegisterForm"
-import styles from "./AuthPage.module.scss"
+import { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
+import Tabs from '../../common/Tabs/Tabs'
+import LoginForm from '../../forms/LoginForm'
+import RegisterForm from '../../forms/RegisterForm'
+import styles from './AuthPage.module.scss'
 
 const AuthPage = () => {
   const location = useLocation()
@@ -11,14 +11,14 @@ const AuthPage = () => {
   const tabs = useMemo(() => {
     return [
       {
-        label: "Sign in",
+        label: 'Sign in',
         content: <LoginForm />,
-        active: location.hash === "#signIn",
+        active: location.hash === '#signIn',
       },
       {
-        label: "Register",
+        label: 'Register',
         content: <RegisterForm />,
-        active: location.hash === "#register",
+        active: location.hash === '#register',
       },
     ]
   }, [location.hash])

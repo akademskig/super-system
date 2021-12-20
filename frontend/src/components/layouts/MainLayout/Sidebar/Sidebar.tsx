@@ -1,13 +1,18 @@
-import { Link } from "react-router-dom"
-import Button from "../../common/Button"
-import sidebarItems from "./sidebarItems"
-import styles from "./Sidebar.module.scss"
-import useAuth from "../../hooks/useAuth"
+import { Link } from 'react-router-dom'
+import Button from '../../../common/Button'
+import sidebarItems from './sidebarItems'
+import styles from './Sidebar.module.scss'
+import useAuth from '../../../hooks/useAuth'
+import classNames from 'classnames'
 
-const Sidebar = () => {
+type Props = {
+  opened: boolean
+}
+
+const Sidebar = ({ opened }: Props) => {
   const { isAuth } = useAuth()
   return (
-    <div className={styles.root}>
+    <div className={classNames(styles.root, { [styles.opened]: opened })}>
       {sidebarItems.map(({ label, Icon, link, authOnly }, index) => {
         return (
           ((!isAuth && !authOnly) || isAuth) && (

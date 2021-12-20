@@ -1,7 +1,7 @@
-import { BrowserRouter } from "react-router-dom"
-import styles from "./App.module.scss"
-import AuthProvider from "./components/providers/AuthProvider"
-import { MainRoutes } from "./routes"
+import { BrowserRouter } from 'react-router-dom'
+import styles from './App.module.scss'
+import AuthProvider from './components/providers/AuthProvider'
+import { MainRoutes } from './routes'
 
 function App() {
   return (

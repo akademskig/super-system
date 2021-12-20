@@ -1,15 +1,15 @@
-import classNames from "classnames";
-import { forwardRef, InputHTMLAttributes, ReactNode, RefCallback } from "react";
-import { ChangeHandler } from "react-hook-form";
-import styles from "./Input.module.scss";
+import classNames from 'classnames'
+import { forwardRef, InputHTMLAttributes, ReactNode, RefCallback } from 'react'
+import { ChangeHandler } from 'react-hook-form'
+import styles from './Input.module.scss'
 
 type Props = {
-  label?: string | ReactNode;
-  name: string;
-  onChange: ChangeHandler;
-  error?: any;
-  ref: RefCallback<any>;
-};
+  label?: string | ReactNode
+  name: string
+  onChange: ChangeHandler
+  error?: any
+  ref: RefCallback<any>
+}
 
 const Input = (
   {
@@ -33,6 +33,6 @@ const Input = (
       />
       {error && <small className={styles.errorMessage}>{error.message}</small>}
     </div>
-  );
-};
-export default forwardRef(Input);
+  )
+}
+export default forwardRef(Input)
