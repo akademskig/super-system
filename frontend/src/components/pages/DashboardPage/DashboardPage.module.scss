@@ -4,6 +4,9 @@
   padding: $padding-xl;
   box-sizing: border-box;
   width: 100%;
+  & a:hover {
+    color: $secondary-dark;
+  }
 }
 .dashboardItem {
   height: 100%;
