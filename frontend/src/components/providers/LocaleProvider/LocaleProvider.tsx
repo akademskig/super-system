@@ -3,13 +3,16 @@ import { IntlProvider } from 'react-intl'
 import messages from '../../../lang'
 import { Locales } from '../../../types/locales'
 
+const getDefaultLocale = () => {
+  return navigator.languages[0] as Locales
+}
 const initialValue = {
-  locale: Locales.EN,
+  locale: getDefaultLocale(),
   setLocale: (locale: Locales) => {},
 }
 export const LocaleContext = createContext(initialValue)
 const LocaleProvider = ({ children }: PropsWithChildren<any>) => {
-  const [locale, setLocale] = useState(Locales.HR)
+  const [locale, setLocale] = useState(initialValue.locale)
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>

@@ -7,6 +7,7 @@ import Flag from 'react-world-flags'
 import localeCountryMap from '../../../utils/localeCountryMap'
 import styles from './LocaleControl.module.scss'
 
+
 const LocaleControl = () => {
   const { locale, setLocale } = useLocale()
 

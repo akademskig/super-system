@@ -1,10 +1,14 @@
 import classNames from 'classnames'
 import { FaRegWindowClose } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { useIntl } from 'react-intl'
+
 import Button from '../../../common/Button'
 import useAuth from '../../../hooks/useAuth'
 import sidebarItems from '../Sidebar/sidebarItems'
+
 import styles from './MobileSidebar.module.scss'
+import messages from '../../../../lang/messages.lang'
 
 type Props = {
   onClose: () => void
@@ -12,6 +16,8 @@ type Props = {
 }
 const MobileSidebar = ({ onClose, opened }: Props) => {
   const { isAuth } = useAuth()
+  const { formatMessage } = useIntl()
+
   return (
     <div className={classNames(styles.root, { [styles.opened]: opened })}>
       <div className={styles.topBar}>
@@ -20,13 +26,16 @@ const MobileSidebar = ({ onClose, opened }: Props) => {
         </Button>
       </div>
       <div className={styles.items}>
-        {sidebarItems.map(({ label, Icon, link, authOnly }, index) => {
+        {sidebarItems.map(({ label, Icon, link, key, authOnly }, index) => {
           return (
             ((!isAuth && !authOnly) || isAuth) && (
               <Link key={index} to={link}>
                 <Button link onClick={onClose}>
                   <Icon />
-                  <span>{label}</span>
+                  <span>
+                    {' '}
+                    {formatMessage(messages[key as keyof typeof messages])}
+                  </span>
                 </Button>
               </Link>
             )
