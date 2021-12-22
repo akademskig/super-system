@@ -1,0 +1,16 @@
+.menu {
+  width: 80px;
+  button {
+    padding: 0;
+    &:nth-child(n) {
+      padding-bottom: 4px;
+    }
+    &:last-child {
+      padding-bottom: 0;
+    }
+    width: 100%;
+    img {
+      width: 30px;
+    }
+  }
+}

@@ -4,7 +4,7 @@ import DashboardPage from '../components/pages/DashboardPage'
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route index element={<DashboardPage />}/>
+      <Route index element={<DashboardPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
     </Routes>
   )

@@ -4,6 +4,8 @@ import sidebarItems from './sidebarItems'
 import styles from './Sidebar.module.scss'
 import useAuth from '../../../hooks/useAuth'
 import classNames from 'classnames'
+import { useIntl } from 'react-intl'
+import messages from '../../../../lang/messages.lang'
 
 type Props = {
   opened: boolean
@@ -11,15 +13,18 @@ type Props = {
 
 const Sidebar = ({ opened }: Props) => {
   const { isAuth } = useAuth()
+  const { formatMessage } = useIntl()
   return (
     <div className={classNames(styles.root, { [styles.opened]: opened })}>
-      {sidebarItems.map(({ label, Icon, link, authOnly }, index) => {
+      {sidebarItems.map(({ label, Icon, link, authOnly, key }, index) => {
         return (
           ((!isAuth && !authOnly) || isAuth) && (
             <Link key={index} to={link}>
               <Button link>
                 <Icon />
-                <span>{label}</span>
+                <span>
+                  {formatMessage(messages[key as keyof typeof messages])}
+                </span>
               </Button>
             </Link>
           )

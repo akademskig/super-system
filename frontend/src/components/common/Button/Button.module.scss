@@ -12,6 +12,7 @@
   justify-content: center;
   white-space: nowrap;
   transition: $transtion-1;
+  width: fit-content;
 
   & :nth-child(2) {
     margin-left: 8px;

@@ -2,10 +2,13 @@
 
 .root {
   position: relative;
+  display: flex;
 }
 .menu {
+  width: fit-content;
   position: absolute;
   right: 0;
+  top: 40px;
   background-color: $primary-main;
   box-shadow: $box-shadow-sm;
   transition: $transtion-2;
@@ -14,9 +17,9 @@
   border-radius: 4px;
   z-index: 1;
   pointer-events: none;
+  padding: $padding-m;
   &.opened {
     pointer-events: all;
-    padding: $padding-m;
     opacity: 1;
   }
 }

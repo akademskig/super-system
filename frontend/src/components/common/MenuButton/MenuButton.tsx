@@ -22,9 +22,14 @@ type Option = {
 
 type Props = {
   options: Option[]
+  classes?: Record<string, string>
 }
 
-const MenuButton = ({ children, options }: PropsWithChildren<Props>) => {
+const MenuButton = ({
+  children,
+  options,
+  classes,
+}: PropsWithChildren<Props>) => {
   const [opened, setOpened] = useState(false)
   const ref = createRef<HTMLDivElement>()
 
@@ -51,7 +56,9 @@ const MenuButton = ({ children, options }: PropsWithChildren<Props>) => {
       <Button onClick={onClick}>{children}</Button>
       <div
         ref={ref}
-        className={classNames(styles.menu, { [styles.opened]: opened })}
+        className={classNames(styles.menu, classes?.menu, {
+          [styles.opened]: opened,
+        })}
       >
         {options.length &&
           options.map((option, idx) => {

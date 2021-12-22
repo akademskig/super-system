@@ -43,7 +43,8 @@
   }
 }
 .opened {
-  width: 185px;
+  width: 300px;
+  max-width: fit-content;
   button {
     > span {
       display: inline-block;

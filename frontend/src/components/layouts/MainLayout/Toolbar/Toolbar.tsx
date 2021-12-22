@@ -8,8 +8,10 @@ import {
 import Button from '../../../common/Button'
 import MenuButton from '../../../common/MenuButton'
 import useAuth from '../../../hooks/useAuth'
-
+import LocaleControl from '../../../widgets/LocaleControl'
+import { useIntl } from 'react-intl'
 import styles from './Toolbar.module.scss'
+import messages from '../../../../lang/messages.lang'
 
 type Props = {
   onMobileOpen: () => void
@@ -17,27 +19,27 @@ type Props = {
 }
 const Toolbar = ({ onMobileOpen, onTabletOpen }: Props) => {
   const { logout, isAuth, user } = useAuth()
-
+  const { formatMessage } = useIntl()
   const isAuthOptions = useMemo(
     () => [
       {
-        label: 'Logout',
+        label: formatMessage(messages.logout),
         icon: <FaSignOutAlt />,
         action: logout,
       },
     ],
-    [logout]
+    [formatMessage, logout]
   )
 
   const notAuthOptions = useMemo(
     () => [
       {
-        label: 'Sign In',
+        label: formatMessage(messages.signIn),
         icon: <FaSignInAlt />,
         link: '/auth#signIn',
       },
     ],
-    []
+    [formatMessage]
   )
 
   return (
@@ -59,6 +61,7 @@ const Toolbar = ({ onMobileOpen, onTabletOpen }: Props) => {
         </Button>
       </div>
       <div className={styles.menuItems}>
+        <LocaleControl />
         {isAuth ? (
           <MenuButton options={isAuthOptions}>
             <FaUserAstronaut />
