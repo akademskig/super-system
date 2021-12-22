@@ -4,24 +4,27 @@ import Tabs from '../../common/Tabs/Tabs'
 import LoginForm from '../../forms/LoginForm'
 import RegisterForm from '../../forms/RegisterForm'
 import styles from './AuthPage.module.scss'
+import { useIntl } from 'react-intl'
+import messages from '../../../lang/messages.lang'
 
 const AuthPage = () => {
   const location = useLocation()
+  const { formatMessage } = useIntl()
 
   const tabs = useMemo(() => {
     return [
       {
-        label: 'Sign in',
+        label: formatMessage(messages.signIn),
         content: <LoginForm />,
         active: location.hash === '#signIn',
       },
       {
-        label: 'Register',
+        label: formatMessage(messages.register),
         content: <RegisterForm />,
         active: location.hash === '#register',
       },
     ]
-  }, [location.hash])
+  }, [formatMessage, location.hash])
 
   return (
     <div className={styles.root}>

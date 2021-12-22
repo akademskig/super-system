@@ -17,4 +17,8 @@ export default defineMessages({
     id: 'Toolbar.signIn',
     defaultMessage: 'sign In',
   },
+  register: {
+    id: 'Toolbar.register',
+    defaultMessage: 'Register',
+  },
 })
