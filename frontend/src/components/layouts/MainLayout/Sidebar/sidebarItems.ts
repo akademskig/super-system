@@ -1,4 +1,4 @@
-import { FaBorderAll, FaScrewdriver } from 'react-icons/fa'
+import { FaBorderAll, FaScrewdriver, FaFileInvoice } from 'react-icons/fa'
 
 const sidebarItems = [
   {
@@ -13,6 +13,13 @@ const sidebarItems = [
     Icon: FaScrewdriver,
     authOnly: true,
     key: 'userSettings',
+  },
+  {
+    label: 'Invoices',
+    link: '/invoices',
+    Icon: FaFileInvoice,
+    authOnly: true,
+    key: 'invoices',
   },
 ]
 export default sidebarItems

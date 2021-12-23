@@ -1,0 +1,72 @@
+@import '../../../styles/variables.scss';
+
+.root {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
+.title {
+  text-align: center;
+}
+.form {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  padding: $padding-l;
+  justify-content: center;
+  align-items: center;
+  & > :nth-child(n) {
+    margin-bottom: $padding-l;
+    width: 100%;
+  }
+  & > :last-child {
+    margin-bottom: 0;
+    width: 100%;
+  }
+}
+.button {
+  margin-top: $padding-l;
+  margin-bottom: 0;
+  padding: $padding-l;
+}
+.accountItemsHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $padding-m;
+}
+.addNewButton {
+  margin-left: $padding-l;
+}
+
+.accountItem {
+  position: relative;
+  box-shadow: 0 0 2px 1px lighten($secondary-light, 20);
+  // border: groove 2px $secondary-light;
+  padding: $padding-m;
+  margin: $padding-m 0;
+}
+.textarea {
+  margin-bottom: $padding-m;
+}
+.label {
+  display: flex;
+  &::after {
+    content: '*';
+    line-height: 15px;
+    margin-left: 2px;
+  }
+}
+.buttonMinus {
+  background-color: transparent;
+  right: 12px;
+  top: 0px;
+  position: absolute;
+  padding-right: 0;
+  svg {
+    color: $primary-main;
+    &:hover {
+      color: inherit;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { forwardRef, InputHTMLAttributes, ReactNode, RefCallback } from 'react'
 import { ChangeHandler } from 'react-hook-form'
-import styles from './Input.module.scss'
+import styles from './Textarea.module.scss'
 
 type Props = {
   label?: string | ReactNode
@@ -13,7 +13,7 @@ type Props = {
   withMessage?: boolean
 }
 
-const Input = (
+const Textarea = (
   {
     label,
     name,
@@ -22,15 +22,13 @@ const Input = (
     classes,
     withMessage,
     ...rest
-  }: Props & InputHTMLAttributes<HTMLInputElement>,
+  }: Props & InputHTMLAttributes<HTMLTextAreaElement>,
   ref: any
 ) => {
   return (
     <div className={classNames(styles.root, classes?.root)}>
-      <label className={classNames(styles.label, classes?.label)}>
-        {label}
-      </label>
-      <input
+      <label className={classNames(classes?.label)}>{label}</label>
+      <textarea
         {...rest}
         ref={ref}
         name={name}
@@ -43,4 +41,4 @@ const Input = (
     </div>
   )
 }
-export default forwardRef(Input)
+export default forwardRef(Textarea)
