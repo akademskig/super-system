@@ -46,8 +46,11 @@ export const cacheUser = (user: TUser) => {
 export const getUser = () => {
   return JSON.parse(localStorage.getItem(USER_KEY) || '{}')
 }
+export const hasUser = () => {
+  return !!getUser()
+}
 
-export const isAuth = () => {
+export const hasToken = () => {
   return !!getToken()
 }
 
@@ -66,15 +69,12 @@ export default function AuthProvider({ children }: IAuthProvider): JSX.Element {
   const [user, setUser] = useState<TUser | null>(null)
   const [isAuth, setIsAuth] = useState(false)
 
-  const setAuthData = useCallback(
-    (authData) => {
-      const { user, accessToken } = authData
-      user && setUser(user)
-      accessToken && cacheToken(accessToken)
-      user && accessToken && setIsAuth(true)
-    },
-    [setUser]
-  )
+  const setAuthData = useCallback((authData) => {
+    const { user, accessToken } = authData
+    user && cacheUser(user) && setUser(user)
+    accessToken && cacheToken(accessToken)
+    user && accessToken && setIsAuth(true)
+  }, [])
 
   const accessToken = useMemo(() => {
     return getToken()
@@ -86,10 +86,16 @@ export default function AuthProvider({ children }: IAuthProvider): JSX.Element {
   }, [])
 
   useEffect(() => {
-    if (!user) {
+    if (hasUser()) {
       setUser(getUser())
     }
-  }, [user])
+  }, [])
+
+  useEffect(() => {
+    if (hasToken()) {
+      setIsAuth(true)
+    }
+  }, [])
 
   const ctxValue = useMemo(
     () => ({
