@@ -1,5 +1,5 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import User from './entity/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import VerificationToken from './entity/verificationToken.entity';
 
 export const dbConfig: TypeOrmModuleOptions = {

@@ -1,10 +1,12 @@
+import { useMutation } from '@apollo/client'
+import classNames from 'classnames'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { registerUser } from '../../../api/public/auth'
+import { REGISTER } from '../../../apollo/api/auth'
+import getErrorMessage from '../../../utils/getErrorMessage'
 import Button from '../../common/Button'
 import Input from '../../common/Input'
-import useAuth from '../../hooks/useAuth'
 import styles from './RegisterForm.module.scss'
 
 const RegisterForm = () => {
@@ -13,23 +15,37 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-
-  const { setAuthData } = useAuth()
+  const [registerUser, res] = useMutation(REGISTER, { errorPolicy: 'all' })
   const navigate = useNavigate()
 
   const onSubmit = useCallback(
     async (values) => {
       const { email, password, username } = values
-      const res = await registerUser({ email, password, username })
-      setAuthData(res)
-      navigate('/auth#signIn')
+      const { data } = await registerUser({
+        variables: { input: { email, password, username } },
+      })
+      if (data?.register) {
+        navigate('/auth#signIn')
+      }
     },
-    [navigate, setAuthData]
+    [navigate, registerUser]
   )
-
+  
   return (
     <div className={styles.root}>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        {res.error && (
+        <ul className={classNames(styles.error)}>
+          {res.error &&
+            getErrorMessage(res?.error).map((errorMessage, idx) => (
+              <li key={idx}>{errorMessage}</li>
+            ))}
+        </ul>
+      )}
+      <form
+        noValidate
+        className={styles.form}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Input
           label={'Username'}
           {...register('username', { required: true })}
@@ -49,7 +65,7 @@ const RegisterForm = () => {
         />
         <Button className={styles.button} type="submit">
           {' '}
-          Sign In
+          Register
         </Button>
       </form>
     </div>

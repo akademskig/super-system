@@ -1,3 +1,4 @@
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   Column,
@@ -7,7 +8,6 @@ import {
   JoinColumn,
   OneToOne,
 } from 'typeorm';
-import User from './user.entity';
 
 @Entity()
 export default class VerificationToken {
