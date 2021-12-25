@@ -24,3 +24,8 @@
   margin-bottom: 0;
   padding: $padding-l;
 }
+.error {
+  list-style: none;
+  padding: $padding-m;
+  border: solid 2px red;
+}

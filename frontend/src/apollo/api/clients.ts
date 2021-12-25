@@ -1,12 +1,16 @@
 import { gql } from '@apollo/client'
 
-const CLIENT_FRAGMENT = gql`
+export const CLIENT_FRAGMENT = gql`
   fragment ClientFragment on Client {
     id
+    name
+    street
+    city
+    zipCode
   }
 `
 export const GET_CLIENTS = gql`
-  query getClients {
+  query findAll {
     clients {
       ...ClientFragment
     }

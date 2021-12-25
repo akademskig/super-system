@@ -1,17 +1,19 @@
 import {
   Injectable,
-  UnauthorizedException,
   NotFoundException,
   Logger,
-  BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthUtils } from './auth.utils';
 import MailService from '../mailer/mail.service';
-import { UserRegister } from '../users/types/UserRegister.type';
-import { getConnection, createQueryBuilder, getRepository } from 'typeorm';
-
+import { getConnection, createQueryBuilder } from 'typeorm';
+import { RegisterInput } from './dto/register.input';
+import { AuthGuard } from '@nestjs/passport';
+import { isEmail } from 'class-validator';
+import { SignInInput } from './dto/signIn.input';
+import { pick } from 'lodash';
 @Injectable()
 export class AuthService {
   constructor(
@@ -23,6 +25,7 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne({ email });
+    console.log(user, 'email');
     if (
       user &&
       (await this.authUtils.comparePasswords({
@@ -44,25 +47,24 @@ export class AuthService {
       throw new NotFoundException("User doesn't exist!");
     }
   }
-  async signIn(user: any) {
-    const payload = { username: user.username, id: user.id, role: user.role };
+
+  async signIn(user: SignInInput) {
+    const dbUser = await this.validateUser(user.email, user.password);
+    const payload = pick(dbUser, ['username', 'id', 'role', 'email']);
     return {
       user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
+        ...payload,
       },
       accessToken: this.jwtService.sign(payload),
     };
   }
 
-  async register(user: UserRegister) {
+  async register(user: RegisterInput) {
     const connection = getConnection();
     const queryRunner = connection.createQueryRunner();
     await queryRunner.startTransaction();
     try {
-      const userCreated = await this.usersService.createNew(user, queryRunner);
+      const userCreated = await this.usersService.create(user, queryRunner);
       if (userCreated) {
         const verificationToken = await this.authUtils.createVerificationToken(
           userCreated.id,
@@ -106,11 +108,7 @@ export class AuthService {
         const qR = getConnection().createQueryRunner();
         await qR.startTransaction();
         try {
-          await this.usersService.updateOne(
-            { email },
-            { isVerified: true },
-            qR,
-          );
+          await this.usersService.update({ email }, { isVerified: true }, qR);
           await qR.manager.delete('verification_token', { token });
           await qR.commitTransaction();
         } catch (err) {

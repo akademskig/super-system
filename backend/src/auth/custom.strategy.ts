@@ -10,7 +10,7 @@ export class CustomStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(req): Promise<any> {
-    const {email, password} = req.body;
+    const { email, password } = req.body.variables.input;
     return this.authService.validateUser(email, password);
   }
 }

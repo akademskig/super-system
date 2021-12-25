@@ -1,59 +1,45 @@
 import {
-  Injectable,
   BadRequestException,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Repository, QueryRunner } from 'typeorm';
-import User from '../database/entity/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { validate } from 'class-validator';
-import { QueryBuilderService } from '../utils/queryBuilder.service';
-import ValidationErrors from '../errors/ValidationErrors';
-import UserUpdate from './types/userUpdate.type';
-import { AuthUtils } from '../auth/auth.utils';
-import { UserRegister } from './types/UserRegister.type';
+import { Repository, QueryRunner } from 'typeorm';
+import ValidationErrors from 'src/errors/ValidationErrors';
+import { QueryBuilderService } from 'src/utils/queryBuilder.service';
+import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserInput } from './dto/update-user.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AuthUtils } from 'src/auth/auth.utils';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[];
-
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepo: Repository<User>,
     private readonly qbs: QueryBuilderService,
     private readonly authUtils: AuthUtils,
   ) {}
-
-  async findOne(query): Promise<User | undefined> {
-    return this.userRepository.findOne(query);
-  }
-
-  async getAll(params): Promise<{ data: User[]; count: number }> {
-    const query = this.qbs.buildQuery(params, 'User');
-    const res = await this.userRepository.findAndCount(query);
-    const data = res[0];
-    const count = res[1];
-    return { data, count };
-  }
-
-  async createNew(
-    { username, password, email }: UserRegister,
+  async create(
+    { username, password, email }: CreateUserInput,
     queryRunner?: QueryRunner,
   ): Promise<User> {
-    const existingUser = await this.findOne({ username });
+    const existingUser = await this.userRepo.findOne({ username });
     if (existingUser) {
       throw new BadRequestException(
         `Username ${existingUser.username} already exists!`,
       );
     }
-    const existingEmail = await this.findOne({ email });
+    const existingEmail = await this.userRepo.findOne({ email });
     if (existingEmail) {
       throw new BadRequestException(
         `Email ${existingEmail.email} already exists!`,
       );
     }
     const hashedPassword = await this.authUtils.hashPassword(password);
-    const user = new User({ username, password, email });
+
+    const user = this.userRepo.create({ email, password, username });
     const errors = await validate(user);
     user.password = hashedPassword;
     if (errors.length) {
@@ -62,23 +48,37 @@ export class UsersService {
     if (queryRunner) {
       return queryRunner.manager.save(user);
     }
-    return this.userRepository.save(user);
+    return this.userRepo.save(user);
   }
-  async updateOne(
-    query: { id?: string; email?: string },
-    userData: UserUpdate,
+
+  async findAll(params) {
+    const query = this.qbs.buildQuery(params, 'User');
+    const res = await this.userRepo.findAndCount(query);
+    const data = res[0];
+    const count = res[1];
+    return { data, count };
+  }
+
+  async findOne(query): Promise<User | undefined> {
+    return this.userRepo.findOne(query);
+  }
+
+  async update(
+    query: { email?: string; id?: string },
+    updateUserInput: Partial<UpdateUserInput>,
     queryRunner?: QueryRunner,
   ) {
-    const user = new UserUpdate(userData);
+    const user = new UpdateUserInput(updateUserInput);
+    console.log(user);
     const errors = await validate(user);
     if (errors.length) {
       throw new ValidationErrors(errors);
     }
-    const { id: extractedId, ...userValues } = user;
+    const { id: _extractedId, ...userValues } = user;
     if (queryRunner) {
       await queryRunner.manager.update('user', query, userValues);
     } else {
-      await this.userRepository.update(query, userValues);
+      await this.userRepo.update(query, userValues);
     }
     return this.findOne(query);
   }
@@ -97,10 +97,10 @@ export class UsersService {
       throw new UnauthorizedException('Invalid password');
     }
     user.password = await this.authUtils.hashPassword(newPassword);
-    return this.updateOne(id, user);
+    this.userRepo.update({ id }, user);
   }
 
-  async deleteById(id) {
-    return this.userRepository.remove(id);
+  remove(id: number) {
+    return this.userRepo.delete(id);
   }
 }

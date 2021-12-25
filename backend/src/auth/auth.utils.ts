@@ -1,16 +1,20 @@
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import VerificationToken from '../database/entity/verificationToken.entity';
-import { Repository, QueryRunner } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { QueryRunner } from 'typeorm';
 
 @Injectable()
 export class AuthUtils {
-
   hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, 10);
   }
-  comparePasswords({ password, hashedPassword }: { password: string; hashedPassword: string; }): Promise<boolean> {
+  comparePasswords({
+    password,
+    hashedPassword,
+  }: {
+    password: string;
+    hashedPassword: string;
+  }): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
   }
 

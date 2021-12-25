@@ -7,7 +7,10 @@ import styles from './NewClientForm.module.scss'
 import newClientFormFields from './newClientFormFields'
 import { uniq } from 'lodash'
 import { useMutation } from '@apollo/client'
-import { CREATE_CLIENT } from '../../../apollo/api/clients'
+import {
+  CLIENT_FRAGMENT,
+  CREATE_CLIENT,
+} from '../../../apollo/api/clients'
 import getErrorMessage from '../../../utils/getErrorMessage'
 
 const rows = newClientFormFields.map((field) => field.row)
@@ -23,7 +26,25 @@ const NewClientForm = ({ onCloseModal }: Props) => {
     formState: { errors },
   } = useForm()
 
-  const [createClient, res] = useMutation(CREATE_CLIENT, { errorPolicy: 'all' })
+  const [createClient, res] = useMutation(CREATE_CLIENT, {
+    errorPolicy: 'all',
+    update(cache, { data }) {
+      if (!data) {
+        return null
+      }
+      cache.modify({
+        fields: {
+          clients(existingClients = []) {
+            const newClientRef = cache.writeFragment({
+              data: data?.createClient,
+              fragment: CLIENT_FRAGMENT,
+            })
+            return [...existingClients, newClientRef]
+          },
+        },
+      })
+    },
+  })
 
   const onSubmit = useCallback(
     async (values) => {

@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { SendgridModule } from './mailer/sendgrid.module';
 import TypeOrmModule from './database';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { InvoicesModule } from './invoices/invoices.module';
 import { ClientsModule } from './clients/clients.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,11 +13,10 @@ import { ClientsModule } from './clients/clients.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
+    AuthModule,
     InvoicesModule,
     TypeOrmModule,
     SendgridModule,
-    AuthModule,
-    UsersModule,
     ClientsModule,
   ],
 })

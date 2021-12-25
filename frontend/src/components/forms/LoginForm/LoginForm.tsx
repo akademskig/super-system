@@ -1,7 +1,8 @@
+import { useMutation } from '@apollo/client'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { signIn } from '../../../api/public/auth'
+import { SIGN_IN } from '../../../apollo/api/auth'
 import Button from '../../common/Button'
 import Input from '../../common/Input'
 import useAuth from '../../hooks/useAuth'
@@ -16,15 +17,21 @@ const LoginForm = () => {
 
   const navigate = useNavigate()
   const { setAuthData } = useAuth()
+  const [signIn, { error, data }] = useMutation(SIGN_IN)
 
   const onSubmit = useCallback(
     async (values) => {
       const { email, password } = values
-      const res = await signIn({ email, password })
-      setAuthData(res)
-      navigate('/dashboard')
+      const { data } = await signIn({
+        variables: { input: { email, password } },
+      })
+      if (data?.signIn) {
+        setAuthData(data?.signIn)
+        navigate('/dashboard')
+      }
+
     },
-    [navigate, setAuthData]
+    [navigate, setAuthData, signIn]
   )
 
   return (

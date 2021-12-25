@@ -1,3 +1,5 @@
+import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import { IsEmail, Length } from 'class-validator';
 import {
   Entity,
   Column,
@@ -5,29 +7,39 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Timestamp,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
-import { UserRoles } from '../../users/types/types';
-import { IsEmail, Length } from 'class-validator';
-import VerificationToken from './verificationToken.entity';
+
+enum UserRoles {
+  ADMIN = 'admin',
+  OWNER = 'owner',
+  REGULAR = 'regular',
+}
+registerEnumType(UserRoles, {
+  name: 'UserRoles',
+});
 
 @Entity()
-export default class User {
+@ObjectType()
+export class User {
+  @Field(() => String, { description: '' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field(() => String, { description: '' })
   @Column({ length: 500, unique: true })
   username: string;
 
+  @Field(() => String, { description: '' })
   @Length(8)
   @Column('text')
   password: string;
 
+  @Field(() => String, { description: '' })
   @IsEmail()
   @Column({ type: 'text', unique: true })
   email: string;
 
+  @Field(() => UserRoles)
   @Column({
     type: 'enum',
     enum: UserRoles,
@@ -35,25 +47,19 @@ export default class User {
   })
   role: UserRoles;
 
+  @Field(() => String, { description: '' })
   @Column({ type: 'text', nullable: true })
   company: string;
 
+  @Field(() => Boolean, { description: '' })
   @Column({ type: Boolean, default: false })
   isVerified: boolean;
 
+  @Field(() => Date)
   @CreateDateColumn()
   createdAt: Timestamp;
 
+  @Field(() => Date)
   @UpdateDateColumn()
   updatedAt: Timestamp;
-
-  constructor(user) {
-    if (!user) {
-      return this;
-    }
-    const { username, email, password } = user;
-    this.username = username;
-    this.email = email;
-    this.password = password;
-  }
 }
