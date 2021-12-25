@@ -4,5 +4,6 @@
   "Toolbar.logout": "Odjavi se",
   "Toolbar.signIn": "Prijavi se",
   "Toolbar.register": "Registriraj se",
-  "Sidebar.invoices": "Računi"
+  "Sidebar.invoices": "Računi",
+  "Sidebar.clients": "Klijenti"
 }

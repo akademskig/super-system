@@ -57,18 +57,18 @@ const NewInvoiceForm = () => {
           />
           <Input
             classes={{ root: 'col-lg-4', label: styles.label }}
-            label={'Account number'}
-            {...register('accountNumber', {
+            label={'Invoice number'}
+            {...register('invoiceNumber', {
               required: 'This field is required',
             })}
-            error={errors.accountNumber}
+            error={errors.invoiceNumber}
             type="text"
           />
           <Input
             classes={{ root: 'col-lg-4', label: styles.label }}
-            label={'Account type'}
-            {...register('accountType', { required: 'This field is required' })}
-            error={errors.accountType}
+            label={'Invoice type'}
+            {...register('invoiceType', { required: 'This field is required' })}
+            error={errors.invoiceType}
             type="text"
           />
         </div>

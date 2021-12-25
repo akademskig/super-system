@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Repository, QueryRunner } from 'typeorm';
 import User from '../database/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,13 +22,13 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     private readonly qbs: QueryBuilderService,
     private readonly authUtils: AuthUtils,
-  ) { }
+  ) {}
 
   async findOne(query): Promise<User | undefined> {
     return this.userRepository.findOne(query);
   }
 
-  async getAll(params): Promise<{ data: User[], count: number }> {
+  async getAll(params): Promise<{ data: User[]; count: number }> {
     const query = this.qbs.buildQuery(params, 'User');
     const res = await this.userRepository.findAndCount(query);
     const data = res[0];
@@ -32,14 +36,21 @@ export class UsersService {
     return { data, count };
   }
 
-  async createNew({ username, password, email }: UserRegister, queryRunner?: QueryRunner): Promise<User> {
+  async createNew(
+    { username, password, email }: UserRegister,
+    queryRunner?: QueryRunner,
+  ): Promise<User> {
     const existingUser = await this.findOne({ username });
     if (existingUser) {
-      throw new BadRequestException(`Username ${existingUser.username} already exists!`);
+      throw new BadRequestException(
+        `Username ${existingUser.username} already exists!`,
+      );
     }
     const existingEmail = await this.findOne({ email });
     if (existingEmail) {
-      throw new BadRequestException(`Email ${existingEmail.email} already exists!`);
+      throw new BadRequestException(
+        `Email ${existingEmail.email} already exists!`,
+      );
     }
     const hashedPassword = await this.authUtils.hashPassword(password);
     const user = new User({ username, password, email });
@@ -53,7 +64,11 @@ export class UsersService {
     }
     return this.userRepository.save(user);
   }
-  async updateOne(query: { id?: string, email?: string }, userData: UserUpdate, queryRunner?: QueryRunner) {
+  async updateOne(
+    query: { id?: string; email?: string },
+    userData: UserUpdate,
+    queryRunner?: QueryRunner,
+  ) {
     const user = new UserUpdate(userData);
     const errors = await validate(user);
     if (errors.length) {
@@ -67,9 +82,18 @@ export class UsersService {
     }
     return this.findOne(query);
   }
-  async updatePassword(id, { oldPassword, newPassword }: { oldPassword: string, newPassword: string }) {
+  async updatePassword(
+    id,
+    { oldPassword, newPassword }: { oldPassword: string; newPassword: string },
+  ) {
     const user = await this.findOne(id);
-    if (user && !await this.authUtils.comparePasswords({ password: oldPassword, hashedPassword: user.password })) {
+    if (
+      user &&
+      !(await this.authUtils.comparePasswords({
+        password: oldPassword,
+        hashedPassword: user.password,
+      }))
+    ) {
       throw new UnauthorizedException('Invalid password');
     }
     user.password = await this.authUtils.hashPassword(newPassword);

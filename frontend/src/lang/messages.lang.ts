@@ -9,6 +9,10 @@ export default defineMessages({
     id: 'Sidebar.userSettings',
     defaultMessage: 'User Settings',
   },
+  clients: {
+    id: 'Sidebar.clients',
+    defaultMessage: 'Clients',
+  },
   invoices: {
     id: 'Sidebar.invoices',
     defaultMessage: 'Invoices',
