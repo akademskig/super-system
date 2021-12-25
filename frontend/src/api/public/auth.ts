@@ -1,7 +1,7 @@
 import checkError from '../utils/checkError'
 
-const registerURL = 'http://localhost:4000/auth/register'
-const signInUrl = 'http://localhost:4000/auth/signin'
+const registerURL = 'http://localhost:4001/auth/register'
+const signInUrl = 'http://localhost:4001/auth/signin'
 
 export const registerUser = async ({
   email,
