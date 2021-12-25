@@ -1,0 +1,52 @@
+@import '../../../styles/variables.scss';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  z-index: -1;
+  transition: $transtion-1;
+}
+.content {
+  background-color: white;
+  position: relative;
+  width: 99%;
+  max-width: 700px;
+  margin: 4rem auto;
+  overflow: hidden;
+  z-index: 1;
+}
+.opened {
+  z-index: 0;
+  opacity: 1;
+}
+.removed {
+  display: none;
+}
+
+.header {
+  background-color: $primary-main;
+  display: flex;
+  justify-content: flex-end;
+  padding: $padding-l $padding-xl;
+  align-items: center;
+}
+.headerWithTitle {
+  justify-content: space-between;
+}
+.closeButton {
+  padding: 0;
+  font-size: 2rem;
+}
+.title {
+  color: white;
+}
