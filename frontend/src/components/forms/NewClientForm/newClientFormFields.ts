@@ -4,7 +4,7 @@ const newClientFormFields = [
     id: 'name',
     required: true,
     row: 1,
-    width: 7
+    width: 7,
   },
   {
     label: 'Street',
@@ -39,7 +39,7 @@ const newClientFormFields = [
     id: 'vatId',
     required: true,
     row: 1,
-    width: 5
+    width: 5,
   },
 ]
 

@@ -1,5 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   Column,
@@ -7,17 +8,21 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Timestamp,
+  JoinColumn,
+  ManyToOne,
+  Unique,
 } from 'typeorm';
 
-@Entity()
 @ObjectType()
+@Entity()
+@Unique(['name', 'user'])
 export class Client {
   @Field(() => String, { description: '' })
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Field(() => String, { nullable: false })
-  @Column({ type: 'text', unique: true })
+  @Column({ type: 'text' })
   name: string;
 
   @Field(() => String, { nullable: false })
@@ -40,6 +45,11 @@ export class Client {
   @MaxLength(10)
   @Column({ type: 'text' })
   zipCode: string;
+
+  @Field(() => User)
+  @ManyToOne((type) => User, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  user: User;
 
   @Field(() => Date)
   @CreateDateColumn()

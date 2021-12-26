@@ -25,3 +25,10 @@ export const CREATE_CLIENT = gql`
   }
   ${CLIENT_FRAGMENT}
 `
+export const REMOVE_CLIENT = gql`
+  mutation removeClient($id: String!) {
+    removeClient(id: $id) {
+      id
+    }
+  }
+`

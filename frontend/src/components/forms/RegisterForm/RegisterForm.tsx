@@ -30,10 +30,10 @@ const RegisterForm = () => {
     },
     [navigate, registerUser]
   )
-  
+
   return (
     <div className={styles.root}>
-        {res.error && (
+      {res.error && (
         <ul className={classNames(styles.error)}>
           {res.error &&
             getErrorMessage(res?.error).map((errorMessage, idx) => (

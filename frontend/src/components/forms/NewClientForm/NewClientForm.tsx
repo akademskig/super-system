@@ -7,10 +7,7 @@ import styles from './NewClientForm.module.scss'
 import newClientFormFields from './newClientFormFields'
 import { uniq } from 'lodash'
 import { useMutation } from '@apollo/client'
-import {
-  CLIENT_FRAGMENT,
-  CREATE_CLIENT,
-} from '../../../apollo/api/clients'
+import { CLIENT_FRAGMENT, CREATE_CLIENT } from '../../../apollo/api/clients'
 import getErrorMessage from '../../../utils/getErrorMessage'
 
 const rows = newClientFormFields.map((field) => field.row)

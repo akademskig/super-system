@@ -23,31 +23,33 @@ registerEnumType(InvoiceTypes, {
 @Entity()
 @ObjectType()
 export class Invoice {
-  @Field(() => String, { description: '' })
+  @Field(() => String)
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @Field(() => String, { description: '' })
+  @Field(() => String)
   @Column({ length: 500 })
   serviceType: string;
 
-  @Field(() => String, { description: '' })
+  @Field(() => String)
   @Length(8)
   @Column('text')
   invoiceNumber: string;
 
   @Column({ type: 'enum', enum: InvoiceTypes, default: InvoiceTypes.R })
-  @Field(() => InvoiceTypes, { description: '' })
+  @Field(() => InvoiceTypes)
   invoiceType: InvoiceTypes;
 
   @OneToOne((type) => Client, { onDelete: 'CASCADE' })
   @JoinColumn()
-  @Field(() => Client, { description: '' })
+  @Field(() => Client)
   client: InvoiceTypes;
 
+  @Field(() => Date)
   @CreateDateColumn()
   createdAt: Timestamp;
 
+  @Field(() => Date)
   @UpdateDateColumn()
   updatedAt: Timestamp;
 }

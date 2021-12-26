@@ -4,6 +4,7 @@ import styles from './ClientsPage.module.scss'
 import PagesLayout from '../../layouts/PagesLayout'
 import Modal from '../../common/Modal'
 import NewClientForm from '../../forms/NewClientForm'
+import ClientList from './ClientList'
 
 const ClientsPage = () => {
   return (
@@ -17,8 +18,9 @@ const ClientsPage = () => {
             </Button>
           )}
         >
-          <NewClientForm/>
+          <NewClientForm />
         </Modal>
+        <ClientList />
       </div>
     </PagesLayout>
   )

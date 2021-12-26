@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 
 import { CreateClientInput } from './dto/create-client.input';
@@ -11,13 +12,13 @@ export class ClientsService {
   constructor(
     @InjectRepository(Client) private readonly clientRepo: Repository<Client>,
   ) {}
-  async create(createClientInput: CreateClientInput) {
+  async create(createClientInput: CreateClientInput & { user: User }) {
     const client = this.clientRepo.create(createClientInput);
     return this.clientRepo.save(client);
   }
 
-  findAll() {
-    return `This action returns all clients`;
+  findAll(userId) {
+    return this.clientRepo.find({ user: userId });
   }
 
   findOne(id: number) {
@@ -28,7 +29,8 @@ export class ClientsService {
     return `This action updates a #${id} client`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} client`;
+  async remove(id: string) {
+    await this.clientRepo.delete(id);
+    return { id };
   }
 }

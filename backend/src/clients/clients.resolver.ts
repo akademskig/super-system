@@ -5,6 +5,8 @@ import { CreateClientInput } from './dto/create-client.input';
 import { UpdateClientInput } from './dto/update-client.input';
 import { UseGuards } from '@nestjs/common';
 import { GQLAuthGuard } from 'src/guards/GQLAuthGuard';
+import { User } from 'src/users/entities/user.entity';
+import { GetUser } from 'src/decorators/getUser';
 
 @Resolver(() => Client)
 @UseGuards(GQLAuthGuard)
@@ -13,14 +15,15 @@ export class ClientsResolver {
 
   @Mutation(() => Client)
   createClient(
+    @GetUser() user: User,
     @Args('createClientInput') createClientInput: CreateClientInput,
   ) {
-    return this.clientsService.create(createClientInput);
+    return this.clientsService.create({ ...createClientInput, user });
   }
 
   @Query(() => [Client], { name: 'clients' })
-  findAll() {
-    return this.clientsService.findAll();
+  findAll(@GetUser() user: User) {
+    return this.clientsService.findAll(user.id);
   }
 
   @Query(() => Client, { name: 'client' })
@@ -36,7 +39,7 @@ export class ClientsResolver {
   }
 
   @Mutation(() => Client)
-  removeClient(@Args('id', { type: () => Int }) id: number) {
+  removeClient(@Args('id', { type: () => String }) id: string) {
     return this.clientsService.remove(id);
   }
 }
