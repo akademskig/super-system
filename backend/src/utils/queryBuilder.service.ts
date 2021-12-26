@@ -2,7 +2,6 @@ import { Injectable, Query, Post } from '@nestjs/common';
 
 @Injectable()
 export class QueryBuilderService {
-
   buildQuery(params, entity) {
     const paginationQ = this.queryByPaginationParams(params);
     const searchQ = this.queryBySearchQuery(params, entity);
@@ -32,7 +31,9 @@ export class QueryBuilderService {
     const { q } = params;
     let where = '';
 
-    if (!q) { return where; }
+    if (!q) {
+      return where;
+    }
     let fields = [];
     switch (entity) {
       case 'User': {
@@ -44,9 +45,7 @@ export class QueryBuilderService {
         break;
     }
     fields.forEach((f, idx) => {
-      where = where.concat(
-        `"${f}" ILIKE '%${q}%'`,
-      );
+      where = where.concat(`"${f}" ILIKE '%${q}%'`);
       if (idx !== fields.length - 1) {
         where = where.concat(' OR ');
       }
@@ -56,7 +55,7 @@ export class QueryBuilderService {
   queryByProp(params) {
     const { id } = params;
     let where = '';
-    where = id && `id='${id}'` || '';
+    where = (id && `id='${id}'`) || '';
     return where;
   }
   joinTables(params, entity) {
@@ -69,7 +68,9 @@ export class QueryBuilderService {
     let leftJoinAndSelect = {};
     includeFields.forEach((iF: string) => {
       iF = iF.trim();
-      leftJoinAndSelect = Object.assign(leftJoinAndSelect, { [iF]: `${entityKey}.${iF}` });
+      leftJoinAndSelect = Object.assign(leftJoinAndSelect, {
+        [iF]: `${entityKey}.${iF}`,
+      });
     });
     const join = {
       alias: entityKey,
