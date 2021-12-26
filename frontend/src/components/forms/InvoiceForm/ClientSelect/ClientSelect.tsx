@@ -24,6 +24,15 @@ const ClientSelect = (
       })),
     [data?.clients]
   )
-  return <Select classes={classes} error={error} options={options} {...rest} ref={ref} label={'Client'} />
+  return (
+    <Select
+      classes={classes}
+      error={error}
+      options={options}
+      {...rest}
+      ref={ref}
+      label={'Client'}
+    />
+  )
 }
 export default forwardRef(ClientSelect)

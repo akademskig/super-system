@@ -32,7 +32,7 @@ const Select = (
     error,
     onChange,
     name,
-    label
+    label,
   }: Props & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
@@ -56,7 +56,7 @@ const Select = (
         options={newOptions}
       >
         <label className={styles.label}>{selectedLabel}</label>
-        <FaChevronDown className={styles.iconChevronDown}/>
+        <FaChevronDown className={styles.iconChevronDown} />
       </MenuButton>
       <select
         name={name}

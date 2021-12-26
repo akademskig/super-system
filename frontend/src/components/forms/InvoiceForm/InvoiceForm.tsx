@@ -74,7 +74,7 @@ const NewInvoiceForm = () => {
             error={errors.invoiceNumber}
             type="text"
           />
-           <InvoiceTypeSelect
+          <InvoiceTypeSelect
             classes={{ root: 'col-lg-4', label: styles.label }}
             {...register('invoiceType', { required: 'This field is required' })}
             error={errors.buyer}
