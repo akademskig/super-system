@@ -35,8 +35,7 @@ const RegisterForm = () => {
     <div className={styles.root}>
         {res.error && (
         <ul className={classNames(styles.error)}>
-          {res.error &&
-            getErrorMessage(res?.error).map((errorMessage, idx) => (
+          {res?.error && getErrorMessage(res?.error).map((errorMessage, idx) => (
               <li key={idx}>{errorMessage}</li>
             ))}
         </ul>
