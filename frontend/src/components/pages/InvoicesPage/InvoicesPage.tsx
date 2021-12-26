@@ -1,19 +1,24 @@
 import Button from '../../common/Button'
 import { FaPlus } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
 import styles from './InvoicesPage.module.scss'
 import PagesLayout from '../../layouts/PagesLayout'
+import Modal from '../../common/Modal'
+import InvoiceForm from '../../forms/InvoiceForm'
 
 const InvoicesPage = () => {
   return (
     <PagesLayout>
       <div className={styles.root}>
-        <Link className={styles.button} to="/new-invoice">
-          <Button>
-            {' '}
-            <FaPlus /> <span>new Invoice</span>
-          </Button>
-        </Link>
+        <Modal
+          title={'New Invoice'}
+          trigger={(onOpen) => (
+            <Button onClick={onOpen} className={styles.button}>
+              <FaPlus /> <span>new Invoice</span>
+            </Button>
+          )}
+        >
+          <InvoiceForm />
+        </Modal>
       </div>
     </PagesLayout>
   )

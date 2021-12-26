@@ -15,9 +15,10 @@ import { isClickedOutside } from './utils'
 
 type Option = {
   label: string
+  value?: string | number
   link?: string
-  icon: ReactNode
-  action?: () => void
+  icon?: ReactNode
+  action?: (e?: any) => void
 }
 
 type Props = {
@@ -52,8 +53,14 @@ const MenuButton = ({
   })
 
   return (
-    <div className={styles.root}>
-      <Button onClick={onClick}>{children}</Button>
+    <div className={classNames(styles.root, classes?.root)}>
+      <Button
+        type="button"
+        className={classNames(classes?.menuButton)}
+        onClick={onClick}
+      >
+        {children}
+      </Button>
       <div
         ref={ref}
         className={classNames(styles.menu, classes?.menu, {
@@ -64,13 +71,13 @@ const MenuButton = ({
           options.map((option, idx) => {
             return option.link ? (
               <Link key={idx} to={option?.link || ''}>
-                <Button link onClick={option?.action}>
+                <Button type="button" link onClick={option?.action}>
                   {option.icon}
                   <span>{option.label}</span>
                 </Button>
               </Link>
             ) : (
-              <Button key={idx} link onClick={option?.action}>
+              <Button type="button" key={idx} link onClick={option?.action}>
                 {option.icon}
                 <span>{option.label}</span>
               </Button>

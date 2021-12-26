@@ -15,6 +15,7 @@
   opacity: 0;
   z-index: -1;
   transition: $transtion-1;
+  overflow-y: scroll;
 }
 .content {
   background-color: white;

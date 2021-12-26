@@ -50,28 +50,18 @@ const useClientForm = (type: FormTypes) => {
       const { data } = await createClient({
         variables: { input: values },
       })
-      if (data?.createClient) {
-        // onCloseModal && onCloseModal()
-        resCreate.reset()
-        // formReset()
-      }
       return data?.createClient
     },
-    [createClient, resCreate]
+    [createClient]
   )
   const onSubmitUpdate = useCallback(
     async (values) => {
       const { data } = await updateClient({
         variables: { input: values },
       })
-      if (data?.editClient) {
-        // onCloseModal && onCloseModal()
-        resEdit.reset()
-        // formReset()
-      }
       return data?.updateClient
     },
-    [updateClient, resEdit]
+    [updateClient]
   )
 
   const values = useMemo(() => {

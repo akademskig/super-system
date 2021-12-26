@@ -7,9 +7,11 @@ import { signIn } from '../../../api/public/auth'
 import Button from '../../common/Button'
 import Input from '../../common/Input'
 import useAuth from '../../hooks/useAuth'
-import styles from './NewInvoiceForm.module.scss'
+import styles from './InvoiceForm.module.scss'
 import Textarea from '../../common/Textarea'
 import moment from 'moment'
+import ClientSelect from './ClientSelect'
+import InvoiceTypeSelect from './InvoiceTypeSelect'
 
 const NewInvoiceForm = () => {
   const {
@@ -37,6 +39,7 @@ const NewInvoiceForm = () => {
     },
     [navigate, setAuthData]
   )
+  console.log(errors)
 
   return (
     <div className={styles.root}>
@@ -46,6 +49,13 @@ const NewInvoiceForm = () => {
       >
         <div className="row">
           <p>Marked fields (*) are required</p>
+        </div>
+        <div className={'row'}>
+          <ClientSelect
+            classes={{ root: 'col-lg-8', label: styles.label }}
+            {...register('client', { required: 'This field is required' })}
+            error={errors.buyer}
+          />
         </div>
         <div className={'row'}>
           <Input
@@ -64,39 +74,13 @@ const NewInvoiceForm = () => {
             error={errors.invoiceNumber}
             type="text"
           />
-          <Input
+           <InvoiceTypeSelect
             classes={{ root: 'col-lg-4', label: styles.label }}
-            label={'Invoice type'}
             {...register('invoiceType', { required: 'This field is required' })}
-            error={errors.invoiceType}
-            type="text"
-          />
-        </div>
-        <div className={'row'}>
-          <Input
-            classes={{ root: 'col-lg-4', label: styles.label }}
-            label={'Buyer'}
-            {...register('buyer', { required: 'This field is required' })}
             error={errors.buyer}
-            type="text"
-          />
-          <Input
-            classes={{ root: 'col-lg-5', label: styles.label }}
-            label={'Buyer address'}
-            {...register('buyerAddress', {
-              required: 'This field is required',
-            })}
-            error={errors.buyerAddress}
-            type="text"
-          />
-          <Input
-            classes={{ root: 'col-lg-3', label: styles.label }}
-            label={'VAT ID'}
-            {...register('vatId', { required: 'This field is required' })}
-            error={errors.vatId}
-            type="text"
           />
         </div>
+
         <div className={classNames('row', styles.accountItems)}>
           <div className={styles.accountItemsHeader}>
             <h5>Invoice Items</h5>
@@ -178,7 +162,7 @@ const NewInvoiceForm = () => {
         </div>
         <div className={'row'}>
           <Input
-            classes={{ root: 'col-lg-3', label: styles.label }}
+            classes={{ root: 'col-lg-6', label: styles.label }}
             label={'Payment method'}
             {...register('paymentMethod', {
               required: 'This field is required',
@@ -187,15 +171,17 @@ const NewInvoiceForm = () => {
             type="text"
           />
           <Input
-            classes={{ root: 'col-lg-3', label: styles.label }}
+            classes={{ root: 'col-lg-6', label: styles.label }}
             label={'Date'}
             defaultValue={moment().format('DD/MM/yyyy')}
             {...register('date', { required: 'This field is required' })}
             error={errors.date}
             type="text"
           />
+        </div>
+        <div className={'row'}>
           <Input
-            classes={{ root: 'col-lg-3', label: styles.label }}
+            classes={{ root: 'col-lg-6', label: styles.label }}
             label={'Payment deadline'}
             defaultValue={moment().add(30, 'days').format('DD/MM/yyyy')}
             {...register('paymentDeadline', {
@@ -205,7 +191,7 @@ const NewInvoiceForm = () => {
             type="text"
           />
           <Input
-            classes={{ root: 'col-lg-3', label: styles.label }}
+            classes={{ root: 'col-lg-6', label: styles.label }}
             label={'Shipment date'}
             defaultValue={moment().add(30, 'days').format('DD/MM/yyyy')}
             {...register('shipmentDate')}

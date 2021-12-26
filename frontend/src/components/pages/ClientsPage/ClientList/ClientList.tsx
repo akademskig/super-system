@@ -39,6 +39,7 @@ const ClientList = () => {
           </div>
           <div className={styles.right}>
             <Modal
+              title={'Edit Client'}
               trigger={(onOpen) => (
                 <Button className={styles.deleteButton} link onClick={onOpen}>
                   <FaPencilAlt className={styles.trashIcon} />
