@@ -25,8 +25,9 @@ export class ClientsService {
     return `This action returns a #${id} client`;
   }
 
-  update(id: number, updateClientInput: UpdateClientInput) {
-    return `This action updates a #${id} client`;
+  async update(id: string, updateClientInput: Partial<UpdateClientInput>) {
+    await this.clientRepo.update(id, updateClientInput);
+    return this.clientRepo.findOne(id);
   }
 
   async remove(id: string) {

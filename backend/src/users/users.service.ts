@@ -69,7 +69,6 @@ export class UsersService {
     queryRunner?: QueryRunner,
   ) {
     const user = new UpdateUserInput(updateUserInput);
-    console.log(user);
     const errors = await validate(user);
     if (errors.length) {
       throw new ValidationErrors(errors);

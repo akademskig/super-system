@@ -7,6 +7,8 @@ export const CLIENT_FRAGMENT = gql`
     street
     city
     zipCode
+    vatId
+    country
   }
 `
 export const GET_CLIENTS = gql`
@@ -20,6 +22,14 @@ export const GET_CLIENTS = gql`
 export const CREATE_CLIENT = gql`
   mutation createClient($input: CreateClientInput!) {
     createClient(createClientInput: $input) {
+      ...ClientFragment
+    }
+  }
+  ${CLIENT_FRAGMENT}
+`
+export const UPDATE_CLIENT = gql`
+  mutation updateClient($input: UpdateClientInput!) {
+    updateClient(updateClientInput: $input) {
       ...ClientFragment
     }
   }

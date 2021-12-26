@@ -1,9 +1,12 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useCallback } from 'react'
-import { FaBuilding, FaTrash } from 'react-icons/fa'
+import { FaBuilding, FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { GET_CLIENTS, REMOVE_CLIENT } from '../../../../apollo/api/clients'
 import { IClient } from '../../../../apollo/api/clients.type'
 import Button from '../../../common/Button'
+import Modal from '../../../common/Modal'
+import ClientForm from '../../../forms/ClientForm'
+import { FormTypes } from '../../../hooks/useClientForm'
 import styles from './ClientList.module.scss'
 
 const ClientList = () => {
@@ -20,7 +23,6 @@ const ClientList = () => {
       cache.gc()
     },
   })
-
   const onDelete = useCallback(
     (id) => {
       return async () => deleteClient({ variables: { id } })
@@ -29,14 +31,27 @@ const ClientList = () => {
   )
   return (
     <ul className={styles.root}>
-      {(data?.clients || []).map(({ id, name }: IClient, idx: number) => (
+      {(data?.clients || []).map((client: IClient, idx: number) => (
         <li className={styles.clientListItem} key={idx}>
           <div className={styles.left}>
             <FaBuilding className={styles.buildingIcon} />
-            <span>{name}</span>
+            <span>{client?.name}</span>
           </div>
           <div className={styles.right}>
-            <Button className={styles.deleteButton} link onClick={onDelete(id)}>
+            <Modal
+              trigger={(onOpen) => (
+                <Button className={styles.deleteButton} link onClick={onOpen}>
+                  <FaPencilAlt className={styles.trashIcon} />
+                </Button>
+              )}
+            >
+              <ClientForm type={FormTypes.UPDATE} initialValues={client} />
+            </Modal>
+            <Button
+              className={styles.deleteButton}
+              link
+              onClick={onDelete(client?.id)}
+            >
               <FaTrash className={styles.trashIcon} />
             </Button>
           </div>

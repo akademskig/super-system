@@ -3,8 +3,9 @@ import { FaPlus } from 'react-icons/fa'
 import styles from './ClientsPage.module.scss'
 import PagesLayout from '../../layouts/PagesLayout'
 import Modal from '../../common/Modal'
-import NewClientForm from '../../forms/NewClientForm'
 import ClientList from './ClientList'
+import { FormTypes } from '../../hooks/useClientForm'
+import ClientForm from '../../forms/ClientForm'
 
 const ClientsPage = () => {
   return (
@@ -18,7 +19,7 @@ const ClientsPage = () => {
             </Button>
           )}
         >
-          <NewClientForm />
+          <ClientForm type={FormTypes.CREATE} />
         </Modal>
         <ClientList />
       </div>

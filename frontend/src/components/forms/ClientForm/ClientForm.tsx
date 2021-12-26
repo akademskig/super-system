@@ -3,72 +3,53 @@ import { useForm } from 'react-hook-form'
 import classNames from 'classnames'
 import Button from '../../common/Button'
 import Input from '../../common/Input'
-import styles from './NewClientForm.module.scss'
-import newClientFormFields from './newClientFormFields'
-import { uniq } from 'lodash'
-import { useMutation } from '@apollo/client'
-import { CLIENT_FRAGMENT, CREATE_CLIENT } from '../../../apollo/api/clients'
+import styles from './ClientForm.module.scss'
+import clientFormFields from './clientFormFields'
+import { omit, uniq } from 'lodash'
 import getErrorMessage from '../../../utils/getErrorMessage'
+import useClientForm, { FormTypes } from '../../hooks/useClientForm'
+import { IClient } from '../../../apollo/api/clients.type'
 
-const rows = newClientFormFields.map((field) => field.row)
+const rows = clientFormFields.map((field) => field.row)
 
 type Props = {
   onCloseModal?: () => void
+  type: FormTypes
+  initialValues?: IClient
 }
-const NewClientForm = ({ onCloseModal }: Props) => {
+const ClientForm = ({ onCloseModal, type, initialValues }: Props) => {
   const {
     register,
     handleSubmit,
-    reset: formReset,
     formState: { errors },
-  } = useForm()
-
-  const [createClient, res] = useMutation(CREATE_CLIENT, {
-    errorPolicy: 'all',
-    update(cache, { data }) {
-      if (!data) {
-        return null
-      }
-      cache.modify({
-        fields: {
-          clients(existingClients = []) {
-            const newClientRef = cache.writeFragment({
-              data: data?.createClient,
-              fragment: CLIENT_FRAGMENT,
-            })
-            return [...existingClients, newClientRef]
-          },
-        },
-      })
-    },
+  } = useForm({
+    defaultValues: omit(initialValues, ['__typename']),
   })
+  const { onSubmit, error } = useClientForm(type)
 
-  const onSubmit = useCallback(
+  const submitHandler = useCallback(
     async (values) => {
-      const { data } = await createClient({
-        variables: { input: values },
-      })
-      if (data?.createClient) {
+      const res = await onSubmit(values)
+      if (res) {
         onCloseModal && onCloseModal()
-        res.reset()
-        formReset()
       }
     },
-    [createClient, formReset, onCloseModal, res]
+    [onCloseModal, onSubmit]
   )
+
   return (
     <div className={styles.root}>
-      {res.error && (
+      {error && !!getErrorMessage(error).length && (
         <div className={classNames(styles.error)}>
-          {res.error &&
-            getErrorMessage(res?.error).map((errorMessage, idx) => (
+          {error &&
+            getErrorMessage(error).map((errorMessage, idx) => (
               <div key={idx}>{errorMessage}</div>
             ))}
         </div>
       )}
       <form
         className={classNames(styles.form)}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(submitHandler)}
       >
         <div className="row">
           <p>Marked fields (*) are required</p>
@@ -77,7 +58,7 @@ const NewClientForm = ({ onCloseModal }: Props) => {
           .sort()
           .map((row, idx) => (
             <div className={'row'} key={idx}>
-              {newClientFormFields
+              {clientFormFields
                 .filter((field) => field.row === row)
                 .map(({ label, id, required, width }, idx, arr) => (
                   <Input
@@ -87,10 +68,10 @@ const NewClientForm = ({ onCloseModal }: Props) => {
                       label: required ? styles.labelRequired : '',
                     }}
                     label={label}
-                    {...register(id, {
+                    {...register(id as keyof IClient, {
                       required: required && 'This field is required',
                     })}
-                    error={errors[id]}
+                    error={errors[id as keyof IClient]}
                     type="text"
                   />
                 ))}
@@ -105,4 +86,4 @@ const NewClientForm = ({ onCloseModal }: Props) => {
   )
 }
 
-export default NewClientForm
+export default ClientForm

@@ -19,7 +19,7 @@ import {
 export class Client {
   @Field(() => String, { description: '' })
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Field(() => String, { nullable: false })
   @Column({ type: 'text' })
