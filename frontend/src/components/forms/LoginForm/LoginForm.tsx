@@ -31,7 +31,6 @@ const LoginForm = () => {
         setAuthData(data?.signIn)
         navigate('/dashboard')
       }
-
     },
     [navigate, setAuthData, signIn]
   )

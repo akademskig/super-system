@@ -32,7 +32,7 @@ const RegisterForm = () => {
     },
     [navigate, registerUser]
   )
-  
+
   return (
     <div className={styles.root}>
       {error && !!getErrorMessage(error).length && (

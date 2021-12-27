@@ -36,7 +36,7 @@ const Tabs = ({ tabs }: Props) => {
   useEffect(() => {
     setActiveIndex(activeTab)
   }, [activeTab])
-  
+
   return (
     <div className={styles.root}>
       <div className={styles.tabs}>
