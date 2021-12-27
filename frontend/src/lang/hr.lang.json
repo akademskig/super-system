@@ -5,5 +5,6 @@
   "Toolbar.signIn": "Prijavi se",
   "Toolbar.register": "Registriraj se",
   "Sidebar.invoices": "Računi",
-  "Sidebar.clients": "Klijenti"
+  "Sidebar.clients": "Klijenti",
+  "Sidebar.companies": "Tvrtke"
 }

@@ -4,6 +4,7 @@ import {
   FaFileInvoice,
   FaUserCircle,
   FaUserCog,
+  FaRegBuilding,
 } from 'react-icons/fa'
 
 const sidebarItems = [
@@ -33,6 +34,13 @@ const sidebarItems = [
     Icon: FaUserCog,
     authOnly: true,
     key: 'clients',
+  },
+  {
+    label: 'Companies',
+    link: '/companies',
+    Icon: FaRegBuilding,
+    authOnly: true,
+    key: 'companies',
   },
 ]
 export default sidebarItems

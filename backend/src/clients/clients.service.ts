@@ -22,7 +22,7 @@ export class ClientsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} client`;
+    return this.clientRepo.findOne(id);
   }
 
   async update(id: string, updateClientInput: Partial<UpdateClientInput>) {

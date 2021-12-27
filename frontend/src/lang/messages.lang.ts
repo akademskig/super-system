@@ -17,6 +17,10 @@ export default defineMessages({
     id: 'Sidebar.invoices',
     defaultMessage: 'Invoices',
   },
+  companies: {
+    id: 'Sidebar.companies',
+    defaultMessage: 'Companies',
+  },
   logout: {
     id: 'Toolbar.logout',
     defaultMessage: 'Logout',

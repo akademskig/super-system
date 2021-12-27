@@ -1,5 +1,6 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Client } from 'src/clients/entities/client.entity';
+import { Company } from 'src/companies/entities/company.entity';
 import { Invoice } from 'src/invoices/entities/invoice.entity';
 import { User } from 'src/users/entities/user.entity';
 import VerificationToken from './entity/verificationToken.entity';
@@ -11,7 +12,7 @@ export const dbConfig: TypeOrmModuleOptions = {
   username: 'dbadmin',
   password: 'dbadmin#123',
   database: 'dbex',
-  entities: [User, VerificationToken, Invoice, Client],
+  entities: [User, VerificationToken, Invoice, Client, Company],
   synchronize: true,
 };
 const typeOrmModule = TypeOrmModule.forRoot(dbConfig);

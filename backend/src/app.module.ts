@@ -6,6 +6,7 @@ import { join } from 'path';
 import { InvoicesModule } from './invoices/invoices.module';
 import { ClientsModule } from './clients/clients.module';
 import { AuthModule } from './auth/auth.module';
+import { CompaniesModule } from './companies/companies.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule,
     SendgridModule,
     ClientsModule,
+    CompaniesModule,
   ],
 })
 export class AppModule {}
