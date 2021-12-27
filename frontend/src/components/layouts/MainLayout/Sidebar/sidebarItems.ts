@@ -1,4 +1,7 @@
-import { FaBorderAll, FaScrewdriver } from 'react-icons/fa'
+import {
+  FaBorderAll,
+  FaScrewdriver,
+} from 'react-icons/fa'
 
 const sidebarItems = [
   {
