@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { ForwardedRef, forwardRef, useMemo } from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import { GET_CLIENTS } from '../../../../apollo/api/clients'
-import { IClient } from '../../../../apollo/api/clients.type'
+import { IClient } from '../../../../types/clients.type'
 import Select from '../../../common/Select'
 
 type Props = {

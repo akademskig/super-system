@@ -9,6 +9,8 @@ export const COMPANY_FRAGMENT = gql`
     zipCode
     vatId
     country
+    email
+    phoneNumber
   }
 `
 export const GET_COMPANIES = gql`

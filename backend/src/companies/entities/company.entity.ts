@@ -1,5 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { MaxLength } from 'class-validator';
+import { IsEmail, IsPhoneNumber, MaxLength } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -15,7 +15,7 @@ import {
 
 @ObjectType()
 @Entity()
-@Unique(['name', 'user', 'vatId'])
+@Unique(['name', 'user', 'vatId', 'email'])
 export class Company {
   @Field(() => String)
   @PrimaryGeneratedColumn('uuid')
@@ -36,6 +36,16 @@ export class Company {
   @Field(() => String, { nullable: false })
   @Column({ type: 'text' })
   street: string;
+
+  @Field(() => String, { nullable: true })
+  @IsEmail()
+  @Column({ type: 'text', nullable: true })
+  email: string;
+
+  @Field(() => String, { nullable: true })
+  @IsPhoneNumber()
+  @Column({ type: 'text', nullable: true })
+  phoneNumber: string;
 
   @Field(() => String, { nullable: false })
   @Column({ type: 'text' })

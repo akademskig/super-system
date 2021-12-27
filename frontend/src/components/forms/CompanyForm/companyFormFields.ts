@@ -41,6 +41,21 @@ const clientFormFields = [
     row: 1,
     width: 5,
   },
+  {
+    label: 'Email',
+    id: 'email',
+    required: true,
+    row: 4,
+    width: 6,
+    fieldType: 'email',
+  },
+  {
+    label: 'Phone number',
+    id: 'phoneNumber',
+    fieldType: 'phone',
+    row: 4,
+    width: 6,
+  },
 ]
 
 export default clientFormFields

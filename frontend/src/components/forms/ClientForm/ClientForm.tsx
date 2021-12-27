@@ -8,7 +8,7 @@ import clientFormFields from './clientFormFields'
 import { omit, uniq } from 'lodash'
 import getErrorMessage from '../../../utils/getErrorMessage'
 import useClientForm, { FormTypes } from '../../hooks/useClientForm'
-import { IClient } from '../../../apollo/api/clients.type'
+import { IClient } from '../../../types/clients.type'
 
 const rows = clientFormFields.map((field) => field.row)
 

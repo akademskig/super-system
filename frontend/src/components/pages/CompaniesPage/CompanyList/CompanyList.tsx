@@ -1,8 +1,8 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useCallback } from 'react'
 import { FaBuilding, FaPencilAlt, FaTrash } from 'react-icons/fa'
-import { IClient } from '../../../../apollo/api/clients.type'
 import { GET_COMPANIES, REMOVE_COMPANY } from '../../../../apollo/api/companies'
+import { ICompany } from '../../../../types/companies.type'
 import Button from '../../../common/Button'
 import Modal from '../../../common/Modal'
 import CompanyForm from '../../../forms/CompanyForm'
@@ -31,7 +31,7 @@ const CompanyList = () => {
   )
   return (
     <ul className={styles.root}>
-      {(data?.companies || []).map((company: IClient, idx: number) => (
+      {(data?.companies || []).map((company: ICompany, idx: number) => (
         <li className={styles.clientListItem} key={idx}>
           <div className={styles.left}>
             <FaBuilding className={styles.buildingIcon} />

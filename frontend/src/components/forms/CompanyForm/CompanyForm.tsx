@@ -1,22 +1,31 @@
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import classNames from 'classnames'
-import Button from '../../common/Button'
-import Input from '../../common/Input'
-import styles from './CompanyForm.module.scss'
-import clientFormFields from './companyFormFields'
 import { omit, uniq } from 'lodash'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+
+import Button from '../../common/Button'
+import { ICompany } from '../../../types/companies.type'
+import Input from '../../common/Input'
+import clientFormFields from './companyFormFields'
 import getErrorMessage from '../../../utils/getErrorMessage'
 import { FormTypes } from '../../hooks/useClientForm'
-import { IClient } from '../../../apollo/api/clients.type'
 import useCompanyForm from '../../hooks/useCompanyForm'
+import getSchemaFields from '../../../utils/getSchemaFields'
+
+import styles from './CompanyForm.module.scss'
 
 const rows = clientFormFields.map((field) => field.row)
+
+const schemaFields = getSchemaFields(clientFormFields)
+
+const schema = yup.object().shape(schemaFields)
 
 type Props = {
   onCloseModal?: () => void
   type: FormTypes
-  initialValues?: IClient
+  initialValues?: ICompany
 }
 const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
   const {
@@ -24,6 +33,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
+    resolver: yupResolver(schema),
     defaultValues: omit(initialValues, ['__typename']),
   })
   const { onSubmit, error } = useCompanyForm(type)
@@ -37,7 +47,6 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
     },
     [onCloseModal, onSubmit]
   )
-
   return (
     <div className={styles.root}>
       {error && !!getErrorMessage(error).length && (
@@ -61,19 +70,24 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
             <div className={'row'} key={idx}>
               {clientFormFields
                 .filter((field) => field.row === row)
-                .map(({ label, id, required, width }, idx, arr) => (
+                .map(({ label, id, required, width, fieldType }, idx, arr) => (
                   <Input
                     key={idx}
                     classes={{
                       root: `col-lg-${width}`,
                       label: required ? styles.labelRequired : '',
                     }}
+                    {...{
+                      withMessage:
+                        (fieldType === 'email' &&
+                          errors[id as keyof ICompany]?.type === 'email') ||
+                        (fieldType === 'phone' &&
+                          errors[id as keyof ICompany]?.type === 'matches'),
+                    }}
                     label={label}
-                    {...register(id as keyof IClient, {
-                      required: required && 'This field is required',
-                    })}
-                    error={errors[id as keyof IClient]}
-                    type="text"
+                    {...register(id as keyof ICompany)}
+                    error={errors[id as keyof ICompany]}
+                    type={fieldType || 'text'}
                   />
                 ))}
             </div>

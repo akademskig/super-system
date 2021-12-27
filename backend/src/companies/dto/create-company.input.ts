@@ -1,4 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
+import { IsEmail, IsPhoneNumber } from 'class-validator';
 
 @InputType()
 export class CreateCompanyInput {
@@ -19,4 +20,12 @@ export class CreateCompanyInput {
 
   @Field(() => String)
   zipCode: string;
+
+  @Field(() => String, { description: '' })
+  @IsEmail()
+  email: string;
+
+  @Field(() => String, { description: '' })
+  @IsPhoneNumber()
+  phoneNumber: string;
 }
