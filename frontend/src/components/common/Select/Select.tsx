@@ -52,7 +52,11 @@ const Select = (
     <div className={classNames(styles.root, classes?.root)}>
       <label className={classes?.label}>{label}</label>
       <MenuButton
-        classes={{ menuButton: styles.menuButton, menu: styles.menu }}
+        classes={{
+          menuButton: styles.menuButton,
+          menu: styles.menu,
+          button: styles.button,
+        }}
         options={newOptions}
       >
         <label className={styles.label}>{selectedLabel}</label>
@@ -65,8 +69,8 @@ const Select = (
         className={classNames(styles.select, { [styles.error]: error })}
       >
         {options.length &&
-          options.map((option) => (
-            <option className={styles.option} value={option.value}>
+          options.map((option, idx) => (
+            <option className={styles.option} value={option.value} key={idx}>
               {option.label}
             </option>
           ))}

@@ -12,6 +12,7 @@ import Textarea from '../../common/Textarea'
 import moment from 'moment'
 import ClientSelect from './ClientSelect'
 import InvoiceTypeSelect from './InvoiceTypeSelect'
+import CompanySelect from './CompanySelect'
 
 const NewInvoiceForm = () => {
   const {
@@ -39,7 +40,6 @@ const NewInvoiceForm = () => {
     },
     [navigate, setAuthData]
   )
-  console.log(errors)
 
   return (
     <div className={styles.root}>
@@ -51,8 +51,13 @@ const NewInvoiceForm = () => {
           <p>Marked fields (*) are required</p>
         </div>
         <div className={'row'}>
+          <CompanySelect
+            classes={{ root: 'col-lg-6', label: styles.label }}
+            {...register('company', { required: 'This field is required' })}
+            error={errors.buyer}
+          />
           <ClientSelect
-            classes={{ root: 'col-lg-8', label: styles.label }}
+            classes={{ root: 'col-lg-6', label: styles.label }}
             {...register('client', { required: 'This field is required' })}
             error={errors.buyer}
           />

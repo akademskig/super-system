@@ -15,7 +15,7 @@
   text-align: left;
   background-color: transparent;
   color: black;
-
+  text-transform: none;
   justify-content: space-between;
   border: solid 1px $gray-3;
   border-radius: 4px;
@@ -39,4 +39,7 @@
   width: 15px;
   color: $primary-main;
   font-size: 1rem;
+}
+.button {
+  text-transform: none;
 }

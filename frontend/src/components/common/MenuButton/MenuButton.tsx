@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom'
 import Button from '../Button'
 
 import styles from './MenuButton.module.scss'
-import { isClickedOutside } from './utils'
 
 type Option = {
   label: string
@@ -34,17 +33,17 @@ const MenuButton = ({
   const [opened, setOpened] = useState(false)
   const ref = createRef<HTMLDivElement>()
 
-  const onClick = useCallback(() => {
-    setOpened(!opened)
-  }, [opened])
+  const onOpen = useCallback(() => {
+    setOpened(true)
+  }, [])
 
   const checkClick = useCallback(
     (e) => {
-      if (isClickedOutside(e, ref) && opened) {
+      if (opened) {
         setOpened(false)
       }
     },
-    [opened, ref]
+    [opened]
   )
 
   useEffect(() => {
@@ -57,7 +56,7 @@ const MenuButton = ({
       <Button
         type="button"
         className={classNames(classes?.menuButton)}
-        onClick={onClick}
+        onClick={onOpen}
       >
         {children}
       </Button>
@@ -71,13 +70,24 @@ const MenuButton = ({
           options.map((option, idx) => {
             return option.link ? (
               <Link key={idx} to={option?.link || ''}>
-                <Button type="button" link onClick={option?.action}>
+                <Button
+                  type="button"
+                  link
+                  onClick={option?.action}
+                  className={classes?.button}
+                >
                   {option.icon}
                   <span>{option.label}</span>
                 </Button>
               </Link>
             ) : (
-              <Button type="button" key={idx} link onClick={option?.action}>
+              <Button
+                type="button"
+                key={idx}
+                link
+                onClick={option?.action}
+                className={classes?.button}
+              >
                 {option.icon}
                 <span>{option.label}</span>
               </Button>

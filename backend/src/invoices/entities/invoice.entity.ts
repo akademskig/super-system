@@ -1,6 +1,7 @@
 import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
 import { Length } from 'class-validator';
 import { Client } from 'src/clients/entities/client.entity';
+import { Company } from 'src/companies/entities/company.entity';
 import {
   Entity,
   Column,
@@ -43,7 +44,12 @@ export class Invoice {
   @OneToOne((type) => Client, { onDelete: 'CASCADE' })
   @JoinColumn()
   @Field(() => Client)
-  client: InvoiceTypes;
+  client: Client;
+
+  @OneToOne((type) => Company, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  @Field(() => Client)
+  company: Company;
 
   @Field(() => Date)
   @CreateDateColumn()
