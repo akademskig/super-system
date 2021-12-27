@@ -26,7 +26,7 @@ export class User {
   id: string;
 
   @Field(() => String, { description: '' })
-  @Column({ length: 500, unique: true })
+  @Column({ length: 500 })
   username: string;
 
   @Field(() => String, { description: '' })

@@ -15,7 +15,9 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const [registerUser, res] = useMutation(REGISTER, { errorPolicy: 'all' })
+  const [registerUser, { error }] = useMutation(REGISTER, {
+    errorPolicy: 'all',
+  })
   const navigate = useNavigate()
 
   const onSubmit = useCallback(
@@ -33,13 +35,13 @@ const RegisterForm = () => {
 
   return (
     <div className={styles.root}>
-      {res.error && (
-        <ul className={classNames(styles.error)}>
-          {res.error &&
-            getErrorMessage(res?.error).map((errorMessage, idx) => (
-              <li key={idx}>{errorMessage}</li>
+      {error && !!getErrorMessage(error).length && (
+        <div className={classNames(styles.error)}>
+          {error &&
+            getErrorMessage(error).map((errorMessage, idx) => (
+              <div key={idx}>{errorMessage}</div>
             ))}
-        </ul>
+        </div>
       )}
       <form
         noValidate

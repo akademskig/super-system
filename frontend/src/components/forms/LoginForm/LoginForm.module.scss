@@ -24,3 +24,8 @@
   margin-bottom: 0;
   padding: $padding-l;
 }
+.error {
+  margin-bottom: $padding-l;
+  padding: $padding-m;
+  border: solid 2px red;
+}

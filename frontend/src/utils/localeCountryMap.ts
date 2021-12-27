@@ -1,4 +1,4 @@
-import { Locales } from '../types/locales'
+import { Locales } from '../types/locales.type'
 
 const localeCountryMap = {
   [Locales.EN]: 'GB',

@@ -16,11 +16,13 @@ const AuthPage = () => {
       {
         label: formatMessage(messages.signIn),
         content: <LoginForm />,
+        hash: '#signIn',
         active: location.hash === '#signIn',
       },
       {
         label: formatMessage(messages.register),
         content: <RegisterForm />,
+        hash: '#register',
         active: location.hash === '#register',
       },
     ]

@@ -25,12 +25,6 @@ export class UsersService {
     { username, password, email }: CreateUserInput,
     queryRunner?: QueryRunner,
   ): Promise<User> {
-    const existingUser = await this.userRepo.findOne({ username });
-    if (existingUser) {
-      throw new BadRequestException(
-        `Username ${existingUser.username} already exists!`,
-      );
-    }
     const existingEmail = await this.userRepo.findOne({ email });
     if (existingEmail) {
       throw new BadRequestException(

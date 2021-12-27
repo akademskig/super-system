@@ -1,8 +1,10 @@
 import { useMutation } from '@apollo/client'
+import classNames from 'classnames'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { SIGN_IN } from '../../../apollo/api/auth'
+import getErrorMessage from '../../../utils/getErrorMessage'
 import Button from '../../common/Button'
 import Input from '../../common/Input'
 import useAuth from '../../hooks/useAuth'
@@ -17,7 +19,7 @@ const LoginForm = () => {
 
   const navigate = useNavigate()
   const { setAuthData } = useAuth()
-  const [signIn, { error, data }] = useMutation(SIGN_IN)
+  const [signIn, { error }] = useMutation(SIGN_IN)
 
   const onSubmit = useCallback(
     async (values) => {
@@ -35,6 +37,14 @@ const LoginForm = () => {
 
   return (
     <div className={styles.root}>
+      {error && !!getErrorMessage(error).length && (
+        <div className={classNames(styles.error)}>
+          {error &&
+            getErrorMessage(error).map((errorMessage, idx) => (
+              <div key={idx}>{errorMessage}</div>
+            ))}
+        </div>
+      )}
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <Input
           label={'Email'}

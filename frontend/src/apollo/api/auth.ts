@@ -8,6 +8,11 @@ const AUTH_FRAGMENT = gql`
     accessToken
   }
 `
+const USER_FRAGMENT = gql`
+  fragment UserFragment on User {
+    username
+  }
+`
 export const SIGN_IN = gql`
   mutation signIn($input: SignInInput!) {
     signIn(signInInput: $input) {
@@ -19,8 +24,8 @@ export const SIGN_IN = gql`
 export const REGISTER = gql`
   mutation register($input: RegisterInput!) {
     register(registerInput: $input) {
-      ...AuthFragment
+      ...UserFragment
     }
   }
-  ${AUTH_FRAGMENT}
+  ${USER_FRAGMENT}
 `

@@ -1,7 +1,7 @@
 import { PropsWithChildren, useState, createContext } from 'react'
 import { IntlProvider } from 'react-intl'
 import messages from '../../../lang'
-import { Locales } from '../../../types/locales'
+import { Locales } from '../../../types/locales.type'
 
 const getDefaultLocale = () => {
   return navigator.languages[0] as Locales

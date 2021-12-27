@@ -1,7 +1,7 @@
 import MenuButton from '../../common/MenuButton'
 import useLocale from '../../hooks/useLocale'
 import messages from '../../../lang'
-import { Locales } from '../../../types/locales'
+import { Locales } from '../../../types/locales.type'
 import { useMemo } from 'react'
 import Flag from 'react-world-flags'
 import localeCountryMap from '../../../utils/localeCountryMap'
