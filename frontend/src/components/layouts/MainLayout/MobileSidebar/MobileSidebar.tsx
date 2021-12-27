@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import { FaRegWindowClose } from 'react-icons/fa'
 import { Link, useLocation } from 'react-router-dom'
 import { useIntl } from 'react-intl'
+import { IoClose } from 'react-icons/io5'
 
 import Button from '../../../common/Button'
 import useAuth from '../../../hooks/useAuth'
@@ -23,7 +24,7 @@ const MobileSidebar = ({ onClose, opened }: Props) => {
     <div className={classNames(styles.root, { [styles.opened]: opened })}>
       <div className={styles.topBar}>
         <Button link onClick={onClose}>
-          <FaRegWindowClose />
+          <IoClose />
         </Button>
       </div>
       <div className={styles.items}>
@@ -36,7 +37,7 @@ const MobileSidebar = ({ onClose, opened }: Props) => {
                   onClick={onClose}
                   active={location.pathname === link}
                 >
-                  <Icon />
+                  <Icon className={styles.icon} />
                   <span>
                     {' '}
                     {formatMessage(messages[key as keyof typeof messages])}

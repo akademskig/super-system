@@ -1,11 +1,5 @@
 import classNames from 'classnames'
-import {
-  cloneElement,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { cloneElement, PropsWithChildren, useCallback, useState } from 'react'
 import { IoClose } from 'react-icons/io5'
 import Button from '../Button'
 import styles from './Modal.module.scss'
