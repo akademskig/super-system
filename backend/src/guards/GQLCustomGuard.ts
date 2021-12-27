@@ -13,7 +13,6 @@ export class GQLCustomGuard extends AuthGuard('custom') {
     return ctx.getContext().req;
   }
   validate(req): Promise<any> {
-    console.log(req, 'req');
     const { email, password } = req.body;
     return this.authService.validateUser(email, password);
   }

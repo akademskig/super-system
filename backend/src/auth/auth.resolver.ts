@@ -4,8 +4,8 @@ import { SignInInput } from './dto/signIn.input';
 import { RegisterInput } from './dto/register.input';
 import { Auth } from './entities/auth.entity';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { GQLCustomGuard } from 'src/guards/GQLCustomGuard';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -17,7 +17,7 @@ export class AuthResolver {
     const res = await this.authService.signIn(signInInput);
     return res;
   }
-  @Mutation(() => Auth)
+  @Mutation(() => User)
   register(@Args('registerInput') registerInput: RegisterInput) {
     return this.authService.register(registerInput);
   }

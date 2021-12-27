@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import { FaRegWindowClose } from 'react-icons/fa'
 import { Link, useLocation } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { IoClose } from 'react-icons/io5'
