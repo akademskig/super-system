@@ -25,7 +25,6 @@ const Button = ({
     },
     [onClick]
   )
-
   return (
     <button
       {...rest}

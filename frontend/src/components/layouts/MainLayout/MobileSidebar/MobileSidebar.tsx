@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FaRegWindowClose } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
 import Button from '../../../common/Button'
@@ -17,6 +17,7 @@ type Props = {
 const MobileSidebar = ({ onClose, opened }: Props) => {
   const { isAuth } = useAuth()
   const { formatMessage } = useIntl()
+  const location = useLocation()
 
   return (
     <div className={classNames(styles.root, { [styles.opened]: opened })}>
@@ -30,7 +31,11 @@ const MobileSidebar = ({ onClose, opened }: Props) => {
           return (
             ((!isAuth && !authOnly) || isAuth) && (
               <Link key={index} to={link}>
-                <Button link onClick={onClose}>
+                <Button
+                  link
+                  onClick={onClose}
+                  active={location.pathname === link}
+                >
                   <Icon />
                   <span>
                     {' '}

@@ -2,7 +2,6 @@ import {
   FaBorderAll,
   FaScrewdriver,
   FaFileInvoice,
-  FaUserCircle,
   FaUserCog,
   FaRegBuilding,
 } from 'react-icons/fa'
