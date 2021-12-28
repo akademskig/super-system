@@ -1,10 +1,9 @@
 import * as yup from 'yup'
-
 import { phoneRegExpNotRequired } from '../config/fieldRegex'
 
 const getSchemaFields = (formFields: any[]) => {
   const schemaFields = formFields.reduce((acc, curr) => {
-    let field = yup.string()
+    let field: yup.AnySchema = yup.string()
     if (curr.fieldType === 'email') {
       field = yup.string().email('Invalid email')
     }
@@ -12,6 +11,9 @@ const getSchemaFields = (formFields: any[]) => {
       field = yup
         .string()
         .matches(phoneRegExpNotRequired, 'Phone number is not valid')
+    }
+    if (curr.fieldType === 'number') {
+      field = yup.number()
     }
     if (curr.required) {
       field = field.required()

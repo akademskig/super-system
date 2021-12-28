@@ -1,4 +1,9 @@
-import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  registerEnumType,
+  InputType,
+} from '@nestjs/graphql';
 import { IsEmail, Length } from 'class-validator';
 import {
   Entity,

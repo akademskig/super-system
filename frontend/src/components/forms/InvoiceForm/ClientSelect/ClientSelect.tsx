@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { ForwardedRef, forwardRef, useMemo } from 'react'
+import { ForwardedRef, forwardRef, SelectHTMLAttributes, useMemo } from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import { GET_CLIENTS } from '../../../../apollo/api/clients'
 import { IClient } from '../../../../types/clients.type'
@@ -11,7 +11,7 @@ type Props = {
   onChange: ChangeHandler
 }
 const ClientSelect = (
-  { error, classes, ...rest }: Props,
+  { error, classes, ...rest }: Props & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const { data } = useQuery(GET_CLIENTS)

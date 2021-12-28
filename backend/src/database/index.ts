@@ -12,7 +12,7 @@ export const dbConfig: TypeOrmModuleOptions = {
   username: 'dbadmin',
   password: 'dbadmin#123',
   database: 'dbex',
-  entities: [User, VerificationToken, Invoice, Client, Company],
+  entities: [User, VerificationToken, Client, Company, Invoice],
   synchronize: true,
 };
 const typeOrmModule = TypeOrmModule.forRoot(dbConfig);

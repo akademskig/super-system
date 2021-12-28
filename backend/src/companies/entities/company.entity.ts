@@ -57,7 +57,7 @@ export class Company {
   zipCode: string;
 
   @Field(() => User)
-  @ManyToOne((type) => User, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 

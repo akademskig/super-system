@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Button from '../../common/Button'
 import { ICompany } from '../../../types/companies.type'
 import Input from '../../common/Input'
-import clientFormFields from './companyFormFields'
+import companyFormFields from './companyFormFields'
 import getErrorMessage from '../../../utils/getErrorMessage'
 import { FormTypes } from '../../hooks/useClientForm'
 import useCompanyForm from '../../hooks/useCompanyForm'
@@ -16,9 +16,9 @@ import getSchemaFields from '../../../utils/getSchemaFields'
 
 import styles from './CompanyForm.module.scss'
 
-const rows = clientFormFields.map((field) => field.row)
+const rows = companyFormFields.map((field) => field.row)
 
-const schemaFields = getSchemaFields(clientFormFields)
+const schemaFields = getSchemaFields(companyFormFields)
 
 const schema = yup.object().shape(schemaFields)
 
@@ -68,7 +68,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
           .sort()
           .map((row, idx) => (
             <div className={'row'} key={idx}>
-              {clientFormFields
+              {companyFormFields
                 .filter((field) => field.row === row)
                 .map(({ label, id, required, width, fieldType }, idx, arr) => (
                   <Input

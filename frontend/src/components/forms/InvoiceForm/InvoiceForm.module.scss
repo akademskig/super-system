@@ -49,7 +49,7 @@
 .textarea {
   margin-bottom: $padding-m;
 }
-.label {
+.labelRequired {
   display: flex;
   &::after {
     content: '*';

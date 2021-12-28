@@ -4,6 +4,8 @@ import styles from './InvoicesPage.module.scss'
 import PagesLayout from '../../layouts/PagesLayout'
 import Modal from '../../common/Modal'
 import InvoiceForm from '../../forms/InvoiceForm'
+import { FormTypes } from '../../hooks/useInvoiceForm'
+import InvoiceList from './InvoiceList'
 
 const InvoicesPage = () => {
   return (
@@ -17,9 +19,10 @@ const InvoicesPage = () => {
             </Button>
           )}
         >
-          <InvoiceForm />
+          <InvoiceForm type={FormTypes.CREATE} />
         </Modal>
       </div>
+      <InvoiceList />
     </PagesLayout>
   )
 }

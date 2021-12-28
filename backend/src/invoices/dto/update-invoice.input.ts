@@ -1,8 +1,8 @@
 import { CreateInvoiceInput } from './create-invoice.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateInvoiceInput extends PartialType(CreateInvoiceInput) {
-  @Field(() => Int)
-  id: number;
+  @Field(() => String)
+  id: string;
 }

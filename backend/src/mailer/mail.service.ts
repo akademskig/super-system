@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { get } from 'env-var';
+import dotenv from 'dotenv';
 
-require('dotenv').config();
+dotenv.config();
 
 const HOST_URL = get('HOST_URL').required().asString();
 

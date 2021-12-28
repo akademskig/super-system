@@ -1,17 +1,10 @@
-import {
-  Injectable,
-  NotFoundException,
-  Logger,
-  UseGuards,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthUtils } from './auth.utils';
 import MailService from '../mailer/mail.service';
 import { getConnection, createQueryBuilder } from 'typeorm';
 import { RegisterInput } from './dto/register.input';
-import { AuthGuard } from '@nestjs/passport';
-import { isEmail } from 'class-validator';
 import { SignInInput } from './dto/signIn.input';
 import { pick } from 'lodash';
 @Injectable()
@@ -33,7 +26,7 @@ export class AuthService {
         hashedPassword: user.password,
       }))
     ) {
-      const { password: pwd, ...result } = user;
+      const { password: _pwd, ...result } = user;
       return result;
     } else if (
       user &&

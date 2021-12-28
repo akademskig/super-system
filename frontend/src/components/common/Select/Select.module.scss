@@ -42,4 +42,9 @@
 }
 .button {
   text-transform: none;
+  width: 100%;
+  justify-content: flex-start;
+}
+.error {
+  border-color: red;
 }

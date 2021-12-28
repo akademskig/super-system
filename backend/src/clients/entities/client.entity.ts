@@ -13,9 +13,9 @@ import {
   Unique,
 } from 'typeorm';
 
-@ObjectType()
 @Entity()
 @Unique(['name', 'user'])
+@ObjectType()
 export class Client {
   @Field(() => String, { description: '' })
   @PrimaryGeneratedColumn('uuid')
@@ -47,7 +47,7 @@ export class Client {
   zipCode: string;
 
   @Field(() => User)
-  @ManyToOne((type) => User, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 

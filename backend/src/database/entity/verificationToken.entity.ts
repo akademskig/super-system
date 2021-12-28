@@ -17,7 +17,7 @@ export default class VerificationToken {
   @Column()
   token: string;
 
-  @OneToOne((type) => User, { onDelete: 'CASCADE' })
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: string;
 

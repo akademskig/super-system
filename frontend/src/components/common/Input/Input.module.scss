@@ -7,11 +7,43 @@
   outline: none;
 }
 .input {
+  width: 100%;
   border: solid 1px $gray-3;
   border-radius: 4px;
   padding: $padding-m;
   line-height: 25px;
   font-size: 1rem;
+  &[type='date'],
+  [type='datetime-local'] {
+    width: 100%;
+    cursor: pointer;
+  }
+  &[type='date']::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    width: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+  }
+  &[type='datetime-local']::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    width: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+  }
 }
 .error {
   border: 1px solid red;
@@ -27,4 +59,14 @@
 }
 .label {
   white-space: nowrap;
+}
+.calendarIcon {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+  color: $secondary-dark;
+}
+.inputBox {
+  position: relative;
+  align-items: center;
 }

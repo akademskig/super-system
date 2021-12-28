@@ -4,6 +4,7 @@ import {
   ForwardedRef,
   forwardRef,
   SelectHTMLAttributes,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
@@ -25,6 +26,9 @@ type Props = {
   label?: string
 }
 
+const getDefaultLabel = (label?: string) =>
+  label ? `Select ${label}` : 'Select...'
+
 const Select = (
   {
     options,
@@ -33,48 +37,41 @@ const Select = (
     onChange,
     name,
     label,
+    value,
   }: Props & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
-  const [selectedLabel, setSelectedLabel] = useState(`Select ${label}`)
+  const [selectedLabel, setSelectedLabel] = useState(getDefaultLabel(label))
 
   const newOptions = useMemo(() => {
     return options.map((option) => ({
       ...option,
       action: (e: ChangeEvent<HTMLSelectElement>) => {
-        onChange && onChange({ target: { value: option.value } })
-        setSelectedLabel(option.label)
+        onChange && onChange({ target: { value: option.value, name } })
       },
     }))
-  }, [onChange, options])
+  }, [name, onChange, options])
+
+  useEffect(() => {
+    setSelectedLabel(
+      options.find((o) => o.value === value)?.label || getDefaultLabel(label)
+    )
+  }, [label, options, value])
 
   return (
     <div className={classNames(styles.root, classes?.root)}>
       <label className={classes?.label}>{label}</label>
       <MenuButton
         classes={{
-          menuButton: styles.menuButton,
+          menuButton: classNames(styles.menuButton, { [styles.error]: error }),
           menu: styles.menu,
-          button: styles.button,
+          button: classNames(styles.button),
         }}
         options={newOptions}
       >
         <label className={styles.label}>{selectedLabel}</label>
         <FaChevronDown className={styles.iconChevronDown} />
       </MenuButton>
-      <select
-        name={name}
-        onChange={onChange}
-        ref={ref}
-        className={classNames(styles.select, { [styles.error]: error })}
-      >
-        {options.length &&
-          options.map((option, idx) => (
-            <option className={styles.option} value={option.value} key={idx}>
-              {option.label}
-            </option>
-          ))}
-      </select>
     </div>
   )
 }

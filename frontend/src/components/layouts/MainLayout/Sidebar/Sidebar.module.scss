@@ -39,7 +39,7 @@
     display: none;
   }
 
-  @media screen and (min-width: $md) {
+  @media screen and (min-width: $lg) {
     width: 300px;
     max-width: fit-content;
     button {
