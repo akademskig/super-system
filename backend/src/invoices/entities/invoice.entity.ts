@@ -22,6 +22,10 @@ import {
 
 export enum InvoiceTypes {
   R = 'R',
+  R1 = 'R1',
+  R2 = 'R2',
+  ADVANCE = 'advance',
+  NONE = 'none',
 }
 
 registerEnumType(InvoiceTypes, {

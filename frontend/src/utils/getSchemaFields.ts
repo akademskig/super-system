@@ -15,6 +15,9 @@ const getSchemaFields = (formFields: any[]) => {
     if (curr.fieldType === 'number') {
       field = yup.number()
     }
+    if (curr.fieldType === 'array') {
+      field = yup.array().of(yup.string())
+    }
     if (curr.required) {
       field = field.required()
     }

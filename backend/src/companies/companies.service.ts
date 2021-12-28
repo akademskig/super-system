@@ -21,12 +21,13 @@ export class CompaniesService {
     return this.companyRepo.find({ user: userId });
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.companyRepo.findOne(id);
   }
 
-  async update(id: string, updateCompanyInput: Partial<UpdateCompanyInput>) {
-    await this.companyRepo.update(id, updateCompanyInput);
+  async update(updateCompanyInput: Partial<UpdateCompanyInput>) {
+    const { id, ...rest } = updateCompanyInput;
+    await this.companyRepo.update(id, rest);
     return this.companyRepo.findOne(id);
   }
 

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { get } from 'env-var';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 

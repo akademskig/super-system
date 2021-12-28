@@ -60,14 +60,14 @@ const MenuButton = ({
       >
         {children}
       </Button>
-      <div
-        ref={ref}
-        className={classNames(styles.menu, classes?.menu, {
-          [styles.opened]: opened,
-        })}
-      >
-        {options.length &&
-          options.map((option, idx) => {
+      {!!options.length && (
+        <div
+          ref={ref}
+          className={classNames(styles.menu, classes?.menu, {
+            [styles.opened]: opened,
+          })}
+        >
+          {options.map((option, idx) => {
             return option.link ? (
               <Link key={idx} to={option?.link || ''}>
                 <Button
@@ -93,7 +93,8 @@ const MenuButton = ({
               </Button>
             )
           })}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

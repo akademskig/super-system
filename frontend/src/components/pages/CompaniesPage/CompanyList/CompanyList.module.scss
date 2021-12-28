@@ -28,7 +28,10 @@
 .right {
   display: flex;
   align-items: center;
-  & > :first-child {
+  & > :nth-child(n) {
     margin-right: 0.5rem;
+  }
+  & > :last-child {
+    margin-right: 0;
   }
 }

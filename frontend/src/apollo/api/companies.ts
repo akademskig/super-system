@@ -11,7 +11,18 @@ export const COMPANY_FRAGMENT = gql`
     country
     email
     phoneNumber
+    invoiceSettings {
+      serviceTypes
+    }
   }
+`
+export const GET_COMPANY = gql`
+  query findOne($id: String!) {
+    company(id: $id) {
+      ...CompanyFragment
+    }
+  }
+  ${COMPANY_FRAGMENT}
 `
 export const GET_COMPANIES = gql`
   query findAll {

@@ -6,8 +6,8 @@ import styles from './Input.module.scss'
 
 type Props = {
   label?: string | ReactNode
-  name: string
-  onChange: ChangeHandler
+  name?: string
+  onChange?: ChangeHandler
   error?: any
   ref: RefCallback<any>
   classes?: Record<string, string>

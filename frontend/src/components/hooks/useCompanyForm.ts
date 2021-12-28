@@ -19,7 +19,7 @@ const useCompanyForm = (type: FormTypes) => {
       cache.writeFragment({
         id: cache.identify({
           id: data?.updateCompany.id,
-          __typename: 'Client',
+          __typename: 'Company',
         }),
         fragment: COMPANY_FRAGMENT,
         data: data.updateCompany,

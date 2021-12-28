@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsPhoneNumber, MaxLength } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -12,6 +12,19 @@ import {
   ManyToOne,
   Unique,
 } from 'typeorm';
+
+@ObjectType()
+export class InvoiceSettings {
+  @Field(() => [String])
+  serviceTypes: string[];
+}
+@InputType()
+export class InvoiceSettingsInput {
+  @Field(() => String)
+  id: string;
+  @Field(() => [String])
+  serviceTypes: string[];
+}
 
 @ObjectType()
 @Entity()
@@ -55,6 +68,10 @@ export class Company {
   @MaxLength(10)
   @Column({ type: 'text' })
   zipCode: string;
+
+  @Field(() => InvoiceSettings, { nullable: true })
+  @Column({ type: 'json', default: {} })
+  invoiceSettings: InvoiceSettings;
 
   @Field(() => User)
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
