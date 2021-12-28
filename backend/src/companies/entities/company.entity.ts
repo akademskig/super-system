@@ -15,15 +15,17 @@ import {
 
 @ObjectType()
 export class InvoiceSettings {
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   serviceTypes: string[];
+  @Field(() => [String], { nullable: true })
+  paymentMethods: string[];
 }
 @InputType()
 export class InvoiceSettingsInput {
-  @Field(() => String)
-  id: string;
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   serviceTypes: string[];
+  @Field(() => [String], { nullable: true })
+  paymentMethods: string[];
 }
 
 @ObjectType()

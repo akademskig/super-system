@@ -34,7 +34,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: omit(initialValues, ['__typename']),
+    defaultValues: omit(initialValues, ['__typename', 'invoiceSettings']),
   })
   const { onSubmit, error } = useCompanyForm(type)
 

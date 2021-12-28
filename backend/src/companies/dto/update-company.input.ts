@@ -10,6 +10,6 @@ export class UpdateCompanyInput extends PartialType(CreateCompanyInput) {
   @Field(() => String)
   id: string;
 
-  @Field(() => InvoiceSettingsInput)
+  @Field(() => InvoiceSettingsInput, { nullable: true })
   invoiceSettings: InvoiceSettings;
 }

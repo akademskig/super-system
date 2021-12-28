@@ -32,15 +32,20 @@ const InvoiceSettingsForm = ({ onCloseModal, type, initialValues }: Props) => {
   const { register, handleSubmit, watch } = useForm({
     resolver: yupResolver(schema),
     ...(initialValues
-      ? { defaultValues: omit(initialValues, ['__typename']) }
+      ? {
+          defaultValues: omit(initialValues.invoiceSettings, [
+            '__typename',
+            'id',
+          ]),
+        }
       : {
           serviceTypes: [],
         }),
   })
   const {
-    handleSubmit: handleFieldSubmit,
     register: registerField,
     watch: watchField,
+    trigger,
     formState: { errors: errorsField },
   } = useForm({ mode: 'onChange' })
 
@@ -60,19 +65,18 @@ const InvoiceSettingsForm = ({ onCloseModal, type, initialValues }: Props) => {
     (id, fieldId) => {
       const value = watch(id)
       const valueField = watchField(fieldId)
-      return () =>
-        handleFieldSubmit((v) =>
-          register(id).onChange({
-            target: {
-              value: !value?.includes(valueField)
-                ? [...(value || []), valueField]
-                : value,
-              name: id,
-            },
-          })
-        )()
+      return async () =>
+        (await trigger(fieldId)) &&
+        register(id).onChange({
+          target: {
+            value: !value?.includes(valueField)
+              ? [...(value || []), valueField]
+              : value,
+            name: id,
+          },
+        })
     },
-    [handleFieldSubmit, register, watch, watchField]
+    [register, trigger, watch, watchField]
   )
   const removeField = useCallback(
     (id, index) => {
@@ -93,7 +97,6 @@ const InvoiceSettingsForm = ({ onCloseModal, type, initialValues }: Props) => {
     },
     [watch]
   )
-
   return (
     <div className={styles.root}>
       {error && !!getErrorMessage(error).length && (
@@ -113,47 +116,53 @@ const InvoiceSettingsForm = ({ onCloseModal, type, initialValues }: Props) => {
           .map((row, idx) =>
             invoiceSettingsFormFields
               .filter((field) => field.row === row)
-              .map(({ label, id, required, fieldId, fieldType }, idx, arr) => (
-                <div className={classNames(styles.item, 'row')} key={idx}>
-                  <h5 className={styles.itemTitle}>{label}</h5>
-                  <ul className={classNames(styles.list, 'col-lg-6')}>
-                    {(getArrayValues(id) || []).map(
-                      (v: string, index: number) => (
-                        <li key={index} className={styles.listItem}>
-                          {v}
-                          <Button
-                            className={styles.removeButton}
-                            onClick={removeField(id, index)}
-                            type="button"
-                          >
-                            <FaMinus />
-                          </Button>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                  <div className="col-lg-6">
-                    <div className={styles.fieldWithButton}>
-                      {' '}
-                      <Input
-                        {...registerField(fieldId, { required })}
-                        key={idx}
-                        label={'Add new service type'}
-                        error={errorsField[id]}
-                        type={fieldType || 'text'}
-                      />
-                      <Button
-                        className={styles.removeButton}
-                        onClick={addField(id, fieldId)}
-                        type="button"
-                        disabled={!!errorsField[id]}
-                      >
-                        <FaPlus />
-                      </Button>
+              .map(
+                (
+                  { label, labelTitle, id, required, fieldId, fieldType },
+                  idx,
+                  arr
+                ) => (
+                  <div className={classNames(styles.item, 'row')} key={idx}>
+                    <h5 className={styles.itemTitle}>{labelTitle}</h5>
+                    <ul className={classNames(styles.list, 'col-lg-6')}>
+                      {(getArrayValues(id) || []).map(
+                        (v: string, index: number) => (
+                          <li key={index} className={styles.listItem}>
+                            {v}
+                            <Button
+                              className={styles.removeButton}
+                              onClick={removeField(id, index)}
+                              type="button"
+                            >
+                              <FaMinus />
+                            </Button>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                    <div className="col-lg-6">
+                      <div className={styles.fieldWithButton}>
+                        {' '}
+                        <Input
+                          {...registerField(fieldId, { required })}
+                          key={idx}
+                          label={`Add new ${label}`}
+                          error={errorsField[fieldId]}
+                          type={fieldType || 'text'}
+                        />
+                        <Button
+                          className={styles.removeButton}
+                          onClick={addField(id, fieldId)}
+                          type="button"
+                          disabled={!!errorsField[fieldId]}
+                        >
+                          <FaPlus />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                )
+              )
           )}
         <Button className={styles.button} type="submit">
           {' '}

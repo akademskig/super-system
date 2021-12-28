@@ -25,6 +25,7 @@ const useInvoiceSettingsForm = (type: FormTypes) => {
 
   const onSubmitUpdate = useCallback(
     async (values, id) => {
+      console.log(values)
       const { data } = await updateCompany({
         variables: { input: { id, invoiceSettings: values } },
       })

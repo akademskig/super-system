@@ -2,7 +2,9 @@ import { useQuery, useMutation } from '@apollo/client'
 import { useCallback } from 'react'
 import { FaBuilding, FaFileInvoice, FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { GET_COMPANIES, REMOVE_COMPANY } from '../../../../apollo/api/companies'
-import { ICompanyInvoiceSettings } from '../../../../types/companies.type'
+import {
+  ICompanyInvoiceSettings,
+} from '../../../../types/companies.type'
 import Button from '../../../common/Button'
 import Modal from '../../../common/Modal'
 import CompanyForm from '../../../forms/CompanyForm'
@@ -55,7 +57,10 @@ const CompanyList = () => {
               >
                 <InvoiceSettingsForm
                   type={FormTypes.UPDATE}
-                  initialValues={{ id: company.id, ...company.invoiceSettings }}
+                  initialValues={{
+                    id: company.id,
+                    invoiceSettings: company.invoiceSettings,
+                  }}
                 />
               </Modal>
               <Modal

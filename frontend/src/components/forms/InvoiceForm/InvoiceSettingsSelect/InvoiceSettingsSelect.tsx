@@ -9,32 +9,39 @@ type Props = {
   classes: Record<string, string>
   onChange: ChangeHandler
   companyId: string
+  name: string
+  label?: string
 }
-const ServiceTypeSelect = (
+const InvoiceSettingsSelect = (
   {
     error,
     classes,
     companyId,
+    label,
+    name,
     ...rest
   }: Props & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
-  const { data } = useQuery(GET_COMPANY, { variables: { id: companyId } })
-
+  const { data } = useQuery(GET_COMPANY, {
+    variables: { id: companyId },
+    skip: !companyId,
+  })
   const options = useMemo(
     () =>
-      (data?.company?.invoiceSettings?.serviceTypes || []).map(
+      (data?.company?.invoiceSettings?.[`${name}s`] || []).map(
         (type: string) => ({
           label: type,
           value: type,
         })
       ),
-    [data?.company?.invoiceSettings?.serviceTypes]
+    [data?.company?.invoiceSettings, name]
   )
 
   return (
     <Select
-      label={'Service Type'}
+      name={name}
+      label={label}
       classes={classes}
       error={error}
       options={options}
@@ -43,4 +50,4 @@ const ServiceTypeSelect = (
     />
   )
 }
-export default forwardRef(ServiceTypeSelect)
+export default forwardRef(InvoiceSettingsSelect)

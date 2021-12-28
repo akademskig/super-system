@@ -13,8 +13,10 @@ export interface ICompanyInvoiceSettings extends ICompany {
   invoiceSettings: InvoiceSettings
 }
 export interface InvoiceSettings {
-  serviceTypes: string[]
+    serviceTypes: string[]
+    paymentMethods: string[]
 }
-export interface InvoiceSettingsInput extends InvoiceSettings {
+export interface InvoiceSettingsInput {
   id: string
+  invoiceSettings: InvoiceSettings
 }

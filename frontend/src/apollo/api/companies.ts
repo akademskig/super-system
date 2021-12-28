@@ -13,6 +13,7 @@ export const COMPANY_FRAGMENT = gql`
     phoneNumber
     invoiceSettings {
       serviceTypes
+      paymentMethods
     }
   }
 `

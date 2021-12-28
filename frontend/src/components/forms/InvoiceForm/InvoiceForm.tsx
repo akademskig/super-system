@@ -16,7 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import useInvoiceForm, { FormTypes } from '../../hooks/useInvoiceForm'
 import getInvoiceFormSchema from './utils/getInvoiceFormSchema'
 import getDefaultFormValues from './utils/getDefaultFormValues'
-import ServiceTypeSelect from './ServiceTypeSelect'
+import InvoiceSettingsSelect from './InvoiceSettingsSelect'
 
 const rows = invoiceFormFields.map((field) => field.row)
 const rowsItems = invoiceItemsFields.map((field) => field.row)
@@ -116,9 +116,10 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                         error={errors[id]}
                       />
                     )
-                  } else if (id === 'serviceType') {
+                  } else if (id === 'serviceType' || id === 'paymentMethod') {
                     return (
-                      <ServiceTypeSelect
+                      <InvoiceSettingsSelect
+                        label={label}
                         value={watch(id) as string}
                         companyId={watch('company') as string}
                         key={idx}
