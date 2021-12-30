@@ -3,6 +3,7 @@ import { CurrenciesService } from './currencies.service';
 import { Currency } from './entities/currency.entity';
 import { CreateCurrencyInput } from './dto/create-currency.input';
 import { UpdateCurrencyInput } from './dto/update-currency.input';
+import { GetExchangeRateInput } from './dto/get-exchange-rate.input';
 
 @Resolver(() => Currency)
 export class CurrenciesResolver {
@@ -21,8 +22,11 @@ export class CurrenciesResolver {
   }
 
   @Query(() => Float, { name: 'exchangeRate' })
-  getExchangeRate(@Args('currency', { type: () => String }) currency: string) {
-    return this.currenciesService.getExchangeRate(currency);
+  getExchangeRate(
+    @Args('getExchangeRateInput', { type: () => GetExchangeRateInput })
+    getExchangeRateInput: GetExchangeRateInput,
+  ) {
+    return this.currenciesService.getExchangeRate(getExchangeRateInput);
   }
 
   @Mutation(() => Currency)

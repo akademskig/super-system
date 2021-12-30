@@ -6,7 +6,7 @@ export const GET_CURRENCIES = gql`
   }
 `
 export const GET_EXCHANGE_RATE = gql`
-  query getExchangeRate($currency: String!) {
-    exchangeRate(currency: $currency)
+  query getExchangeRate($getExchangeRateInput: GetExchangeRateInput!) {
+    exchangeRate(getExchangeRateInput: $getExchangeRateInput)
   }
 `

@@ -9,6 +9,7 @@ type Props = {
   error?: any
   classes: Record<string, string>
   onChange: ChangeHandler
+  setDefault?: boolean
 }
 const CompanySelect = (
   { error, classes, ...rest }: Props & SelectHTMLAttributes<HTMLSelectElement>,

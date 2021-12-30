@@ -16,6 +16,8 @@ import getSchemaFields from '../../../utils/getSchemaFields'
 import styles from './InvoiceSettingsForm.module.scss'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import useInvoiceSettingsForm from '../../hooks/useInvoiceSettingsForm'
+import CurrencySelect from '../InvoiceForm/CurrencySelect'
+import Textarea from '../../common/Textarea'
 
 const rows = invoiceSettingsFormFields.map((field) => field.row)
 
@@ -97,6 +99,7 @@ const InvoiceSettingsForm = ({ onCloseModal, type, initialValues }: Props) => {
     },
     [watch]
   )
+  console.log(getArrayValues('notes'))
   return (
     <div className={styles.root}>
       {error && !!getErrorMessage(error).length && (
@@ -123,43 +126,74 @@ const InvoiceSettingsForm = ({ onCloseModal, type, initialValues }: Props) => {
                   arr
                 ) => (
                   <div className={classNames(styles.item, 'row')} key={idx}>
-                    <h5 className={styles.itemTitle}>{labelTitle}</h5>
-                    <ul className={classNames(styles.list, 'col-lg-6')}>
-                      {(getArrayValues(id) || []).map(
-                        (v: string, index: number) => (
-                          <li key={index} className={styles.listItem}>
-                            {v}
+                    <h5 className={styles.itemTitle}>{labelTitle}</h5>{' '}
+                    {id === 'baseCurrency' ? (
+                      <div className="col-lg-5">
+                        <CurrencySelect
+                          value={watch('baseCurrency')}
+                          {...register(id, { required })}
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <ul
+                          className={classNames(
+                            styles.list,
+                            { 'col-12': id === 'notes' },
+                            { 'col-lg-6': id !== 'notes' }
+                          )}
+                        >
+                          {fieldType === 'array' &&
+                            (getArrayValues(id) || []).map(
+                              (v: string, index: number) => (
+                                <li key={index} className={styles.listItem}>
+                                  {v}
+                                  <Button
+                                    className={styles.removeButton}
+                                    onClick={removeField(id, index)}
+                                    type="button"
+                                  >
+                                    <FaMinus />
+                                  </Button>
+                                </li>
+                              )
+                            )}
+                        </ul>
+                        <div
+                          className={classNames(
+                            { 'col-12': id === 'notes' },
+                            { 'col-lg-6': id !== 'notes' }
+                          )}
+                        >
+                          <div className={styles.fieldWithButton}>
+                            {id === 'notes' ? (
+                              <Textarea
+                                {...registerField(fieldId, { required })}
+                                key={idx}
+                                label={`Add new ${label}`}
+                                error={errorsField[fieldId]}
+                              />
+                            ) : (
+                              <Input
+                                {...registerField(fieldId, { required })}
+                                key={idx}
+                                label={`Add new ${label}`}
+                                error={errorsField[fieldId]}
+                                type={fieldType || 'text'}
+                              />
+                            )}
                             <Button
                               className={styles.removeButton}
-                              onClick={removeField(id, index)}
+                              onClick={addField(id, fieldId)}
                               type="button"
+                              disabled={!!errorsField[fieldId]}
                             >
-                              <FaMinus />
+                              <FaPlus />
                             </Button>
-                          </li>
-                        )
-                      )}
-                    </ul>
-                    <div className="col-lg-6">
-                      <div className={styles.fieldWithButton}>
-                        {' '}
-                        <Input
-                          {...registerField(fieldId, { required })}
-                          key={idx}
-                          label={`Add new ${label}`}
-                          error={errorsField[fieldId]}
-                          type={fieldType || 'text'}
-                        />
-                        <Button
-                          className={styles.removeButton}
-                          onClick={addField(id, fieldId)}
-                          type="button"
-                          disabled={!!errorsField[fieldId]}
-                        >
-                          <FaPlus />
-                        </Button>
-                      </div>
-                    </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )
               )

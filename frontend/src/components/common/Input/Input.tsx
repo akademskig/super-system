@@ -37,7 +37,6 @@ const Input = (
 ) => {
   const handleChange = useCallback(
     (e) => {
-      console.log(type, name)
       onChange &&
         onChange({
           target: {

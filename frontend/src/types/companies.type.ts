@@ -15,6 +15,7 @@ export interface ICompanyInvoiceSettings extends ICompany {
 export interface InvoiceSettings {
   serviceTypes: string[]
   paymentMethods: string[]
+  baseCurrency: string
 }
 export interface InvoiceSettingsInput {
   id: string

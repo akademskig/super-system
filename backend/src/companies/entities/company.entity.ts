@@ -19,6 +19,10 @@ export class InvoiceSettings {
   serviceTypes: string[];
   @Field(() => [String], { nullable: true })
   paymentMethods: string[];
+  @Field(() => String, { nullable: true })
+  baseCurrency: string;
+  @Field(() => [String], { nullable: true })
+  notes: string[];
 }
 @InputType()
 export class InvoiceSettingsInput {
@@ -26,6 +30,10 @@ export class InvoiceSettingsInput {
   serviceTypes: string[];
   @Field(() => [String], { nullable: true })
   paymentMethods: string[];
+  @Field(() => String, { nullable: true })
+  baseCurrency: string;
+  @Field(() => [String], { nullable: true })
+  notes: string[];
 }
 
 @ObjectType()

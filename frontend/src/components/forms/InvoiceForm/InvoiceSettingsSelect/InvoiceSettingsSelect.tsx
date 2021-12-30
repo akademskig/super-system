@@ -11,6 +11,7 @@ type Props = {
   companyId: string
   name: string
   label?: string
+  setDefault?: boolean
 }
 const InvoiceSettingsSelect = (
   {

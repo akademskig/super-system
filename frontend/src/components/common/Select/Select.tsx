@@ -24,6 +24,7 @@ type Props = {
   error?: any
   onChange?: ChangeHandler
   label?: string
+  setDefault?: boolean
 }
 
 const getDefaultLabel = (label?: string) =>
@@ -38,6 +39,8 @@ const Select = (
     name,
     label,
     value,
+    setDefault,
+    defaultValue,
   }: Props & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
@@ -53,10 +56,23 @@ const Select = (
   }, [name, onChange, options])
 
   useEffect(() => {
+    if (!value) {
+      onChange &&
+        onChange({
+          target: {
+            value: defaultValue
+              ? defaultValue
+              : setDefault
+              ? options?.[0]?.value
+              : '',
+            name,
+          },
+        })
+    }
     setSelectedLabel(
       options.find((o) => o.value === value)?.label || getDefaultLabel(label)
     )
-  }, [label, options, value])
+  }, [defaultValue, label, name, onChange, options, setDefault, value])
 
   return (
     <div className={classNames(styles.root, classes?.root)}>

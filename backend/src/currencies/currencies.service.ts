@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { get } from 'env-var';
 import { firstValueFrom } from 'rxjs';
+import { GetExchangeRateInput } from './dto/get-exchange-rate.input';
 
 const EXCHANGE_RATE_API = get('EXCHANGE_RATE_API').required().asString();
 const SUPPORTED_CURRENCY = get('SUPPORTED_CURRENCY').required().asArray();
@@ -14,10 +15,11 @@ export class CurrenciesService {
     return SUPPORTED_CURRENCY;
   }
 
-  async getExchangeRate(currency: string) {
-    console.log(`${EXCHANGE_RATE_API}/pair/${currency}/HRK`);
+  async getExchangeRate(getExchangeRateInput: GetExchangeRateInput) {
+    const { from, to } = getExchangeRateInput;
+    console.log(`${EXCHANGE_RATE_API}/pair/${to}/${from}`);
     const o = await this.httpService.get(
-      `${EXCHANGE_RATE_API}/pair/${currency}/HRK`,
+      `${EXCHANGE_RATE_API}/pair/${to}/${from}`,
     );
     const r = await firstValueFrom(o);
     if (r) {

@@ -14,6 +14,8 @@ export const COMPANY_FRAGMENT = gql`
     invoiceSettings {
       serviceTypes
       paymentMethods
+      baseCurrency
+      notes
     }
   }
 `

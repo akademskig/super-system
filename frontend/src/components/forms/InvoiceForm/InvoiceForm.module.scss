@@ -41,10 +41,10 @@
 
 .accountItem {
   position: relative;
-  box-shadow: 0 0 2px 1px lighten($secondary-light, 20);
-  // border: groove 2px $secondary-light;
+  box-shadow: 0 3px 2px -2px $secondary-main;
   padding: $padding-m;
   margin: $padding-m 0;
+  padding-bottom: $padding-l;
 }
 .textarea {
   margin-bottom: $padding-m;
@@ -71,8 +71,14 @@
   }
 }
 .price {
-  padding: $padding-m 0;
-  border-top: solid 2px $primary-main;
+  box-shadow: 0 -3px 2px -2px $primary-light;
+  margin-bottom: 0;
+  > div {
+    padding: $padding-m;
+  }
+  > :nth-child(2) {
+    border-top: solid 1px $primary-main;
+  }
 }
 .priceItem {
   display: flex;
@@ -82,5 +88,10 @@
   label {
     font-weight: bold;
     text-align: right;
+  }
+}
+.currencySelectRoot {
+  label {
+    justify-content: flex-end;
   }
 }

@@ -6,7 +6,7 @@ import Select from '../../../common/Select'
 
 type Props = {
   error?: any
-  classes: Record<string, string>
+  classes?: Record<string, string>
   label?: string
   value?: string
   onChange: ChangeHandler
@@ -32,17 +32,15 @@ const CurrencySelect = (
     [data?.currencies]
   )
   return (
-    <div>
-      <Select
-        value={value}
-        label={label}
-        classes={classes}
-        error={error}
-        options={options}
-        ref={ref}
-        {...rest}
-      />
-    </div>
+    <Select
+      value={value}
+      label={label}
+      classes={classes}
+      error={error}
+      options={options}
+      ref={ref}
+      {...rest}
+    />
   )
 }
 export default forwardRef(CurrencySelect)

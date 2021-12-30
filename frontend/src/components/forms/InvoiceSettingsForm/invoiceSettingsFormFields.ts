@@ -17,6 +17,24 @@ const invoiceSettingsFormFields = [
     required: true,
     fieldType: 'array',
   },
+  {
+    labelTitle: 'Base currency',
+    label: 'base currency',
+    id: 'baseCurrency',
+    fieldId: 'baseCurrency',
+    row: 3,
+    required: true,
+    fieldType: 'select',
+  },
+  {
+    labelTitle: 'Notes',
+    label: 'note',
+    id: 'notes',
+    fieldId: 'note',
+    row: 3,
+    required: true,
+    fieldType: 'array',
+  },
 ]
 
 export default invoiceSettingsFormFields

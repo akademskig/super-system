@@ -1,5 +1,11 @@
 import classNames from 'classnames'
-import { forwardRef, InputHTMLAttributes, ReactNode, RefCallback } from 'react'
+import {
+  forwardRef,
+  InputHTMLAttributes,
+  ReactNode,
+  RefCallback,
+  TextareaHTMLAttributes,
+} from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import styles from './Textarea.module.scss'
 
@@ -22,7 +28,7 @@ const Textarea = (
     classes,
     withMessage,
     ...rest
-  }: Props & InputHTMLAttributes<HTMLTextAreaElement>,
+  }: Props & TextareaHTMLAttributes<HTMLTextAreaElement>,
   ref: any
 ) => {
   return (
