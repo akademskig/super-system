@@ -3,7 +3,9 @@ import getSchemaFields from '../../../../utils/getSchemaFields'
 
 import invoiceFormFields, { invoiceItemsFields } from '../invoiceFormFields'
 const getInvoiceFormSchema = () => {
-  const invoiceSchema = getSchemaFields(invoiceFormFields)
+  const invoiceSchemaTop = getSchemaFields(invoiceFormFields.top)
+  const invoiceSchemaBottom = getSchemaFields(invoiceFormFields.top)
+  const invoiceSchema = { ...invoiceSchemaTop, ...invoiceSchemaBottom }
   const invoiceItemShape = getSchemaFields(invoiceItemsFields)
   const invoiceItemsShape = yup.object().shape(invoiceItemShape)
   const invoiceItemsSchema = yup.array().of(invoiceItemsShape)

@@ -1,10 +1,4 @@
-import {
-  ObjectType,
-  Field,
-  registerEnumType,
-  InputType,
-  Int,
-} from '@nestjs/graphql';
+import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
 import { Length } from 'class-validator';
 import { Client } from 'src/clients/entities/client.entity';
 import { Company } from 'src/companies/entities/company.entity';
@@ -19,6 +13,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { InvoiceItem } from './invoice-item.entity';
+import { Price } from './price.entity';
 
 export enum InvoiceTypes {
   R = 'R',
@@ -27,41 +23,17 @@ export enum InvoiceTypes {
   ADVANCE = 'advance',
   NONE = 'none',
 }
-
+const defaultInvoiceItem = {
+  desciption: '',
+  unit: '',
+  price: 0,
+  discount: 0,
+  tax: 0,
+  amount: 0,
+};
 registerEnumType(InvoiceTypes, {
   name: 'InvoiceTypes',
 });
-
-@ObjectType()
-export class InvoiceItem {
-  @Field(() => String)
-  description: string;
-  @Field(() => String)
-  unit: string;
-  @Field(() => String)
-  price: string;
-  @Field(() => String)
-  discount: string;
-  @Field(() => String)
-  tax: string;
-  @Field(() => Int)
-  amount: number;
-}
-@InputType()
-export class InvoiceItemInput {
-  @Field(() => String)
-  description: string;
-  @Field(() => String)
-  unit: string;
-  @Field(() => String)
-  price: string;
-  @Field(() => String)
-  discount: string;
-  @Field(() => String)
-  tax: string;
-  @Field(() => Int)
-  amount: number;
-}
 
 @Entity()
 @ObjectType()
@@ -108,8 +80,17 @@ export class Invoice {
   notes: string;
 
   @Field(() => [InvoiceItem], { nullable: true })
-  @Column({ type: 'json', default: [] })
+  @Column({ type: 'json', default: [defaultInvoiceItem] })
   items: InvoiceItem[];
+
+  @Field(() => Price, { nullable: true })
+  @Column({ type: 'json', default: { net: 0, gross: 0 } })
+  price: Price;
+
+  @Field(() => String, { nullable: true })
+  @Length(3)
+  @Column('text', { nullable: true })
+  currency: string;
 
   @Field(() => Date)
   @Column({ type: Date })

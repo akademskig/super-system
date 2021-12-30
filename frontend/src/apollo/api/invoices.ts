@@ -11,6 +11,11 @@ export const INVOICE_FRAGMENT = gql`
     paymentDeadline
     shipmentDate
     notes
+    currency
+    price {
+      net
+      gross
+    }
     items {
       description
       unit

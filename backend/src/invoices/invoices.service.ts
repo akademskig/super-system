@@ -8,6 +8,8 @@ import { Invoice } from './entities/invoice.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { Client } from 'src/clients/entities/client.entity';
 import { UpdateCompanyInput } from 'src/companies/dto/update-company.input';
+import { InvoiceItem } from './entities/invoice-item.entity';
+import { CalculatePriceInput } from './dto/price.input';
 
 @Injectable()
 export class InvoicesService {
@@ -70,5 +72,22 @@ export class InvoicesService {
   async remove(id: string) {
     await this.invoiceRepo.delete(id);
     return { id };
+  }
+
+  calculatePrice(invoice: CalculatePriceInput) {
+    const defaultPrice = { net: 0, gross: 0 };
+    const { items } = invoice;
+    const price = items?.reduce((acc, curr) => {
+      const grossPrice = curr.price * curr.amount;
+      const netPrice = grossPrice / (1 + curr.tax / 100);
+      return {
+        net: acc.net + netPrice,
+        gross: acc.gross + grossPrice,
+      };
+    }, defaultPrice);
+    if (price) {
+      return price;
+    }
+    return defaultPrice;
   }
 }

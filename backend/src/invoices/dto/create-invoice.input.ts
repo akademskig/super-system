@@ -1,10 +1,10 @@
 import { InputType, Field } from '@nestjs/graphql';
-import {
-  InvoiceItem,
-  InvoiceItemInput,
-  InvoiceTypes,
-} from '../entities/invoice.entity';
+import { InvoiceTypes } from '../entities/invoice.entity';
 import { Timestamp } from 'typeorm';
+import { InvoiceItemInput } from './invoice-item.input';
+import { InvoiceItem } from '../entities/invoice-item.entity';
+import { PriceInput } from './price.input';
+import { Price } from '../entities/price.entity';
 
 @InputType()
 export class CreateInvoiceInput {
@@ -13,6 +13,9 @@ export class CreateInvoiceInput {
 
   @Field(() => String)
   invoiceNumber: string;
+
+  @Field(() => String)
+  currency: string;
 
   @Field(() => String)
   paymentMethod: string;
@@ -40,4 +43,7 @@ export class CreateInvoiceInput {
 
   @Field(() => [InvoiceItemInput])
   items: InvoiceItem[];
+
+  @Field(() => PriceInput)
+  price: Price;
 }

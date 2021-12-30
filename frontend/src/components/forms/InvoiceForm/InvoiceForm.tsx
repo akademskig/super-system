@@ -10,15 +10,19 @@ import ClientSelect from './ClientSelect'
 import InvoiceTypeSelect from './InvoiceTypeSelect'
 import CompanySelect from './CompanySelect'
 import invoiceFormFields, { invoiceItemsFields } from './invoiceFormFields'
-import { uniq } from 'lodash'
-import { IInvoice, InvoiceItems } from '../../../types/invoices.type'
+import { omit, uniq } from 'lodash'
+import { IInvoice, InvoiceItems, Price } from '../../../types/invoices.type'
 import { yupResolver } from '@hookform/resolvers/yup'
 import useInvoiceForm, { FormTypes } from '../../hooks/useInvoiceForm'
 import getInvoiceFormSchema from './utils/getInvoiceFormSchema'
 import getDefaultFormValues from './utils/getDefaultFormValues'
 import InvoiceSettingsSelect from './InvoiceSettingsSelect'
+import CurrencySelect from './CurrencySelect'
+import useCalculatePrice from '../../hooks/useCalculatePrice'
+import { useIntl } from 'react-intl'
 
-const rows = invoiceFormFields.map((field) => field.row)
+const rowsTop = invoiceFormFields.top.map((field) => field.row)
+const rowsBottom = invoiceFormFields.bottom.map((field) => field.row)
 const rowsItems = invoiceItemsFields.map((field) => field.row)
 
 const schema = getInvoiceFormSchema()
@@ -33,9 +37,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     register,
     handleSubmit,
     control,
+    getValues,
     watch,
     formState: { errors },
   } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(schema),
     ...getDefaultFormValues(initialValues),
   })
@@ -45,7 +51,10 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     control: control as Control<Record<string, InvoiceItems[]>>,
     name: 'items',
   })
+  const { formatNumber } = useIntl()
   const { onSubmit } = useInvoiceForm(type)
+  const { calculatePrice } = useCalculatePrice()
+
   const submitHandler = useCallback(
     async (values) => {
       const res = await onSubmit(values)
@@ -61,6 +70,17 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     }
   }, [append, fields.length])
 
+  const onWatch = useCallback(
+    async ({ name, value }) => {
+      const price = await calculatePrice(getValues().items)
+      console.log(price)
+      register('price').onChange({
+        target: { value: omit(price, ['__typename']), name: 'price' },
+      })
+    },
+    [calculatePrice, getValues, register]
+  )
+
   return (
     <div className={styles.root}>
       <form
@@ -70,11 +90,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
         <div className="row">
           <p>Marked fields (*) are required</p>
         </div>
-        {uniq(rows)
+        {uniq(rowsTop)
           .sort()
           .map((row, idx) => (
             <div className={'row'} key={idx}>
-              {invoiceFormFields
+              {invoiceFormFields.top
                 .filter((field) => field.row === row)
                 .map(({ label, id, required, width, fieldType }, idx, arr) => {
                   if (id === 'company') {
@@ -234,15 +254,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                 root: `col-lg-${width}`,
                                 label: required ? styles.labelRequired : '',
                               }}
-                              {...{
-                                withMessage:
-                                  (fieldType === 'email' &&
-                                    (errors[id as keyof IInvoice] as FieldError)
-                                      ?.type === 'email') ||
-                                  (fieldType === 'phone' &&
-                                    (errors[id as keyof IInvoice] as FieldError)
-                                      ?.type === 'matches'),
-                              }}
+                              watch={onWatch}
                               label={label}
                               {...register(`items[${index}][${id}]`)}
                               error={
@@ -259,6 +271,53 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                 ))}
             </div>
           ))}
+          {uniq(rowsBottom)
+            .sort()
+            .map((row, idx) => (
+              <div className={'row'} key={idx}>
+                {invoiceFormFields.bottom
+                  .filter((field) => field.row === row)
+                  .map(
+                    ({ label, id, required, width, fieldType }, idx, arr) => {
+                      if (id === 'currency') {
+                        return (
+                          <CurrencySelect
+                            label={label}
+                            value={watch(id) as string}
+                            key={idx}
+                            classes={{
+                              root: `col-lg-${width}`,
+                              label: styles.labelRequired,
+                            }}
+                            {...register(id)}
+                            error={errors[id]}
+                          />
+                        )
+                      }
+                    }
+                  )}
+              </div>
+            ))}
+        </div>
+        <div className={classNames(styles.price, 'row justify-content-end')}>
+          <div className="col-lg-3">
+            <span className={styles.priceItem}>
+              <label>Net </label>
+              {formatNumber((watch('price') as Price)?.net, {
+                style: 'currency',
+                currency: watch('currency') as string,
+              })}
+            </span>
+          </div>
+          <div className="col-lg-3">
+            <span className={styles.priceItem}>
+              <label>Gross </label>
+              {formatNumber((watch('price') as Price)?.gross, {
+                style: 'currency',
+                currency: watch('currency') as string,
+              })}
+            </span>
+          </div>
         </div>
         <Button className={styles.button} type="submit">
           Save

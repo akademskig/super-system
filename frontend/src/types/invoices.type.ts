@@ -20,7 +20,17 @@ export interface IInvoice {
   paymentDeadline: Date
   shipmentDate: Date
   items: InvoiceItems[]
+  price: Price
 }
 export type InvoiceItems = {
   description: string
+  unit: string
+  price: number
+  amount: number
+  discount: number
+  tax: number
+}
+export type Price = {
+  net: number
+  gross: number
 }

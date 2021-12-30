@@ -70,3 +70,17 @@
     }
   }
 }
+.price {
+  padding: $padding-m 0;
+  border-top: solid 2px $primary-main;
+}
+.priceItem {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: right;
+  label {
+    font-weight: bold;
+    text-align: right;
+  }
+}

@@ -7,6 +7,7 @@ import { InvoicesModule } from './invoices/invoices.module';
 import { ClientsModule } from './clients/clients.module';
 import { AuthModule } from './auth/auth.module';
 import { CompaniesModule } from './companies/companies.module';
+import { CurrenciesModule } from './currencies/currencies.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CompaniesModule } from './companies/companies.module';
     SendgridModule,
     ClientsModule,
     CompaniesModule,
+    CurrenciesModule,
   ],
 })
 export class AppModule {}

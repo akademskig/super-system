@@ -2,7 +2,7 @@ import { omit } from 'lodash'
 import moment from 'moment'
 import { IClient } from '../../../../types/clients.type'
 import { ICompany } from '../../../../types/companies.type'
-import { IInvoice, InvoiceItems } from '../../../../types/invoices.type'
+import { IInvoice, InvoiceItems, Price } from '../../../../types/invoices.type'
 
 const getDefaultFormValues = (initialValues?: IInvoice) => {
   return {
@@ -17,6 +17,8 @@ const getDefaultFormValues = (initialValues?: IInvoice) => {
               acc[key] = moment(initialValues[key]).format('YYYY-MM-DD')
             } else if (key === 'date') {
               acc[key] = moment(initialValues[key]).format('YYYY-MM-DDThh:mm')
+            } else if (key === 'price') {
+              acc[key] = omit(initialValues[key], ['__typename']) as Price
             } else if (key === 'items') {
               acc[key] = (
                 initialValues[key as keyof IInvoice] as InvoiceItems[]
@@ -25,7 +27,7 @@ const getDefaultFormValues = (initialValues?: IInvoice) => {
               acc[key] = initialValues[key as keyof IInvoice] as string
             }
             return acc
-          }, {} as Record<string, string | InvoiceItems[]>),
+          }, {} as Record<string, string | InvoiceItems[] | Price>),
           ['__typename', 'createdAt']
         )
       : {

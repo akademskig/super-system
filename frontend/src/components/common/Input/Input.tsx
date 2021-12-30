@@ -1,17 +1,24 @@
 import classNames from 'classnames'
-import { forwardRef, InputHTMLAttributes, ReactNode, RefCallback } from 'react'
+import {
+  forwardRef,
+  InputHTMLAttributes,
+  ReactNode,
+  RefCallback,
+  useCallback,
+} from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import { FaCalendar, FaCalendarDay } from 'react-icons/fa'
 import styles from './Input.module.scss'
 
 type Props = {
   label?: string | ReactNode
-  name?: string
+  name: string
   onChange?: ChangeHandler
   error?: any
   ref: RefCallback<any>
   classes?: Record<string, string>
   withMessage?: boolean
+  watch?: ({ name, value }: { name: string; value: string | number }) => void
 }
 
 const Input = (
@@ -19,6 +26,7 @@ const Input = (
     label,
     name,
     onChange,
+    watch,
     type,
     error,
     classes,
@@ -27,6 +35,24 @@ const Input = (
   }: Props & InputHTMLAttributes<HTMLInputElement>,
   ref: any
 ) => {
+  const handleChange = useCallback(
+    (e) => {
+      console.log(type, name)
+      onChange &&
+        onChange({
+          target: {
+            value: type === 'number' ? Number(e.target.value) : e.target.value,
+            name,
+          },
+        })
+      watch &&
+        watch({
+          value: type === 'number' ? Number(e.target.value) : e.target.value,
+          name,
+        })
+    },
+    [name, onChange, type, watch]
+  )
   return (
     <div className={classNames(styles.root, classes?.root)}>
       <label className={classNames(styles.label, classes?.label)}>
@@ -38,7 +64,7 @@ const Input = (
           type={type}
           ref={ref}
           name={name}
-          onChange={onChange}
+          onChange={handleChange}
           className={classNames(styles.input, { [styles.error]: error })}
         />
         {type === 'date' && <FaCalendar className={styles.calendarIcon} />}
