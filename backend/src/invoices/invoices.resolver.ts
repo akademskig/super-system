@@ -39,6 +39,13 @@ export class InvoicesResolver {
   ) {
     return this.invoicesService.calculatePrice(invoice);
   }
+  @Query(() => String, { name: 'invoiceNumber' })
+  getNextInvoiceNumber(
+    @Args('companyId', { type: () => String })
+    companyId: string,
+  ) {
+    return this.invoicesService.getNextInvoiceNumber(companyId);
+  }
 
   @Mutation(() => Invoice)
   updateInvoice(

@@ -59,7 +59,8 @@ const Select = (
   }, [name, onChange, options, watch])
 
   useEffect(() => {
-    if (!value) {
+    const inOptions = options.find((o) => o.value === value)
+    if (!value || !inOptions) {
       onChange &&
         onChange({
           target: {
@@ -72,11 +73,13 @@ const Select = (
           },
         })
     }
+  }, [defaultValue, label, name, onChange, options, setDefault, value])
+
+  useEffect(() => {
     setSelectedLabel(
       options.find((o) => o.value === value)?.label || getDefaultLabel(label)
     )
-  }, [defaultValue, label, name, onChange, options, setDefault, value])
-
+  }, [label, options, value])
   return (
     <div className={classNames(styles.root, classes?.root)}>
       <label className={classes?.label}>{label}</label>

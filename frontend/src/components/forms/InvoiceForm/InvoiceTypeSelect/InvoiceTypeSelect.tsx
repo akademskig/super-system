@@ -1,7 +1,7 @@
 import { ForwardedRef, forwardRef, SelectHTMLAttributes, useMemo } from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import { InvoiceTypes } from '../../../../types/invoices.type'
-import Select from '../../../common/Select'
+import Select, { SelectProps } from '../../../common/Select'
 
 type Props = {
   error?: any
@@ -9,7 +9,11 @@ type Props = {
   onChange: ChangeHandler
 }
 const InvoiceTypeSelect = (
-  { error, classes, ...rest }: Props & SelectHTMLAttributes<HTMLSelectElement>,
+  {
+    error,
+    classes,
+    ...rest
+  }: Props & Partial<SelectProps> & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const options = useMemo(

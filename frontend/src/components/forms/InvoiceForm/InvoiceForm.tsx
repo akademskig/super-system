@@ -24,6 +24,7 @@ import useBaseCurrency from '../../hooks/useBaseCurrency'
 import useExchangeRates from '../../hooks/useExchangeRates'
 import { GET_COMPANY } from '../../../apollo/api/companies'
 import { useQuery } from '@apollo/client'
+import useNextInvoiceNumber from '../../hooks/useNextInvoiceNumber'
 
 const rowsTop = invoiceFormFields.top.map((field) => field.row)
 const rowsBottom = invoiceFormFields.bottom.map((field) => field.row)
@@ -136,6 +137,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     },
     [baseCurrency, formatNumber, getExchangeRate, notes, register]
   )
+  const { invoiceNumber } = useNextInvoiceNumber(watch('company') as string)
   return (
     <div className={styles.root}>
       <form
@@ -169,6 +171,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'client') {
                     return (
                       <ClientSelect
+                        setDefault
                         value={watch(id) as string}
                         key={idx}
                         classes={{
@@ -182,6 +185,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'invoiceType') {
                     return (
                       <InvoiceTypeSelect
+                        setDefault
                         value={watch(id) as string}
                         key={idx}
                         classes={{
@@ -227,6 +231,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   }
                   return (
                     <Input
+                      defaultValue={id === 'invoiceNumber' ? invoiceNumber : ''}
                       key={idx}
                       classes={{
                         root: `col-lg-${width}`,

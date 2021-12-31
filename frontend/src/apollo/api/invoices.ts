@@ -43,6 +43,11 @@ export const GET_INVOICES = gql`
   }
   ${INVOICE_FRAGMENT}
 `
+export const GET_NEXT_INVOICE_NUMBER = gql`
+  query getNextInvoiceNumber($companyId: String!) {
+    invoiceNumber(companyId: $companyId)
+  }
+`
 export const CREATE_INVOICE = gql`
   mutation createInvoice($input: CreateInvoiceInput!) {
     createInvoice(createInvoiceInput: $input) {

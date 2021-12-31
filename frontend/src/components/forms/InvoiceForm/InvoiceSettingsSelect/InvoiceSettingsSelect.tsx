@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { ForwardedRef, forwardRef, SelectHTMLAttributes, useMemo } from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import { GET_COMPANY } from '../../../../apollo/api/companies'
-import Select from '../../../common/Select'
+import Select, { SelectProps } from '../../../common/Select'
 
 type Props = {
   error?: any
@@ -23,7 +23,7 @@ const InvoiceSettingsSelect = (
     field,
     name,
     ...rest
-  }: Props & SelectHTMLAttributes<HTMLSelectElement>,
+  }: Props & Partial<SelectProps> & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const { data } = useQuery(GET_COMPANY, {

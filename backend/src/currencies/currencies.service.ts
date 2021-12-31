@@ -17,7 +17,6 @@ export class CurrenciesService {
 
   async getExchangeRate(getExchangeRateInput: GetExchangeRateInput) {
     const { from, to } = getExchangeRateInput;
-    console.log(`${EXCHANGE_RATE_API}/pair/${to}/${from}`);
     const o = await this.httpService.get(
       `${EXCHANGE_RATE_API}/pair/${to}/${from}`,
     );

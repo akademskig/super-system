@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getConnectionName, InjectRepository } from '@nestjs/typeorm';
+import { Repository, getConnection } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { CreateInvoiceInput } from './dto/create-invoice.input';
 import { UpdateInvoiceInput } from './dto/update-invoice.input';
@@ -10,6 +10,7 @@ import { Client } from 'src/clients/entities/client.entity';
 import { UpdateCompanyInput } from 'src/companies/dto/update-company.input';
 import { InvoiceItem } from './entities/invoice-item.entity';
 import { CalculatePriceInput } from './dto/price.input';
+import getNextInvoiceNumber from './utils/getNextInvoiceNumber';
 
 @Injectable()
 export class InvoicesService {
@@ -89,5 +90,21 @@ export class InvoicesService {
       return price;
     }
     return defaultPrice;
+  }
+
+  async getNextInvoiceNumber(companyId: string) {
+    const res = await this.invoiceRepo.find({
+      where: { company: companyId },
+      order: {
+        createdAt: 'DESC',
+      },
+      select: ['invoiceNumber'],
+      take: 1,
+    });
+    if (res && res[0]) {
+      return getNextInvoiceNumber(res[0].invoiceNumber);
+    } else {
+      return getNextInvoiceNumber();
+    }
   }
 }

@@ -3,7 +3,7 @@ import { ForwardedRef, forwardRef, SelectHTMLAttributes, useMemo } from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import { GET_CLIENTS } from '../../../../apollo/api/clients'
 import { IClient } from '../../../../types/clients.type'
-import Select from '../../../common/Select'
+import Select, { SelectProps } from '../../../common/Select'
 
 type Props = {
   error?: any
@@ -11,7 +11,11 @@ type Props = {
   onChange: ChangeHandler
 }
 const ClientSelect = (
-  { error, classes, ...rest }: Props & SelectHTMLAttributes<HTMLSelectElement>,
+  {
+    error,
+    classes,
+    ...rest
+  }: Props & Partial<SelectProps> & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const { data } = useQuery(GET_CLIENTS)
