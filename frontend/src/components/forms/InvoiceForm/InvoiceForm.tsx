@@ -286,6 +286,9 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                           if (id === 'description') {
                             return (
                               <Textarea
+                                value={
+                                  watch(`items[${index}][${id}]`) as string
+                                }
                                 defaultValue={watch('serviceType') as string}
                                 error={
                                   (
@@ -307,6 +310,25 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                 }}
                                 {...register(`items[${index}][${id}]`)}
                                 label={label}
+                              />
+                            )
+                          } else if (id === 'unit') {
+                            return (
+                              <InvoiceSettingsSelect
+                                field={'units'}
+                                label={label}
+                                setDefault
+                                value={
+                                  watch(`items[${index}][${id}]`) as string
+                                }
+                                companyId={watch('company') as string}
+                                key={idx}
+                                classes={{
+                                  root: `col-lg-${width}`,
+                                  label: styles.labelRequired,
+                                }}
+                                {...register(`items[${index}][${id}]`)}
+                                error={errors[`items[${index}][${id}]`]}
                               />
                             )
                           }

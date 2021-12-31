@@ -16,6 +16,7 @@ export const COMPANY_FRAGMENT = gql`
       paymentMethods
       baseCurrency
       notes
+      units
     }
   }
 `

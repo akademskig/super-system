@@ -12,6 +12,7 @@ type Props = {
   name: string
   label?: string
   setDefault?: boolean
+  field?: string
 }
 const InvoiceSettingsSelect = (
   {
@@ -19,6 +20,7 @@ const InvoiceSettingsSelect = (
     classes,
     companyId,
     label,
+    field,
     name,
     ...rest
   }: Props & SelectHTMLAttributes<HTMLSelectElement>,
@@ -30,15 +32,14 @@ const InvoiceSettingsSelect = (
   })
   const options = useMemo(
     () =>
-      (data?.company?.invoiceSettings?.[`${name}s`] || []).map(
+      (data?.company?.invoiceSettings?.[field || `${name}s`] || []).map(
         (type: string) => ({
           label: type,
           value: type,
         })
       ),
-    [data?.company?.invoiceSettings, name]
+    [data?.company?.invoiceSettings, field, name]
   )
-
   return (
     <Select
       name={name}

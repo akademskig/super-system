@@ -35,6 +35,15 @@ const invoiceSettingsFormFields = [
     required: true,
     fieldType: 'array',
   },
+  {
+    labelTitle: 'Units',
+    label: 'unit',
+    id: 'units',
+    fieldId: 'unit',
+    row: 4,
+    required: true,
+    fieldType: 'array',
+  },
 ]
 
 export default invoiceSettingsFormFields

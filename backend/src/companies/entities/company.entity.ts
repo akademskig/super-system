@@ -23,6 +23,8 @@ export class InvoiceSettings {
   baseCurrency: string;
   @Field(() => [String], { nullable: true })
   notes: string[];
+  @Field(() => [String], { nullable: true })
+  units: string[];
 }
 @InputType()
 export class InvoiceSettingsInput {
@@ -34,6 +36,8 @@ export class InvoiceSettingsInput {
   baseCurrency: string;
   @Field(() => [String], { nullable: true })
   notes: string[];
+  @Field(() => [String], { nullable: true })
+  units: string[];
 }
 
 @ObjectType()
