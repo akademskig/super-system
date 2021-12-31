@@ -1,5 +1,5 @@
-import { useQuery } from '@apollo/client'
-import { useMemo } from 'react'
+import { useApolloClient, useQuery } from '@apollo/client'
+import { useCallback, useMemo } from 'react'
 import { GET_EXCHANGE_RATE } from '../../apollo/api/currencies'
 
 const useExchangeRates = (
@@ -7,6 +7,7 @@ const useExchangeRates = (
   baseCurrency?: string,
   price?: number
 ) => {
+  const client = useApolloClient()
   const { data } = useQuery(GET_EXCHANGE_RATE, {
     variables: { getExchangeRateInput: { from: baseCurrency, to: currency } },
     skip: !currency || !baseCurrency,
@@ -17,9 +18,22 @@ const useExchangeRates = (
     return exPrice
   }, [data?.exchangeRate, price])
 
+  const getExchangeRate = useCallback(
+    async ({ currency, baseCurrency }) => {
+      const { data } = await client.query({
+        query: GET_EXCHANGE_RATE,
+        variables: {
+          getExchangeRateInput: { from: baseCurrency, to: currency },
+        },
+      })
+      return data?.exchangeRate
+    },
+    [client]
+  )
   return {
     exchangeRate: data?.exchangeRate,
     exchangePrice,
+    getExchangeRate,
   }
 }
 export default useExchangeRates

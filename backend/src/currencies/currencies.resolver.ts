@@ -1,20 +1,11 @@
 import { Resolver, Query, Mutation, Args, Int, Float } from '@nestjs/graphql';
 import { CurrenciesService } from './currencies.service';
 import { Currency } from './entities/currency.entity';
-import { CreateCurrencyInput } from './dto/create-currency.input';
-import { UpdateCurrencyInput } from './dto/update-currency.input';
 import { GetExchangeRateInput } from './dto/get-exchange-rate.input';
 
 @Resolver(() => Currency)
 export class CurrenciesResolver {
   constructor(private readonly currenciesService: CurrenciesService) {}
-
-  @Mutation(() => Currency)
-  createCurrency(
-    @Args('createCurrencyInput') createCurrencyInput: CreateCurrencyInput,
-  ) {
-    return this.currenciesService.create(createCurrencyInput);
-  }
 
   @Query(() => [String], { name: 'currencies' })
   findAll() {
@@ -27,16 +18,6 @@ export class CurrenciesResolver {
     getExchangeRateInput: GetExchangeRateInput,
   ) {
     return this.currenciesService.getExchangeRate(getExchangeRateInput);
-  }
-
-  @Mutation(() => Currency)
-  updateCurrency(
-    @Args('updateCurrencyInput') updateCurrencyInput: UpdateCurrencyInput,
-  ) {
-    return this.currenciesService.update(
-      updateCurrencyInput.id,
-      updateCurrencyInput,
-    );
   }
 
   @Mutation(() => Currency)

@@ -18,11 +18,12 @@ type Option = {
   value: string
 }
 
-type Props = {
+export type SelectProps = {
   options: Option[]
   classes?: Record<string, string>
   error?: any
   onChange?: ChangeHandler
+  watch?: ChangeHandler
   label?: string
   setDefault?: boolean
 }
@@ -36,12 +37,13 @@ const Select = (
     classes,
     error,
     onChange,
+    watch,
     name,
     label,
     value,
     setDefault,
     defaultValue,
-  }: Props & SelectHTMLAttributes<HTMLSelectElement>,
+  }: SelectProps & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const [selectedLabel, setSelectedLabel] = useState(getDefaultLabel(label))
@@ -51,9 +53,10 @@ const Select = (
       ...option,
       action: (e: ChangeEvent<HTMLSelectElement>) => {
         onChange && onChange({ target: { value: option.value, name } })
+        watch && watch({ target: { value: option.value, name } })
       },
     }))
-  }, [name, onChange, options])
+  }, [name, onChange, options, watch])
 
   useEffect(() => {
     if (!value) {

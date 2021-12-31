@@ -99,7 +99,6 @@ const InvoiceSettingsForm = ({ onCloseModal, type, initialValues }: Props) => {
     },
     [watch]
   )
-  console.log(getArrayValues('notes'))
   return (
     <div className={styles.root}>
       {error && !!getErrorMessage(error).length && (

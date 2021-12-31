@@ -83,7 +83,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
   }, [append, fields.length])
 
   const onWatch = useCallback(
-    async ({ name, value }) => {
+    async ({ target: { value, name } }) => {
       const price = await calculatePrice(getValues().items)
       register('price').onChange({
         target: { value: omit(price, ['__typename']), name: 'price' },
@@ -96,12 +96,46 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     },
     [calculatePrice, getValues, register, setHasTax, watch]
   )
-  const { exchangeRate, exchangePrice } = useExchangeRates(
+  const { exchangeRate, exchangePrice, getExchangeRate } = useExchangeRates(
     watch('currency') as string,
     baseCurrency,
     watch('price.gross') as number
   )
   const currency = watch('currency') as string
+  const notes = watch('notes') as string
+  const onWatchCurrency = useCallback(
+    async ({ target: { value, name } }) => {
+      const exchangeRateCurrent = await getExchangeRate({
+        currency: value,
+        baseCurrency,
+      })
+      const newString = `${
+        notes?.length ? '\n' : ''
+      }Preračunato po srednjem tečaju HNB-a (${formatNumber(1, {
+        style: 'currency',
+        currency: value || 'HRK',
+      })} = ${formatNumber(exchangeRateCurrent, {
+        style: 'currency',
+        currency: baseCurrency || 'HRK',
+      })})`
+      if (value !== baseCurrency) {
+        return register('notes').onChange({
+          target: {
+            value: (notes || '').concat(newString),
+            name: 'notes',
+          },
+        })
+      } else {
+        return register('notes').onChange({
+          target: {
+            value: (notes || '').replace(newString, ''),
+            name: 'notes',
+          },
+        })
+      }
+    },
+    [baseCurrency, formatNumber, getExchangeRate, notes, register]
+  )
   return (
     <div className={styles.root}>
       <form
@@ -177,6 +211,8 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'notes') {
                     return (
                       <Textarea
+                        autoExpand
+                        value={notes}
                         defaultValue={(
                           data?.company?.invoiceSettings?.notes || []
                         ).join('\n')}
@@ -310,6 +346,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   if (id === 'currency') {
                     return (
                       <CurrencySelect
+                        watch={onWatchCurrency}
                         defaultValue={baseCurrency}
                         label={label}
                         value={watch(id) as string}
@@ -343,12 +380,12 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   (
                   {formatNumber(1, {
                     style: 'currency',
-                    currency,
+                    currency: currency || 'HRK',
                   })}{' '}
                   ={' '}
                   {formatNumber(exchangeRate, {
                     style: 'currency',
-                    currency: baseCurrency,
+                    currency: baseCurrency || 'HRK',
                   })}
                   )
                 </div>

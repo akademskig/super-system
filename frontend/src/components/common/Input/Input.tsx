@@ -18,7 +18,7 @@ type Props = {
   ref: RefCallback<any>
   classes?: Record<string, string>
   withMessage?: boolean
-  watch?: ({ name, value }: { name: string; value: string | number }) => void
+  watch?: ChangeHandler
 }
 
 const Input = (
@@ -46,8 +46,10 @@ const Input = (
         })
       watch &&
         watch({
-          value: type === 'number' ? Number(e.target.value) : e.target.value,
-          name,
+          target: {
+            value: type === 'number' ? Number(e.target.value) : e.target.value,
+            name,
+          },
         })
     },
     [name, onChange, type, watch]

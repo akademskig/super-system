@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { ForwardedRef, forwardRef, SelectHTMLAttributes, useMemo } from 'react'
 import { ChangeHandler } from 'react-hook-form'
 import { GET_CURRENCIES } from '../../../../apollo/api/currencies'
-import Select from '../../../common/Select'
+import Select, { type SelectProps } from '../../../common/Select'
 
 type Props = {
   error?: any
@@ -18,7 +18,7 @@ const CurrencySelect = (
     label,
     value,
     ...rest
-  }: Props & SelectHTMLAttributes<HTMLSelectElement>,
+  }: Props & Partial<SelectProps> & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const { data } = useQuery(GET_CURRENCIES)
