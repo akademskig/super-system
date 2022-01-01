@@ -25,6 +25,7 @@ import useExchangeRates from '../../hooks/useExchangeRates'
 import { GET_COMPANY } from '../../../apollo/api/companies'
 import { useQuery } from '@apollo/client'
 import useNextInvoiceNumber from '../../hooks/useNextInvoiceNumber'
+import { ClipLoader } from 'react-spinners'
 
 const rowsTop = invoiceFormFields.top.map((field) => field.row)
 const rowsBottom = invoiceFormFields.bottom.map((field) => field.row)
@@ -58,7 +59,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     name: 'items',
   })
   const { formatNumber } = useIntl()
-  const { onSubmit } = useInvoiceForm(type)
+  const { onSubmit, loading } = useInvoiceForm(type)
   const { calculatePrice } = useCalculatePrice()
   const { baseCurrency } = useBaseCurrency(watch('company') as string)
   const invoiceItems = watch('items')
@@ -224,7 +225,6 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                     return (
                       <Textarea
                         autoExpand
-                        value={notes}
                         defaultValue={(
                           data?.company?.invoiceSettings?.notes || []
                         ).join('\n')}
@@ -449,7 +449,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
           )}
         </div>
         <Button className={styles.button} type="submit">
-          Save
+          {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
         </Button>
       </form>
     </div>

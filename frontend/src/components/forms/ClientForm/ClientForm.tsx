@@ -9,6 +9,7 @@ import { omit, uniq } from 'lodash'
 import getErrorMessage from '../../../utils/getErrorMessage'
 import useClientForm, { FormTypes } from '../../hooks/useClientForm'
 import { IClient } from '../../../types/clients.type'
+import { ClipLoader } from 'react-spinners'
 
 const rows = clientFormFields.map((field) => field.row)
 
@@ -25,7 +26,7 @@ const ClientForm = ({ onCloseModal, type, initialValues }: Props) => {
   } = useForm({
     defaultValues: omit(initialValues, ['__typename']),
   })
-  const { onSubmit, error } = useClientForm(type)
+  const { onSubmit, error, loading } = useClientForm(type)
 
   const submitHandler = useCallback(
     async (values) => {
@@ -78,8 +79,7 @@ const ClientForm = ({ onCloseModal, type, initialValues }: Props) => {
             </div>
           ))}
         <Button className={styles.button} type="submit">
-          {' '}
-          Save
+          {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
         </Button>
       </form>
     </div>

@@ -18,7 +18,7 @@ const Modal = ({ trigger, children, title }: PropsWithChildren<Props>) => {
 
   const onClose = useCallback(() => {
     setOpened(false)
-    window.setTimeout(() => setRemoved(true), 500)
+    window.setTimeout(() => setRemoved(true), 200)
   }, [])
 
   return (

@@ -10,6 +10,7 @@ import {
 import { GET_COMPANIES, REMOVE_COMPANY } from '../../../../apollo/api/companies'
 import { ICompanyInvoiceSettings } from '../../../../types/companies.type'
 import Button from '../../../common/Button'
+import Loader from '../../../common/Loader'
 import Modal from '../../../common/Modal'
 import AddClientForm from '../../../forms/AddClientsForm/AddClientsForm'
 import CompanyForm from '../../../forms/CompanyForm'
@@ -18,7 +19,7 @@ import { FormTypes } from '../../../hooks/useClientForm'
 import styles from './CompanyList.module.scss'
 
 const CompanyList = () => {
-  const { data } = useQuery(GET_COMPANIES)
+  const { data, loading } = useQuery(GET_COMPANIES)
 
   const [deleteCompany] = useMutation(REMOVE_COMPANY, {
     errorPolicy: 'all',
@@ -39,6 +40,7 @@ const CompanyList = () => {
   )
   return (
     <ul className={styles.root}>
+      {loading && <Loader />}
       {(data?.companies || []).map(
         (company: ICompanyInvoiceSettings, idx: number) => (
           <li className={styles.clientListItem} key={idx}>

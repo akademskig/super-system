@@ -4,13 +4,14 @@ import { FaBuilding, FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { GET_CLIENTS, REMOVE_CLIENT } from '../../../../apollo/api/clients'
 import { IClient } from '../../../../types/clients.type'
 import Button from '../../../common/Button'
+import Loader from '../../../common/Loader'
 import Modal from '../../../common/Modal'
 import ClientForm from '../../../forms/ClientForm'
 import { FormTypes } from '../../../hooks/useClientForm'
 import styles from './ClientList.module.scss'
 
 const ClientList = () => {
-  const { data } = useQuery(GET_CLIENTS)
+  const { data, loading } = useQuery(GET_CLIENTS)
 
   const [deleteClient] = useMutation(REMOVE_CLIENT, {
     errorPolicy: 'all',
@@ -31,6 +32,7 @@ const ClientList = () => {
   )
   return (
     <ul className={styles.root}>
+      {loading && <Loader />}
       {(data?.clients || []).map((client: IClient, idx: number) => (
         <li className={styles.clientListItem} key={idx}>
           <div className={styles.left}>

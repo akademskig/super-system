@@ -68,8 +68,17 @@ const useInvoiceForm = (type: FormTypes) => {
     return {
       onSubmit: type === FormTypes.CREATE ? onSubmitCreate : onSubmitUpdate,
       error: type === FormTypes.CREATE ? resCreate.error : resEdit.error,
+      loading: resCreate.loading || resEdit.loading,
     }
-  }, [onSubmitCreate, onSubmitUpdate, resCreate.error, resEdit.error, type])
+  }, [
+    onSubmitCreate,
+    onSubmitUpdate,
+    resCreate.error,
+    resCreate.loading,
+    resEdit.error,
+    resEdit.loading,
+    type,
+  ])
 
   return values
 }
