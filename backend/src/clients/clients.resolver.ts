@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { GQLAuthGuard } from 'src/guards/GQLAuthGuard';
 import { User } from 'src/users/entities/user.entity';
 import { GetUser } from 'src/decorators/getUser';
+import { GetClientsInput } from './dto/get-client.input';
 
 @Resolver(() => Client)
 @UseGuards(GQLAuthGuard)
@@ -22,8 +23,12 @@ export class ClientsResolver {
   }
 
   @Query(() => [Client], { name: 'clients' })
-  findAll(@GetUser() user: User) {
-    return this.clientsService.findAll(user.id);
+  findAll(
+    @GetUser() user: User,
+    @Args('query', { type: () => GetClientsInput, nullable: true })
+    query?: GetClientsInput,
+  ) {
+    return this.clientsService.findAll(query, user.id);
   }
 
   @Query(() => Client, { name: 'client' })

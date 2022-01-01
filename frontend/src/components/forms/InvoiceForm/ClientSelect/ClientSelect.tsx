@@ -7,19 +7,25 @@ import Select, { SelectProps } from '../../../common/Select'
 
 type Props = {
   error?: any
-  classes: Record<string, string>
+  classes?: Record<string, string>
   onChange: ChangeHandler
+  value: string | { label: string; value: string }
+  label?: string
+  companyId?: string
 }
 const ClientSelect = (
   {
     error,
     classes,
+    label,
+    companyId,
     ...rest
   }: Props & Partial<SelectProps> & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
-  const { data } = useQuery(GET_CLIENTS)
-
+  const { data } = useQuery(GET_CLIENTS, {
+    variables: { query: { companyId } },
+  })
   const options = useMemo(
     () =>
       (data?.clients || []).map((client: IClient) => ({
@@ -35,7 +41,7 @@ const ClientSelect = (
       options={options}
       {...rest}
       ref={ref}
-      label={'Client'}
+      label={label}
     />
   )
 }

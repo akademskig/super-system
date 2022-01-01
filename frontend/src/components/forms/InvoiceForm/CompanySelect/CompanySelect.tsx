@@ -10,6 +10,7 @@ type Props = {
   classes: Record<string, string>
   onChange: ChangeHandler
   setDefault?: boolean
+  value: string | { label: string; value: string }
 }
 const CompanySelect = (
   { error, classes, ...rest }: Props & SelectHTMLAttributes<HTMLSelectElement>,

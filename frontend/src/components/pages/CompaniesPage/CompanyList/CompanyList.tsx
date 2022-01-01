@@ -1,10 +1,17 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useCallback } from 'react'
-import { FaBuilding, FaFileInvoice, FaPencilAlt, FaTrash } from 'react-icons/fa'
+import {
+  FaBuilding,
+  FaFileInvoice,
+  FaPencilAlt,
+  FaTrash,
+  FaUserCog,
+} from 'react-icons/fa'
 import { GET_COMPANIES, REMOVE_COMPANY } from '../../../../apollo/api/companies'
 import { ICompanyInvoiceSettings } from '../../../../types/companies.type'
 import Button from '../../../common/Button'
 import Modal from '../../../common/Modal'
+import AddClientForm from '../../../forms/AddClientsForm/AddClientsForm'
 import CompanyForm from '../../../forms/CompanyForm'
 import InvoiceSettingsForm from '../../../forms/InvoiceSettingsForm'
 import { FormTypes } from '../../../hooks/useClientForm'
@@ -40,6 +47,27 @@ const CompanyList = () => {
               <span>{company?.name}</span>
             </div>
             <div className={styles.right}>
+              <Modal
+                title={'Add clients'}
+                trigger={(onOpen) => (
+                  <Button
+                    className={styles.deleteButton}
+                    link
+                    onClick={onOpen}
+                    title="Add clients"
+                  >
+                    <FaUserCog className={styles.trashIcon} />
+                  </Button>
+                )}
+              >
+                <AddClientForm
+                  type={FormTypes.UPDATE}
+                  initialValues={{
+                    id: company.id,
+                    clients: company.clients,
+                  }}
+                />
+              </Modal>
               <Modal
                 title={'Invoice settings'}
                 trigger={(onOpen) => (

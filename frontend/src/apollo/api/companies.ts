@@ -10,6 +10,10 @@ export const COMPANY_FRAGMENT = gql`
     vatId
     country
     email
+    clients {
+      id
+      name
+    }
     phoneNumber
     invoiceSettings {
       serviceTypes

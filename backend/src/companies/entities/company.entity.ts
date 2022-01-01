@@ -1,5 +1,6 @@
 import { ObjectType, Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsPhoneNumber, MaxLength } from 'class-validator';
+import { Client } from 'src/clients/entities/client.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -10,6 +11,8 @@ import {
   Timestamp,
   JoinColumn,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
   Unique,
 } from 'typeorm';
 
@@ -38,6 +41,13 @@ export class InvoiceSettingsInput {
   notes: string[];
   @Field(() => [String], { nullable: true })
   units: string[];
+}
+@InputType()
+export class ClientsInput {
+  @Field(() => String, { nullable: true })
+  id: string;
+  @Field(() => String, { nullable: true })
+  name: string;
 }
 
 @ObjectType()
@@ -91,6 +101,13 @@ export class Company {
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
+
+  @Field(() => [Client], { nullable: true })
+  @ManyToMany(() => Client, (client) => client.companies, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  clients: Client[];
 
   @Field(() => Date)
   @CreateDateColumn()

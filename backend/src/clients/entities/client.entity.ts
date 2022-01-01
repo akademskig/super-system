@@ -1,5 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
+import { Company } from 'src/companies/entities/company.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -10,6 +11,7 @@ import {
   Timestamp,
   JoinColumn,
   ManyToOne,
+  ManyToMany,
   Unique,
 } from 'typeorm';
 
@@ -50,6 +52,10 @@ export class Client {
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
+
+  @Field(() => [Company], { nullable: true })
+  @ManyToMany(() => Company, (company) => company.clients)
+  companies: Company[];
 
   @Field(() => Date)
   @CreateDateColumn()

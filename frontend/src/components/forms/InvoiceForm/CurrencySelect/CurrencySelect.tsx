@@ -8,8 +8,8 @@ type Props = {
   error?: any
   classes?: Record<string, string>
   label?: string
-  value?: string
   onChange: ChangeHandler
+  value: string | { label: string; value: string } | undefined
 }
 const CurrencySelect = (
   {

@@ -1,13 +1,12 @@
 import { useMutation } from '@apollo/client'
 import { useCallback, useMemo } from 'react'
-import {} from '../../apollo/api/clients'
 import { COMPANY_FRAGMENT, UPDATE_COMPANY } from '../../apollo/api/companies'
 
 export enum FormTypes {
   UPDATE = 'UPDATE',
   CREATE = 'CREATE',
 }
-const useInvoiceSettingsForm = (type: FormTypes) => {
+const useAddClientForm = (type: FormTypes) => {
   const [updateCompany, resEdit] = useMutation(UPDATE_COMPANY, {
     errorPolicy: 'all',
     update(cache, { data }) {
@@ -26,7 +25,7 @@ const useInvoiceSettingsForm = (type: FormTypes) => {
   const onSubmitUpdate = useCallback(
     async (values, id) => {
       const { data } = await updateCompany({
-        variables: { input: { id, invoiceSettings: values } },
+        variables: { input: { id, clientIds: values } },
       })
       return data?.updateCompany
     },
@@ -42,4 +41,4 @@ const useInvoiceSettingsForm = (type: FormTypes) => {
 
   return values
 }
-export default useInvoiceSettingsForm
+export default useAddClientForm

@@ -7,6 +7,7 @@ type Props = {
   error?: any
   classes: Record<string, string>
   onChange: ChangeHandler
+  value: string | { label: string; value: string }
 }
 const InvoiceTypeSelect = (
   {

@@ -17,8 +17,18 @@ export class ClientsService {
     return this.clientRepo.save(client);
   }
 
-  findAll(userId) {
-    return this.clientRepo.find({ user: userId });
+  findAll(query, userId) {
+    const { companyId, ...rest } = query || {};
+    const q = { ...rest, user: userId };
+    if (companyId) {
+      return this.clientRepo
+        .createQueryBuilder('client')
+        .leftJoinAndSelect('client.companies', 'company')
+        .where(q)
+        .where('company.id = :companyId', { companyId })
+        .getMany();
+    }
+    return this.clientRepo.find(q);
   }
 
   findOne(id: number) {

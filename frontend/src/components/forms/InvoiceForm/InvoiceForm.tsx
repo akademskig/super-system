@@ -49,6 +49,8 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     resolver: yupResolver(schema),
     ...getDefaultFormValues(initialValues),
   })
+  const { invoiceNumber } = useNextInvoiceNumber(watch('company') as string)
+
   const { fields, append, remove } = useFieldArray<
     Record<string, InvoiceItems[]>
   >({
@@ -137,7 +139,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     },
     [baseCurrency, formatNumber, getExchangeRate, notes, register]
   )
-  const { invoiceNumber } = useNextInvoiceNumber(watch('company') as string)
+  useEffect(() => {
+    register('invoiceNumber').onChange({
+      target: { value: invoiceNumber, name: 'invoiceNumber' },
+    })
+  }, [invoiceNumber, register])
   return (
     <div className={styles.root}>
       <form
@@ -171,7 +177,9 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'client') {
                     return (
                       <ClientSelect
+                        label={'Client'}
                         setDefault
+                        companyId={watch('company') as string}
                         value={watch(id) as string}
                         key={idx}
                         classes={{
@@ -236,15 +244,6 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                       classes={{
                         root: `col-lg-${width}`,
                         label: required ? styles.labelRequired : '',
-                      }}
-                      {...{
-                        withMessage:
-                          (fieldType === 'email' &&
-                            (errors[id as keyof IInvoice] as FieldError)
-                              ?.type === 'email') ||
-                          (fieldType === 'phone' &&
-                            (errors[id as keyof IInvoice] as FieldError)
-                              ?.type === 'matches'),
                       }}
                       label={label}
                       {...register(id as keyof IInvoice)}

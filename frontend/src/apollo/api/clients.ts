@@ -12,8 +12,8 @@ export const CLIENT_FRAGMENT = gql`
   }
 `
 export const GET_CLIENTS = gql`
-  query findAll {
-    clients {
+  query findAll($query: GetClientsInput) {
+    clients(query: $query) {
       ...ClientFragment
     }
   }

@@ -1,3 +1,5 @@
+import { IClient } from './clients.type'
+
 export interface ICompany {
   id: string
   name: string
@@ -11,6 +13,7 @@ export interface ICompany {
 }
 export interface ICompanyInvoiceSettings extends ICompany {
   invoiceSettings: InvoiceSettings
+  clients: IClient[]
 }
 export interface InvoiceSettings {
   serviceTypes: string[]
@@ -20,4 +23,8 @@ export interface InvoiceSettings {
 export interface InvoiceSettingsInput {
   id: string
   invoiceSettings: InvoiceSettings
+}
+export interface AddClientsInput {
+  id: string
+  clients: IClient[]
 }

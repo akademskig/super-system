@@ -96,7 +96,7 @@ export class InvoicesService {
     const res = await this.invoiceRepo.find({
       where: { company: companyId },
       order: {
-        createdAt: 'DESC',
+        updatedAt: 'DESC',
       },
       select: ['invoiceNumber'],
       take: 1,

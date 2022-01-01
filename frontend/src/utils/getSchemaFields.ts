@@ -18,6 +18,9 @@ const getSchemaFields = (formFields: any[]) => {
     if (curr.fieldType === 'array') {
       field = yup.array().of(yup.string())
     }
+    if (curr.fieldType === 'arrayOfObjects') {
+      field = yup.array().of(yup.object())
+    }
     if (curr.required) {
       field = field.required()
     }

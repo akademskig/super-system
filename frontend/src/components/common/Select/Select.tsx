@@ -4,6 +4,7 @@ import {
   ForwardedRef,
   forwardRef,
   SelectHTMLAttributes,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -26,10 +27,11 @@ export type SelectProps = {
   watch?: ChangeHandler
   label?: string
   setDefault?: boolean
+  returnLabel?: boolean
+  value: string | { value: string; label: string } | undefined
 }
 
-const getDefaultLabel = (label?: string) =>
-  label ? `Select ${label}` : 'Select...'
+const getDefaultLabel = (label?: string) => 'Select...'
 
 const Select = (
   {
@@ -42,44 +44,69 @@ const Select = (
     label,
     value,
     setDefault,
+    returnLabel,
     defaultValue,
   }: SelectProps & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const [selectedLabel, setSelectedLabel] = useState(getDefaultLabel(label))
 
+  const getValue = useCallback(
+    (value) => {
+      return returnLabel
+        ? {
+            value: value,
+            label: options.find((o) => o.value === value)?.label || '',
+          }
+        : value
+    },
+    [options, returnLabel]
+  )
   const newOptions = useMemo(() => {
     return options.map((option) => ({
       ...option,
       action: (e: ChangeEvent<HTMLSelectElement>) => {
-        onChange && onChange({ target: { value: option.value, name } })
-        watch && watch({ target: { value: option.value, name } })
+        onChange &&
+          onChange({ target: { value: getValue(option.value), name } })
+        watch && watch({ target: { value: getValue(option.value), name } })
       },
     }))
-  }, [name, onChange, options, watch])
+  }, [getValue, name, onChange, options, watch])
 
   useEffect(() => {
-    const inOptions = options.find((o) => o.value === value)
-    if (!value || !inOptions) {
+    const v = typeof value === 'string' ? value : value?.value
+    const inOptions = options.find((o) => o?.value === v)
+    if (!v || !inOptions) {
       onChange &&
         onChange({
           target: {
             value: defaultValue
-              ? defaultValue
+              ? getValue(defaultValue)
               : setDefault
-              ? options?.[0]?.value
+              ? getValue(options?.[0]?.value)
               : '',
             name,
           },
         })
     }
-  }, [defaultValue, label, name, onChange, options, setDefault, value])
+  }, [
+    defaultValue,
+    getValue,
+    label,
+    name,
+    onChange,
+    options,
+    setDefault,
+    value,
+  ])
 
   useEffect(() => {
     setSelectedLabel(
-      options.find((o) => o.value === value)?.label || getDefaultLabel(label)
+      options.find(
+        (o) => o?.value === (typeof value === 'string' ? value : value?.value)
+      )?.label || getDefaultLabel(label)
     )
-  }, [label, options, value])
+  }, [label, options, returnLabel, value])
   return (
     <div className={classNames(styles.root, classes?.root)}>
       <label className={classes?.label}>{label}</label>

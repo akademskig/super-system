@@ -13,6 +13,7 @@ type Props = {
   label?: string
   setDefault?: boolean
   field?: string
+  value: string | { label: string; value: string }
 }
 const InvoiceSettingsSelect = (
   {
