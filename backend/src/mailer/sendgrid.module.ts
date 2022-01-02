@@ -1,17 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import MailService from './mail.service';
-import { get } from 'env-var';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-const SG_API_KEY = get('SG_API_KEY').required().asString();
-
+import { config } from 'dotenv';
 @Module({
   imports: [
     SendGridModule.forRoot({
-      apikey: SG_API_KEY,
+      apikey: config().parsed['SG_API_KEY'],
     }),
   ],
   providers: [MailService],
