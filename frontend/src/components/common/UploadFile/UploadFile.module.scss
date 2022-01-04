@@ -1,7 +1,8 @@
-@import '../../../../styles/variables.scss';
+@import '../../../styles/variables.scss';
 
 .root {
   position: relative;
+ 
 }
 .input {
   top: 0;
@@ -14,6 +15,7 @@
 }
 
 .label {
+  width: 156px;
   border: dashed 2px $primary-dark;
   border-radius: 4px;
   padding: $padding-l;

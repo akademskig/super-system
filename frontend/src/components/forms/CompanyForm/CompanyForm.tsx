@@ -15,7 +15,8 @@ import useCompanyForm from '../../hooks/useCompanyForm'
 import getSchemaFields from '../../../utils/getSchemaFields'
 
 import styles from './CompanyForm.module.scss'
-import UploadFile from './UploadFile'
+import { ClipLoader } from 'react-spinners'
+import UploadFile from '../../common/UploadFile'
 
 const rows = companyFormFields.map((field) => field.row)
 
@@ -41,7 +42,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
       logoFile: '',
     },
   })
-  const { onSubmit, error } = useCompanyForm(type)
+  const { onSubmit, error, loading } = useCompanyForm(type)
 
   const submitHandler = useCallback(
     async (values) => {
@@ -98,9 +99,9 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
             </div>
           ))}
         <div className="row">
-          <label>Logo</label>
           <div className="col-lg-6">
             <UploadFile
+              label={'Upload Logo'}
               value={watch('logoFile')}
               logoUrl={watch('logoUrl')}
               {...register('logoFile' as keyof ICompany)}
@@ -108,8 +109,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
           </div>
         </div>
         <Button className={styles.button} type="submit">
-          {' '}
-          Save
+        {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
         </Button>
       </form>
     </div>
