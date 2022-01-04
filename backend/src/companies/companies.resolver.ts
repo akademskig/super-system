@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { GraphQLUpload, Upload } from 'graphql-upload';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
 import { CreateCompanyInput } from './dto/create-company.input';
@@ -41,5 +42,12 @@ export class CompaniesResolver {
   @Mutation(() => Company)
   removeCompany(@Args('id', { type: () => String }) id: string) {
     return this.companiesService.remove(id);
+  }
+  @Mutation(() => Company)
+  async uploadLogo(
+    @Args('file', { type: () => GraphQLUpload }) file: Upload,
+    @Args('id', { type: () => String }) id: string,
+  ) {
+    return this.companiesService.uploadImage(file, id);
   }
 }

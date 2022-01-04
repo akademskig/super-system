@@ -15,6 +15,7 @@ import useCompanyForm from '../../hooks/useCompanyForm'
 import getSchemaFields from '../../../utils/getSchemaFields'
 
 import styles from './CompanyForm.module.scss'
+import UploadFile from './UploadFile'
 
 const rows = companyFormFields.map((field) => field.row)
 
@@ -31,14 +32,14 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: omit(initialValues, [
-      '__typename',
-      'invoiceSettings',
-      'clients',
-    ]),
+    defaultValues: {
+      ...omit(initialValues, ['__typename', 'invoiceSettings', 'clients']),
+      logoFile: '',
+    },
   })
   const { onSubmit, error } = useCompanyForm(type)
 
@@ -96,6 +97,16 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
                 ))}
             </div>
           ))}
+        <div className="row">
+          <label>Logo</label>
+          <div className="col-lg-6">
+            <UploadFile
+              value={watch('logoFile')}
+              logoUrl={watch('logoUrl')}
+              {...register('logoFile' as keyof ICompany)}
+            />
+          </div>
+        </div>
         <Button className={styles.button} type="submit">
           {' '}
           Save

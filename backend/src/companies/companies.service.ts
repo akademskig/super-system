@@ -6,6 +6,8 @@ import { UpdateCompanyInput } from './dto/update-company.input';
 import { Repository } from 'typeorm';
 import { Company } from './entities/company.entity';
 import { Client } from 'src/clients/entities/client.entity';
+import { AWSS3Service } from 'src/aws/aws-s3.service';
+import { Upload } from 'graphql-upload';
 
 @Injectable()
 export class CompaniesService {
@@ -14,6 +16,7 @@ export class CompaniesService {
     private readonly companyRepo: Repository<Company>,
     @InjectRepository(Client)
     private readonly clientRepo: Repository<Client>,
+    private readonly awsS3Service: AWSS3Service,
   ) {}
   create(createCompanyInput: CreateCompanyInput & { user: User }) {
     const company = this.companyRepo.create(createCompanyInput);
@@ -33,7 +36,7 @@ export class CompaniesService {
 
   async update(updateCompanyInput: Partial<UpdateCompanyInput>) {
     const { id, clientIds, ...rest } = updateCompanyInput;
-    if (clientIds.length) {
+    if (clientIds?.length) {
       const dbClients = await this.clientRepo
         .createQueryBuilder('client')
         .where(`id IN (:...clientIds)`)
@@ -45,6 +48,13 @@ export class CompaniesService {
     }
     await this.companyRepo.update(id, rest);
     return this.companyRepo.findOne(id, { relations: ['clients'] });
+  }
+
+  async uploadImage(file: Upload, id: string) {
+    const res = await this.awsS3Service.uploadToS3({
+      file,
+    });
+    return this.update({ id, logoUrl: res.Location });
   }
 
   async remove(id: string) {

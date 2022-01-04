@@ -93,6 +93,10 @@ export class Company {
   @Column({ type: 'text' })
   zipCode: string;
 
+  @Field(() => String, { nullable: true })
+  @Column({ type: 'text', nullable: true })
+  logoUrl: string;
+
   @Field(() => InvoiceSettings, { nullable: true })
   @Column({ type: 'json', default: {} })
   invoiceSettings: InvoiceSettings;

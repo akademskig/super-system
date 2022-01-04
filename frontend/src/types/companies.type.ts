@@ -10,6 +10,7 @@ export interface ICompany {
   country: string
   email: string
   phoneNumber: string
+  logoUrl: string
 }
 export interface ICompanyInvoiceSettings extends ICompany {
   invoiceSettings: InvoiceSettings

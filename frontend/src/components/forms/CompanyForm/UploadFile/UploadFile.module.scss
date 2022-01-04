@@ -1,0 +1,24 @@
+@import '../../../../styles/variables.scss';
+
+.root {
+  position: relative;
+}
+.input {
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  display: none;
+}
+.fakeInput {
+  width: 50px;
+}
+
+.label {
+  border: dashed 2px $primary-dark;
+  border-radius: 4px;
+  padding: $padding-l;
+  &:hover {
+    cursor: pointer;
+  }
+  height: fit-content;
+}

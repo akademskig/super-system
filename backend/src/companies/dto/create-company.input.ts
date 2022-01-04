@@ -28,4 +28,7 @@ export class CreateCompanyInput {
   @Field(() => String, { description: '' })
   @IsPhoneNumber()
   phoneNumber: string;
+
+  @Field(() => String, { description: '', nullable: true })
+  logoUrl: string;
 }

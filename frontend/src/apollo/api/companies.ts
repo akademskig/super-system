@@ -10,6 +10,7 @@ export const COMPANY_FRAGMENT = gql`
     vatId
     country
     email
+    logoUrl
     clients {
       id
       name
@@ -62,4 +63,12 @@ export const REMOVE_COMPANY = gql`
       id
     }
   }
+`
+export const UPLOAD_LOGO = gql`
+  mutation ($file: Upload!, $id: String!) {
+    uploadLogo(file: $file, id: $id) {
+      ...CompanyFragment
+    }
+  }
+  ${COMPANY_FRAGMENT}
 `
