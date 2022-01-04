@@ -29,8 +29,14 @@ export type InvoiceItems = {
   amount: number
   discount: number
   tax: number
+  total: {
+    net: number
+    gross: number
+    tax: number
+  }
 }
 export type Price = {
   net: number
   gross: number
+  tax: number
 }

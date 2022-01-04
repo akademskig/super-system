@@ -60,7 +60,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
   })
   const { formatNumber } = useIntl()
   const { onSubmit, loading } = useInvoiceForm(type)
-  const { calculatePrice } = useCalculatePrice()
+  const { calculatePrice, calculateItemTotal } = useCalculatePrice()
   const { baseCurrency } = useBaseCurrency(watch('company') as string)
   const invoiceItems = watch('items')
 
@@ -89,6 +89,19 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
   const onWatch = useCallback(
     async ({ target: { value, name } }) => {
       const price = await calculatePrice(getValues().items)
+      console.log(name)
+      const found = name.match(/[0-9]/)
+      if (found) {
+        const item = watch(`items[${found[0]}]`)
+        const total = await calculateItemTotal(item)
+        console.log(total)
+        register(`items[${found[0]}].total`).onChange({
+          target: {
+            value: omit(total, ['__typename']),
+            name: `items[${found[0]}].total`,
+          },
+        })
+      }
       register('price').onChange({
         target: { value: omit(price, ['__typename']), name: 'price' },
       })
@@ -98,7 +111,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
       )
       setHasTax(hasTax)
     },
-    [calculatePrice, getValues, register, setHasTax, watch]
+    [calculateItemTotal, calculatePrice, getValues, register, watch]
   )
   const { exchangeRate, exchangePrice, getExchangeRate } = useExchangeRates(
     watch('currency') as string,
@@ -145,6 +158,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
       target: { value: invoiceNumber, name: 'invoiceNumber' },
     })
   }, [invoiceNumber, register])
+  console.log(watch())
   return (
     <div className={styles.root}>
       <form
@@ -290,9 +304,9 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                           if (id === 'description') {
                             return (
                               <Textarea
-                                value={
-                                  watch(`items[${index}][${id}]`) as string
-                                }
+                                // value={
+                                //   watch(`items[${index}][${id}]`) as string
+                                // }
                                 defaultValue={watch('serviceType') as string}
                                 error={
                                   (
@@ -334,6 +348,44 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                 {...register(`items[${index}][${id}]`)}
                                 error={errors[`items[${index}][${id}]`]}
                               />
+                            )
+                          } else if (id === 'total') {
+                            return (
+                              <div
+                                className={classNames(
+                                  styles.invoiceItemPriceItem,
+                                  'justify-content-end'
+                                )}
+                              >
+                                <span>
+                                  <label>Total price: </label>
+                                  {formatNumber(
+                                    (watch(`items[${index}].total`) as Price)
+                                      ?.gross || 0,
+                                    {
+                                      style: 'currency',
+                                      currency:
+                                        (watch('currency') as string) || 'HRK',
+                                    }
+                                  )}
+                                </span>
+                                {!!(watch(`items[${index}].total`) as Price)
+                                  ?.tax && (
+                                  <span className={classNames()}>
+                                    <label>Tax: </label>
+                                    {formatNumber(
+                                      (watch(`items[${index}].total`) as Price)
+                                        ?.tax || 0,
+                                      {
+                                        style: 'currency',
+                                        currency:
+                                          (watch('currency') as string) ||
+                                          'HRK',
+                                      }
+                                    )}
+                                  </span>
+                                )}
+                              </div>
                             )
                           }
                           return (
@@ -436,14 +488,10 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
               </span>
               <span className={classNames(styles.priceItem, 'col-3')}>
                 <label>Tax </label>
-                {formatNumber(
-                  (watch('price') as Price)?.gross -
-                    (watch('price') as Price)?.net,
-                  {
-                    style: 'currency',
-                    currency: (watch('currency') as string) || 'HRK',
-                  }
-                )}
+                {formatNumber((watch('price') as Price)?.tax, {
+                  style: 'currency',
+                  currency: (watch('currency') as string) || 'HRK',
+                })}
               </span>
             </div>
           )}

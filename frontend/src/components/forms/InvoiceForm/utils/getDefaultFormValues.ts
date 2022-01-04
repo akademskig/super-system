@@ -22,7 +22,11 @@ const getDefaultFormValues = (initialValues?: IInvoice) => {
             } else if (key === 'items') {
               acc[key] = (
                 initialValues[key as keyof IInvoice] as InvoiceItems[]
-              ).map((item) => omit(item, ['__typename'])) as InvoiceItems[]
+              ).map((item) =>
+                omit({ ...item, total: omit(item.total, ['__typename']) }, [
+                  '__typename',
+                ])
+              ) as InvoiceItems[]
             } else {
               acc[key] = initialValues[key as keyof IInvoice] as string
             }
@@ -31,13 +35,14 @@ const getDefaultFormValues = (initialValues?: IInvoice) => {
           ['__typename', 'createdAt']
         )
       : {
-          items: [{ discount: 0, tax: 0 }],
+          items: [{ discount: 0, tax: 0, total: { net: 0, gross: 0, tax: 0 } }],
           shipmentDate: moment().add(30, 'days').format('YYYY-MM-DD'),
           paymentDeadline: moment().add(30, 'days').format('YYYY-MM-DD'),
           date: moment().format('YYYY-MM-DDThh:mm'),
           price: {
             net: 0,
             gross: 0,
+            tax: 0,
           },
         },
   }

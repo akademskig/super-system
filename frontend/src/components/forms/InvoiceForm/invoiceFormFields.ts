@@ -145,5 +145,12 @@ export const invoiceItemsFields = [
     width: 3,
     fieldType: 'number',
   },
+  {
+    label: 'Total',
+    id: 'total',
+    row: 3,
+    width: 12,
+    fieldType: 'object',
+  },
 ]
 export default invoiceFormFields

@@ -10,7 +10,7 @@ type Props = {
 }
 const Modal = ({ trigger, children, title }: PropsWithChildren<Props>) => {
   const [opened, setOpened] = useState(false)
-  const [removed, setRemoved] = useState(false)
+  const [removed, setRemoved] = useState(true)
   const onOpen = useCallback(() => {
     setRemoved(false)
     setOpened(true)

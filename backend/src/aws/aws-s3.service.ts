@@ -36,7 +36,7 @@ export class AWSS3Service implements IUploader {
   }
 
   async uploadToS3({ file }: { file: Upload }) {
-    const { createReadStream, filename, mimetype, encoding } = await file;
+    const { createReadStream, filename, mimetype } = await file;
     const fileStream = createReadStream();
     const filePath = this.createDestinationFilePath(filename);
     return new Promise(

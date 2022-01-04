@@ -3,12 +3,14 @@ import { InvoicesService } from './invoices.service';
 import { Invoice } from './entities/invoice.entity';
 import { UpdateInvoiceInput } from './dto/update-invoice.input';
 import { CreateInvoiceInput } from './dto/create-invoice.input';
-import { UseGuards } from '@nestjs/common';
+import { UploadedFile, UseGuards } from '@nestjs/common';
 import { GQLAuthGuard } from 'src/guards/GQLAuthGuard';
 import { GetUser } from 'src/decorators/getUser';
 import { User } from 'src/users/entities/user.entity';
 import { CalculatePriceInput } from './dto/price.input';
 import { Price } from './entities/price.entity';
+import { InvoiceItemInput } from './dto/invoice-item.input';
+import { Locale } from 'src/decorators/locale';
 
 @Resolver(() => Invoice)
 @UseGuards(GQLAuthGuard)
@@ -39,6 +41,13 @@ export class InvoicesResolver {
   ) {
     return this.invoicesService.calculatePrice(invoice);
   }
+  @Query(() => Price, { name: 'total' })
+  calculateItemTotal(
+    @Args('invoiceItem', { type: () => InvoiceItemInput })
+    invoiceItem: InvoiceItemInput,
+  ) {
+    return this.invoicesService.calculateItemsTotal(invoiceItem);
+  }
   @Query(() => String, { name: 'invoiceNumber' })
   getNextInvoiceNumber(
     @Args('companyId', { type: () => String })
@@ -57,5 +66,10 @@ export class InvoicesResolver {
   @Mutation(() => Invoice)
   removeInvoice(@Args('id', { type: () => String }) id: string) {
     return this.invoicesService.remove(id);
+  }
+
+  @Mutation(() => String)
+  getPdf(@Locale() locale, @Args('id', { type: () => String }) id: string) {
+    return this.invoicesService.generatePDFBuffer(id, locale);
   }
 }

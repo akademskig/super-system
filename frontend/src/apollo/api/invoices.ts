@@ -15,6 +15,7 @@ export const INVOICE_FRAGMENT = gql`
     price {
       net
       gross
+      tax
     }
     items {
       description
@@ -23,6 +24,11 @@ export const INVOICE_FRAGMENT = gql`
       amount
       discount
       tax
+      total {
+        net
+        gross
+        tax
+      }
     }
     createdAt
     client {
@@ -69,5 +75,10 @@ export const REMOVE_INVOICE = gql`
     removeInvoice(id: $id) {
       id
     }
+  }
+`
+export const GET_PDF = gql`
+  mutation getPdf($id: String!) {
+    getPdf(id: $id)
   }
 `

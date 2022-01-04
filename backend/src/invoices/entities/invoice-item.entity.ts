@@ -1,4 +1,5 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Price } from './price.entity';
 
 @ObjectType()
 export class InvoiceItem {
@@ -14,4 +15,6 @@ export class InvoiceItem {
   tax: number;
   @Field(() => Float)
   amount: number;
+  @Field(() => Price, { nullable: true })
+  total: Price;
 }

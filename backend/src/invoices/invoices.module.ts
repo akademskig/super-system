@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Invoice } from './entities/invoice.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { Client } from 'src/clients/entities/client.entity';
+import { AWSS3Module } from 'src/aws/aws-s3.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Invoice, Company, Client])],
+  imports: [TypeOrmModule.forFeature([Invoice, Company, Client]), AWSS3Module],
   providers: [InvoicesResolver, InvoicesService],
 })
 export class InvoicesModule {}

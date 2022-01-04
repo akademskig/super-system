@@ -109,7 +109,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
           </div>
         </div>
         <Button className={styles.button} type="submit">
-        {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
+          {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
         </Button>
       </form>
     </div>

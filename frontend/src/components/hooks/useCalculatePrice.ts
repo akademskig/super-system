@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/client'
 import { useCallback } from 'react'
-import { CALCULATE_PRICE } from '../../apollo/api/prices'
+import { CALCULATE_ITEM_TOTAL, CALCULATE_PRICE } from '../../apollo/api/prices'
 import { InvoiceItems } from '../../types/invoices.type'
 
 const useCalculatePrice = () => {
@@ -34,8 +34,26 @@ const useCalculatePrice = () => {
     },
     [client, parseItems]
   )
+  const calculateItemTotal = useCallback(
+    async (item) => {
+      console.log(item)
+      const parsedItems = parseItems([item])
+      if (!parsedItems) {
+        return 0
+      }
+      const { data } = await client.query({
+        query: CALCULATE_ITEM_TOTAL,
+        variables: { invoiceItem: parsedItems[0] },
+      })
+      if (data?.total) {
+        return data?.total
+      }
+    },
+    [client, parseItems]
+  )
   return {
     calculatePrice,
+    calculateItemTotal,
   }
 }
 export default useCalculatePrice

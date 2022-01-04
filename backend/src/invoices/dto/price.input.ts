@@ -17,4 +17,6 @@ export class PriceInput {
   net: number;
   @Field(() => Float, { defaultValue: 0 })
   gross: number;
+  @Field(() => Float, { defaultValue: 0 })
+  tax: number;
 }
