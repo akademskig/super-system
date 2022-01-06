@@ -27,6 +27,9 @@ import { useQuery } from '@apollo/client'
 import useNextInvoiceNumber from '../../hooks/useNextInvoiceNumber'
 import { ClipLoader } from 'react-spinners'
 import PriceItem from './PriceItem'
+import ReactDatePicker from 'react-datepicker'
+import useLocale from '../../hooks/useLocale'
+import { localesDateFormats } from '../../providers/LocaleProvider/LocaleProvider'
 
 const rowsTop = invoiceFormFields.top.map((field) => field.row)
 const rowsBottom = invoiceFormFields.bottom.map((field) => field.row)
@@ -59,6 +62,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     control: control as Control<Record<string, InvoiceItems[]>>,
     name: 'items',
   })
+  const { locale } = useLocale()
   const { formatNumber } = useIntl()
   const { onSubmit, loading } = useInvoiceForm(type)
   const { calculatePrice, calculateItemTotal } = useCalculatePrice()
@@ -233,7 +237,6 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
       removeExchangePrices,
     ]
   )
-
   useEffect(() => {
     register('invoiceNumber').onChange({
       target: { value: invoiceNumber, name: 'invoiceNumber' },
@@ -330,6 +333,33 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                         {...register(`notes`)}
                         label={'Notes'}
                       />
+                    )
+                  } else if (
+                    fieldType === 'date' ||
+                    fieldType === 'datetime-local'
+                  ) {
+                    return (
+                      <div className={`col-lg-${width}`}>
+                        <label> {label}</label>
+                        <ReactDatePicker
+                          showTimeInput={fieldType === 'datetime-local'}
+                          className={styles.datepicker}
+                          dateFormat={
+                            fieldType === 'datetime-local'
+                              ? `${localesDateFormats[locale]},hh:mm`
+                              : `${localesDateFormats[locale]}`
+                          }
+                          locale={locale}
+                          selected={
+                            (watch(id) || new Date()) as unknown as Date
+                          }
+                          onChange={(e) =>
+                            register(id).onChange({
+                              target: { value: e, name: id },
+                            })
+                          }
+                        />
+                      </div>
                     )
                   }
                   return (

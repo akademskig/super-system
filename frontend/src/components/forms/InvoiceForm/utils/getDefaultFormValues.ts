@@ -13,10 +13,12 @@ const getDefaultFormValues = (initialValues?: IInvoice) => {
               acc[key] = (initialValues[key] as IClient).id
             } else if (key === 'company') {
               acc[key] = (initialValues[key] as ICompany).id
-            } else if (key === 'paymentDeadline' || key === 'shipmentDate') {
-              acc[key] = moment(initialValues[key]).format('YYYY-MM-DD')
-            } else if (key === 'date') {
-              acc[key] = moment(initialValues[key]).format('YYYY-MM-DDThh:mm')
+            } else if (
+              key === 'date' ||
+              key === 'paymentDeadline' ||
+              key === 'shipmentDate'
+            ) {
+              acc[key] = new Date(initialValues[key])
             } else if (key === 'price') {
               acc[key] = omit(
                 {
@@ -47,14 +49,14 @@ const getDefaultFormValues = (initialValues?: IInvoice) => {
               acc[key] = initialValues[key as keyof IInvoice] as string
             }
             return acc
-          }, {} as Record<string, string | InvoiceItems[] | Price>),
+          }, {} as Record<string, string | InvoiceItems[] | Price | Date>),
           ['__typename', 'createdAt']
         )
       : {
           items: [{ discount: 0, tax: 0, total: { net: 0, gross: 0, tax: 0 } }],
-          shipmentDate: moment().add(30, 'days').format('YYYY-MM-DD'),
-          paymentDeadline: moment().add(30, 'days').format('YYYY-MM-DD'),
-          date: moment().format('YYYY-MM-DDThh:mm'),
+          shipmentDate: moment().add(30, 'days').toDate(),
+          paymentDeadline: moment().add(30, 'days').toDate(),
+          date: moment().toDate(),
           price: {
             net: 0,
             gross: 0,

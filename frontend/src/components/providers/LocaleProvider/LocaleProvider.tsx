@@ -3,6 +3,17 @@ import { IntlProvider } from 'react-intl'
 import messages from '../../../lang'
 import { Locales } from '../../../types/locales.type'
 import Cookie from 'js-cookie'
+import { hr, enUS } from 'date-fns/locale'
+import { registerLocale } from 'react-datepicker'
+
+const localesMap = {
+  [Locales.HR]: hr,
+  [Locales.EN]: enUS,
+}
+export const localesDateFormats = {
+  [Locales.HR]: 'dd/MM/yyyy',
+  [Locales.EN]: 'MM/dd/yyyy',
+}
 const getDefaultLocale = () => {
   return navigator.languages[0] as Locales
 }
@@ -24,6 +35,7 @@ const LocaleProvider = ({ children }: PropsWithChildren<any>) => {
 
   useEffect(() => {
     Cookie.set(LOCALE_KEY, locale)
+    registerLocale(locale, localesMap[locale])
   }, [locale])
 
   return (
