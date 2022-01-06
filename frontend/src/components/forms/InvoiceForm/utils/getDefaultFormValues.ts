@@ -18,14 +18,30 @@ const getDefaultFormValues = (initialValues?: IInvoice) => {
             } else if (key === 'date') {
               acc[key] = moment(initialValues[key]).format('YYYY-MM-DDThh:mm')
             } else if (key === 'price') {
-              acc[key] = omit(initialValues[key], ['__typename']) as Price
+              acc[key] = omit(
+                {
+                  ...initialValues[key],
+                  exchange: omit(initialValues[key].exchange, ['__typename']),
+                },
+                ['__typename']
+              ) as Price
             } else if (key === 'items') {
               acc[key] = (
                 initialValues[key as keyof IInvoice] as InvoiceItems[]
               ).map((item) =>
-                omit({ ...item, total: omit(item.total, ['__typename']) }, [
-                  '__typename',
-                ])
+                omit(
+                  {
+                    ...item,
+                    total: omit(
+                      {
+                        ...item.total,
+                        exchange: omit(item.total.exchange, ['__typename']),
+                      },
+                      ['__typename']
+                    ),
+                  },
+                  ['__typename']
+                )
               ) as InvoiceItems[]
             } else {
               acc[key] = initialValues[key as keyof IInvoice] as string

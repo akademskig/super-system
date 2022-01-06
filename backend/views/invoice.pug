@@ -23,6 +23,7 @@ html(lang="#{locales.locale}")
         width: 100%;
       }
       .invoice-number {
+        font-size: 14px;
         font-weight: 700;
       }
       .client-name, .company-name{
@@ -36,7 +37,7 @@ html(lang="#{locales.locale}")
         border-radius: 4px;
         padding: 10px
       }
-      .client-info div,.company-info div {
+      .client-info div,.company-info div, .invoice-info div {
         line-height: 20px;
       }
       .border-table th, .border-table td {
@@ -45,9 +46,12 @@ html(lang="#{locales.locale}")
       .border-table th{
         background-color: #d6e0f5;
         font-weight: 700;
+        border:1px solid #d6e0f5;
       }
       .border-table-wrapper {
-        border:1px solid #d6e0f5;
+        border: 1px solid #d6e0f5;
+        border-bottom: none;
+        border-left:none;
         border-radius: 2px;
         margin-top: 30px;
       }
@@ -63,10 +67,10 @@ html(lang="#{locales.locale}")
         border-top: none
       }
       .border-table tr:last-child td{
-        border-bottom: none
+        border-bottom: none;
+        border-left: none;
       }
       .border-table td:first-child {
-        border-left: none;
         border-bottom: none;
       }
       .border-table td:last-child {
@@ -84,6 +88,18 @@ html(lang="#{locales.locale}")
         font-family: Roboto;
         text-align: left;
         padding: 6px;
+      }
+      .invoice-info-table {
+        margin-top:30px;
+        font-size: 10px;
+        width: 100%;
+      }
+      .invoice-info-table td{
+        padding: 2px 0;
+      }
+      .exchange-price {
+        font-weight: 400;
+        font-size: 8px;
       }
 - var invoice = locals.invoice
 body
@@ -109,18 +125,43 @@ body
     div.border-table-wrapper
       table.invoice-items-table.border-table
         tr 
-          th(colspan="5", width="50%") Description
+          th(colspan="6", width="60%") Description
           th(colspan="1", width="10%") Unit
           th(colspan="1", width="10%") Quantity
           th(colspan="1", width="10%") Price
           th(colspan="1", width="10%") Total
         each val in invoice.items 
           tr 
-            td(colspan="5", width="50%") #{val.description}
+            td(colspan="6", width="60%") #{val.description}
             td(colspan="1", width="10%") #{val.unit}
             td(colspan="1", width="10%") #{val.amount}
             td(colspan="1", width="10%") #{utils.formatCurrency(val.price, invoice.currency)}
             td(colspan="1", width="10%")  #{utils.formatCurrency(val.total.gross, invoice.currency)}
-
+        tr 
+          td(colspan="8", width="70%")
+          th(width="15%") Total
+          th(width="15%") 
+            span #{utils.formatCurrency(invoice.price.gross, invoice.currency)} 
+            if invoice.price.exchange
+              span.exchange-price (#{utils.formatCurrency(invoice.price.exchange.gross, invoice.company.invoiceSettings.baseCurrency)})
+    table.invoice-info-table 
+      tr 
+        td
+          div.title Payment type 
+          div #{invoice.paymentMethod}
+      tr 
+        td
+          div.title Operator
+          div #{invoice.user.username}
+      tr 
+        td
+          div.title Notes
+          div
+            each val in locals.utils.splitString(invoice.notes, '\n')
+              div #{val}
+      tr 
+        td
+          div.title Transaction details
+          div IBAN #{invoice.company.iban}
 
 </html>

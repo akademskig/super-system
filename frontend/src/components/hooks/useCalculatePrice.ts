@@ -36,7 +36,6 @@ const useCalculatePrice = () => {
   )
   const calculateItemTotal = useCallback(
     async (item) => {
-      console.log(item)
       const parsedItems = parseItems([item])
       if (!parsedItems) {
         return 0

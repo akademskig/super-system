@@ -84,13 +84,15 @@ const Textarea = (
   }, [autoExpand, autoResize, inputRef, value])
   // set default value
   useEffect(() => {
-    handleChange({ target: { value: defaultValue } })
-  }, [defaultValue, handleChange])
+    handleChange({ target: { value: defaultValue, name } })
+  }, [defaultValue, handleChange, name])
+
   return (
     <div className={classNames(styles.root, classes?.root)}>
       <label className={classNames(classes?.label)}>{label}</label>
       <textarea
         {...rest}
+        value={value}
         name={name}
         defaultValue={defaultValue}
         ref={(refValue: HTMLTextAreaElement | null) => {

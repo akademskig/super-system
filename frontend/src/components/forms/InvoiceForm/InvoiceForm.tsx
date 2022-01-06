@@ -62,8 +62,10 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
   const { onSubmit, loading } = useInvoiceForm(type)
   const { calculatePrice, calculateItemTotal } = useCalculatePrice()
   const { baseCurrency } = useBaseCurrency(watch('company') as string)
-  const invoiceItems = watch('items')
-
+  const invoiceItems = watch('items') as InvoiceItems[]
+  const currency = watch('currency') as string
+  const notes = watch('notes') as string
+  const price = watch('price') as Price
   const [hasTax, setHasTax] = useState(
     (invoiceItems as InvoiceItems[]).some((item) => Number(item.tax) > 0)
   )
@@ -86,15 +88,76 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     }
   }, [append, fields.length])
 
+  const { exchangeRate, exchangePrice, getExchangeRate, getExchangePrice } =
+    useExchangeRates(
+      watch('currency') as string,
+      baseCurrency,
+      watch('price.gross') as number
+    )
+
+  const addExchangePrices = useCallback(
+    async (exchangeRate) => {
+      const price = await calculatePrice(getValues().items)
+      const exchange = {
+        net: getExchangePrice(price.net, exchangeRate),
+        gross: getExchangePrice(price.gross, exchangeRate),
+        tax: getExchangePrice(price.tax, exchangeRate),
+      }
+      const priceWithExchange = { ...price, exchange }
+      register('price').onChange({
+        target: {
+          value: omit(priceWithExchange, ['__typename']),
+          name: 'price',
+        },
+      })
+      invoiceItems.map(async (item, idx) => {
+        const total = await calculateItemTotal(item)
+        const totalWithExchangePrice = {
+          ...total,
+          exchange: {
+            net: getExchangePrice(total.net, exchangeRate),
+            gross: getExchangePrice(total.gross, exchangeRate),
+            tax: getExchangePrice(total.tax, exchangeRate),
+          },
+        }
+        register(`items[${idx}].total`).onChange({
+          target: {
+            value: omit(totalWithExchangePrice, ['__typename']),
+            name: `items[${idx}].total`,
+          },
+        })
+      })
+    },
+    [
+      calculateItemTotal,
+      calculatePrice,
+      getExchangePrice,
+      getValues,
+      invoiceItems,
+      register,
+    ]
+  )
+  const removeExchangePrices = useCallback(() => {
+    register('price').onChange({
+      target: { value: omit(price, ['exchange']), name: 'price' },
+    })
+    invoiceItems.map((item, idx) => {
+      return register(`items[${idx}].total`).onChange({
+        target: {
+          value: omit(invoiceItems[idx].total, ['exchange']),
+          name: `items[${idx}].total`,
+        },
+      })
+    })
+  }, [invoiceItems, price, register])
+
   const onWatch = useCallback(
     async ({ target: { value, name } }) => {
       const price = await calculatePrice(getValues().items)
-      console.log(name)
       const found = name.match(/[0-9]/)
       if (found) {
-        const item = watch(`items[${found[0]}]`)
+        const item = invoiceItems[found[0]]
         const total = await calculateItemTotal(item)
-        console.log(total)
         register(`items[${found[0]}].total`).onChange({
           target: {
             value: omit(total, ['__typename']),
@@ -105,21 +168,27 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
       register('price').onChange({
         target: { value: omit(price, ['__typename']), name: 'price' },
       })
-      const invoiceItems = watch('items')
+      if (currency !== baseCurrency) {
+        addExchangePrices(exchangeRate)
+      }
       const hasTax = (invoiceItems as InvoiceItems[]).some(
         (item) => Number(item.tax) > 0
       )
       setHasTax(hasTax)
     },
-    [calculateItemTotal, calculatePrice, getValues, register, watch]
+    [
+      addExchangePrices,
+      baseCurrency,
+      calculateItemTotal,
+      calculatePrice,
+      currency,
+      exchangeRate,
+      getValues,
+      invoiceItems,
+      register,
+    ]
   )
-  const { exchangeRate, exchangePrice, getExchangeRate } = useExchangeRates(
-    watch('currency') as string,
-    baseCurrency,
-    watch('price.gross') as number
-  )
-  const currency = watch('currency') as string
-  const notes = watch('notes') as string
+
   const onWatchCurrency = useCallback(
     async ({ target: { value, name } }) => {
       const exchangeRateCurrent = await getExchangeRate({
@@ -136,13 +205,15 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
         currency: baseCurrency || 'HRK',
       })})`
       if (value !== baseCurrency) {
-        return register('notes').onChange({
+        addExchangePrices(exchangeRateCurrent)
+        register('notes').onChange({
           target: {
             value: (notes || '').concat(newString),
             name: 'notes',
           },
         })
       } else {
+        removeExchangePrices()
         return register('notes').onChange({
           target: {
             value: (notes || '').replace(newString, ''),
@@ -151,14 +222,22 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
         })
       }
     },
-    [baseCurrency, formatNumber, getExchangeRate, notes, register]
+    [
+      addExchangePrices,
+      baseCurrency,
+      formatNumber,
+      getExchangeRate,
+      notes,
+      register,
+      removeExchangePrices,
+    ]
   )
+
   useEffect(() => {
     register('invoiceNumber').onChange({
       target: { value: invoiceNumber, name: 'invoiceNumber' },
     })
   }, [invoiceNumber, register])
-  console.log(watch())
   return (
     <div className={styles.root}>
       <form
@@ -238,6 +317,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'notes') {
                     return (
                       <Textarea
+                        value={watch('notes') as string}
                         autoExpand
                         defaultValue={(
                           data?.company?.invoiceSettings?.notes || []
@@ -304,9 +384,6 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                           if (id === 'description') {
                             return (
                               <Textarea
-                                // value={
-                                //   watch(`items[${index}][${id}]`) as string
-                                // }
                                 defaultValue={watch('serviceType') as string}
                                 error={
                                   (
@@ -358,24 +435,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                 )}
                               >
                                 <span>
-                                  <label>Total price: </label>
-                                  {formatNumber(
-                                    (watch(`items[${index}].total`) as Price)
-                                      ?.gross || 0,
-                                    {
-                                      style: 'currency',
-                                      currency:
-                                        (watch('currency') as string) || 'HRK',
-                                    }
-                                  )}
-                                </span>
-                                {!!(watch(`items[${index}].total`) as Price)
-                                  ?.tax && (
-                                  <span className={classNames()}>
-                                    <label>Tax: </label>
+                                  <div>
+                                    <label>Total price: </label>
                                     {formatNumber(
                                       (watch(`items[${index}].total`) as Price)
-                                        ?.tax || 0,
+                                        ?.gross || 0,
                                       {
                                         style: 'currency',
                                         currency:
@@ -383,29 +447,104 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                           'HRK',
                                       }
                                     )}
+                                  </div>
+                                  {baseCurrency !== currency && (
+                                    <div>
+                                      (
+                                      {formatNumber(
+                                        (
+                                          watch(
+                                            `items[${index}].total`
+                                          ) as Price
+                                        )?.exchange?.gross || 0,
+                                        {
+                                          style: 'currency',
+                                          currency: baseCurrency || 'HRK',
+                                        }
+                                      )}
+                                      )
+                                    </div>
+                                  )}
+                                </span>
+
+                                {!!(watch(`items[${index}].total`) as Price)
+                                  ?.tax && (
+                                  <span>
+                                    <div className={classNames()}>
+                                      <label>Tax: </label>
+                                      {formatNumber(
+                                        (
+                                          watch(
+                                            `items[${index}].total`
+                                          ) as Price
+                                        )?.tax || 0,
+                                        {
+                                          style: 'currency',
+                                          currency:
+                                            (watch('currency') as string) ||
+                                            'HRK',
+                                        }
+                                      )}
+                                    </div>
+                                    {baseCurrency !== currency && (
+                                      <div>
+                                        (
+                                        {formatNumber(
+                                          (
+                                            watch(
+                                              `items[${index}].total`
+                                            ) as Price
+                                          )?.exchange?.tax || 0,
+                                          {
+                                            style: 'currency',
+                                            currency: baseCurrency || 'HRK',
+                                          }
+                                        )}
+                                        )
+                                      </div>
+                                    )}
                                   </span>
                                 )}
                               </div>
                             )
                           }
                           return (
-                            <Input
-                              key={idx}
-                              defaultValue={fieldType === 'number' ? 0 : ''}
-                              classes={{
-                                root: `col-lg-${width}`,
-                                label: required ? styles.labelRequired : '',
-                              }}
-                              watch={onWatch}
-                              label={label}
-                              {...register(`items[${index}][${id}]`)}
-                              error={
-                                (
-                                  errors?.items as Record<string, FieldError>[]
-                                )?.[index]?.[id]
-                              }
-                              type={fieldType || 'text'}
-                            />
+                            <div className={`col-lg-${width}`}>
+                              <Input
+                                key={idx}
+                                defaultValue={fieldType === 'number' ? 0 : ''}
+                                classes={{
+                                  label: required ? styles.labelRequired : '',
+                                }}
+                                watch={onWatch}
+                                label={label}
+                                {...register(`items[${index}][${id}]`)}
+                                error={
+                                  (
+                                    errors?.items as Record<
+                                      string,
+                                      FieldError
+                                    >[]
+                                  )?.[index]?.[id]
+                                }
+                                type={fieldType || 'text'}
+                              />
+                              {id === 'price' && baseCurrency !== currency && (
+                                <span>
+                                  (
+                                  {formatNumber(
+                                    (watch(
+                                      `items[${index}][${id}]`
+                                    ) as unknown as number) * exchangeRate,
+                                    {
+                                      style: 'currency',
+                                      currency: baseCurrency || 'HRK',
+                                    }
+                                  )}
+                                  )
+                                </span>
+                              )}
+                            </div>
                           )
                         }
                       )}
@@ -463,6 +602,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   ={' '}
                   {formatNumber(exchangeRate, {
                     style: 'currency',
+                    currencyDisplay: 'narrowSymbol',
                     currency: baseCurrency || 'HRK',
                   })}
                   )

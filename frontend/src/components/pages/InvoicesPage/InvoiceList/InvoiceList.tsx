@@ -65,9 +65,7 @@ const InvoiceList = () => {
             <span>{invoice.client.name}</span> &nbsp; &#8226; &nbsp;
             <span>{invoice.company.name}</span> &nbsp; &#8226; &nbsp;
             <span>
-              {moment(invoice?.createdAt)
-                .format('DD/MM/YY, hh:mm:ss')
-                .toString()}
+              {moment(invoice?.date).format('DD/MM/YY, hh:mm:ss').toString()}
             </span>
           </div>
           <div className={styles.right}>
@@ -90,7 +88,7 @@ const InvoiceList = () => {
               </a>
             )}
             <Modal
-              title={'Edit Company'}
+              title={'Edit Invoice'}
               trigger={(onOpen) => (
                 <Button className={styles.deleteButton} link onClick={onOpen}>
                   <FaPencilAlt className={styles.trashIcon} />

@@ -88,6 +88,8 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
                         (fieldType === 'email' &&
                           errors[id as keyof ICompany]?.type === 'email') ||
                         (fieldType === 'phone' &&
+                          errors[id as keyof ICompany]?.type === 'matches') ||
+                        (fieldType === 'iban' &&
                           errors[id as keyof ICompany]?.type === 'matches'),
                     }}
                     label={label}

@@ -75,9 +75,11 @@
   margin-bottom: 0;
   > div {
     padding: $padding-m;
+    width: 100%;
+    margin: auto;
   }
   > :nth-child(2) {
-    border-top: solid 1px $primary-main;
+    box-shadow: 0 -3px 2px -2px $primary-light;
   }
 }
 .priceItem {

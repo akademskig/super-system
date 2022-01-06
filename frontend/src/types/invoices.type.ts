@@ -29,14 +29,15 @@ export type InvoiceItems = {
   amount: number
   discount: number
   tax: number
-  total: {
-    net: number
-    gross: number
-    tax: number
-  }
+  total: Price
 }
 export type Price = {
   net: number
   gross: number
   tax: number
+  exchange: {
+    net: number
+    gross: number
+    tax: number
+  }
 }

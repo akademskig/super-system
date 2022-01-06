@@ -92,7 +92,6 @@ export class InvoicesService {
         tax: acc.tax + grossPrice - netPrice,
       };
     }, defaultPrice);
-    console.log(price);
     if (price) {
       return price;
     }
@@ -138,7 +137,7 @@ export class InvoicesService {
   async generatePDFBuffer(invoiceId: string, locale: string) {
     const invoice = await this.invoiceRepo.findOne({
       where: { id: invoiceId },
-      relations: ['client', 'company'],
+      relations: ['client', 'company', 'user'],
     });
     const o = await this.pdfService.toBuffer('invoice.pug', {
       locals: {
@@ -150,6 +149,7 @@ export class InvoicesService {
               style: 'currency',
               currency,
             }).format(number),
+          splitString: (string, value) => string.split(value),
         },
       },
       format: 'A4',

@@ -31,4 +31,7 @@ export class CreateCompanyInput {
 
   @Field(() => String, { description: '', nullable: true })
   logoUrl: string;
+
+  @Field(() => String, { nullable: true })
+  iban: string;
 }

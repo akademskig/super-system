@@ -56,6 +56,14 @@ const companyFormFields = [
     row: 4,
     width: 6,
   },
+  {
+    label: 'IBAN',
+    id: 'iban',
+    fieldType: 'iban',
+    row: 5,
+    required: true,
+    width: 6,
+  },
 ]
 
 export default companyFormFields

@@ -11,6 +11,7 @@ export const COMPANY_FRAGMENT = gql`
     country
     email
     logoUrl
+    iban
     clients {
       id
       name

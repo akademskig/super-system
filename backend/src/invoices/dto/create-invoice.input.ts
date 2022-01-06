@@ -32,6 +32,9 @@ export class CreateInvoiceInput {
   @Field(() => String, { nullable: true })
   notes: string;
 
+  @Field(() => String, { nullable: true })
+  iban: string;
+
   @Field(() => Date)
   date: Timestamp;
 

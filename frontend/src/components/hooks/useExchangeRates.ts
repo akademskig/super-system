@@ -30,10 +30,15 @@ const useExchangeRates = (
     },
     [client]
   )
+  const getExchangePrice = useCallback((price, exchangeRate) => {
+    const exPrice = (price || 0) * exchangeRate || 0
+    return exPrice
+  }, [])
   return {
     exchangeRate: data?.exchangeRate,
     exchangePrice,
     getExchangeRate,
+    getExchangePrice,
   }
 }
 export default useExchangeRates

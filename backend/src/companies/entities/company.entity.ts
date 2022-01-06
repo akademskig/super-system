@@ -1,5 +1,5 @@
 import { ObjectType, Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsPhoneNumber, MaxLength } from 'class-validator';
+import { IsEmail, IsIBAN, IsPhoneNumber, MaxLength } from 'class-validator';
 import { Client } from 'src/clients/entities/client.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -96,6 +96,11 @@ export class Company {
   @Field(() => String, { nullable: true })
   @Column({ type: 'text', nullable: true })
   logoUrl: string;
+
+  @Field(() => String, { nullable: true })
+  @IsIBAN()
+  @Column({ type: 'text', nullable: true })
+  iban: string;
 
   @Field(() => InvoiceSettings, { nullable: true })
   @Column({ type: 'json', default: {} })

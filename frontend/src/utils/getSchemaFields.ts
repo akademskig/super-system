@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import { phoneRegExpNotRequired } from '../config/fieldRegex'
+import { ibanRegex, phoneRegExpNotRequired } from '../config/fieldRegex'
 
 const getSchemaFields = (formFields: any[]) => {
   const schemaFields = formFields.reduce((acc, curr) => {
@@ -23,6 +23,9 @@ const getSchemaFields = (formFields: any[]) => {
     }
     if (curr.fieldType === 'object') {
       field = yup.object()
+    }
+    if (curr.fieldType === 'iban') {
+      field = yup.string().matches(ibanRegex, 'Iban is not valid')
     }
     if (curr.required) {
       field = field.required()

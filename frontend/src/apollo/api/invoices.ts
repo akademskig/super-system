@@ -16,6 +16,11 @@ export const INVOICE_FRAGMENT = gql`
       net
       gross
       tax
+      exchange {
+        net
+        gross
+        tax
+      }
     }
     items {
       description
@@ -28,6 +33,11 @@ export const INVOICE_FRAGMENT = gql`
         net
         gross
         tax
+        exchange {
+          net
+          gross
+          tax
+        }
       }
     }
     createdAt
