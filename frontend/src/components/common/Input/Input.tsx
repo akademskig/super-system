@@ -19,6 +19,7 @@ type Props = {
   classes?: Record<string, string>
   withMessage?: boolean
   watch?: ChangeHandler
+  inputAdornment?: string
 }
 
 const Input = (
@@ -31,6 +32,7 @@ const Input = (
     error,
     classes,
     withMessage,
+    inputAdornment,
     ...rest
   }: Props & InputHTMLAttributes<HTMLInputElement>,
   ref: any
@@ -71,6 +73,9 @@ const Input = (
         {type === 'date' && <FaCalendar className={styles.calendarIcon} />}
         {type === 'datetime-local' && (
           <FaCalendarDay className={styles.calendarIcon} />
+        )}
+        {inputAdornment && (
+          <div className={styles.inputAdornment}>{inputAdornment}</div>
         )}
       </div>
       {error && withMessage && (

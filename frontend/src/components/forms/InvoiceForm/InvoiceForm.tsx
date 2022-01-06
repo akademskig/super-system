@@ -26,6 +26,7 @@ import { GET_COMPANY } from '../../../apollo/api/companies'
 import { useQuery } from '@apollo/client'
 import useNextInvoiceNumber from '../../hooks/useNextInvoiceNumber'
 import { ClipLoader } from 'react-spinners'
+import PriceItem from './PriceItem'
 
 const rowsTop = invoiceFormFields.top.map((field) => field.row)
 const rowsBottom = invoiceFormFields.bottom.map((field) => field.row)
@@ -436,32 +437,31 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                               >
                                 <span>
                                   <div>
-                                    <label>Total price: </label>
-                                    {formatNumber(
-                                      (watch(`items[${index}].total`) as Price)
-                                        ?.gross || 0,
-                                      {
-                                        style: 'currency',
-                                        currency:
-                                          (watch('currency') as string) ||
-                                          'HRK',
-                                      }
-                                    )}
-                                  </div>
-                                  {baseCurrency !== currency && (
-                                    <div>
-                                      (
-                                      {formatNumber(
+                                    <PriceItem
+                                      price={
                                         (
                                           watch(
                                             `items[${index}].total`
                                           ) as Price
-                                        )?.exchange?.gross || 0,
-                                        {
-                                          style: 'currency',
-                                          currency: baseCurrency || 'HRK',
+                                        )?.gross || 0
+                                      }
+                                      currency={currency}
+                                      label={'Total price'}
+                                    />
+                                  </div>
+                                  {baseCurrency !== currency && (
+                                    <div>
+                                      (
+                                      <PriceItem
+                                        price={
+                                          (
+                                            watch(
+                                              `items[${index}].total`
+                                            ) as Price
+                                          )?.exchange?.gross || 0
                                         }
-                                      )}
+                                        currency={baseCurrency}
+                                      />
                                       )
                                     </div>
                                   )}
@@ -471,35 +471,31 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                   ?.tax && (
                                   <span>
                                     <div className={classNames()}>
-                                      <label>Tax: </label>
-                                      {formatNumber(
-                                        (
-                                          watch(
-                                            `items[${index}].total`
-                                          ) as Price
-                                        )?.tax || 0,
-                                        {
-                                          style: 'currency',
-                                          currency:
-                                            (watch('currency') as string) ||
-                                            'HRK',
-                                        }
-                                      )}
-                                    </div>
-                                    {baseCurrency !== currency && (
-                                      <div>
-                                        (
-                                        {formatNumber(
+                                      <PriceItem
+                                        price={
                                           (
                                             watch(
                                               `items[${index}].total`
                                             ) as Price
-                                          )?.exchange?.tax || 0,
-                                          {
-                                            style: 'currency',
-                                            currency: baseCurrency || 'HRK',
+                                          )?.tax || 0
+                                        }
+                                        currency={currency}
+                                        label={'Tax'}
+                                      />
+                                    </div>
+                                    {baseCurrency !== currency && (
+                                      <div>
+                                        (
+                                        <PriceItem
+                                          price={
+                                            (
+                                              watch(
+                                                `items[${index}].total`
+                                              ) as Price
+                                            )?.exchange?.tax || 0
                                           }
-                                        )}
+                                          currency={baseCurrency}
+                                        />
                                         )
                                       </div>
                                     )}
@@ -511,6 +507,13 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                           return (
                             <div className={`col-lg-${width}`}>
                               <Input
+                                inputAdornment={
+                                  id === 'price'
+                                    ? currency
+                                    : id === 'tax'
+                                    ? '%'
+                                    : undefined
+                                }
                                 key={idx}
                                 defaultValue={fieldType === 'number' ? 0 : ''}
                                 classes={{
@@ -532,15 +535,14 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                               {id === 'price' && baseCurrency !== currency && (
                                 <span>
                                   (
-                                  {formatNumber(
-                                    (watch(
-                                      `items[${index}][${id}]`
-                                    ) as unknown as number) * exchangeRate,
-                                    {
-                                      style: 'currency',
-                                      currency: baseCurrency || 'HRK',
+                                  <PriceItem
+                                    price={
+                                      (watch(
+                                        `items[${index}][${id}]`
+                                      ) as unknown as number) * exchangeRate
                                     }
-                                  )}
+                                    currency={baseCurrency}
+                                  />
                                   )
                                 </span>
                               )}
@@ -588,50 +590,41 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
           <div className="row justify-content-end align-items-start">
             {baseCurrency !== watch('currency') && (
               <span className={classNames(styles.priceItem, 'col-5')}>
-                <label>In {baseCurrency}</label>
-                {formatNumber(exchangePrice, {
-                  style: 'currency',
-                  currency: baseCurrency || 'HRK',
-                })}
+                <PriceItem
+                  price={exchangePrice}
+                  currency={baseCurrency}
+                  label={`In ${baseCurrency}`}
+                />
                 <div>
                   (
-                  {formatNumber(1, {
-                    style: 'currency',
-                    currency: currency || 'HRK',
-                  })}{' '}
-                  ={' '}
-                  {formatNumber(exchangeRate, {
-                    style: 'currency',
-                    currencyDisplay: 'narrowSymbol',
-                    currency: baseCurrency || 'HRK',
-                  })}
-                  )
+                  <PriceItem price={1} currency={currency} /> {' = '}
+                  <PriceItem price={exchangeRate} currency={baseCurrency} />)
                 </div>
               </span>
             )}
             <span className={classNames(styles.priceItem, 'col-3')}>
-              <label>Total price </label>
-              {formatNumber((watch('price') as Price)?.gross, {
-                style: 'currency',
-                currency: (watch('currency') as string) || 'HRK',
-              })}
+              <PriceItem
+                price={price?.gross}
+                currency={currency}
+                label={`Total price`}
+              />
             </span>
           </div>
           {hasTax && (
             <div className="row justify-content-end">
               <span className={classNames(styles.priceItem, 'col-3')}>
-                <label>Net </label>
-                {formatNumber((watch('price') as Price)?.net, {
-                  style: 'currency',
-                  currency: (watch('currency') as string) || 'HRK',
-                })}
+                <PriceItem
+                  price={price?.net}
+                  currency={currency}
+                  label={`Net`}
+                />
               </span>
               <span className={classNames(styles.priceItem, 'col-3')}>
-                <label>Tax </label>
-                {formatNumber((watch('price') as Price)?.tax, {
-                  style: 'currency',
-                  currency: (watch('currency') as string) || 'HRK',
-                })}
+                <PriceItem
+                  price={price?.tax}
+                  currency={currency}
+                  label={`Tax`}
+                />
               </span>
             </div>
           )}

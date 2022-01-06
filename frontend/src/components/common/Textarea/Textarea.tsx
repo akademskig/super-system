@@ -84,8 +84,8 @@ const Textarea = (
   }, [autoExpand, autoResize, inputRef, value])
   // set default value
   useEffect(() => {
-    handleChange({ target: { value: defaultValue, name } })
-  }, [defaultValue, handleChange, name])
+    !value && handleChange({ target: { value: defaultValue, name } })
+  }, [defaultValue, handleChange, name, value])
 
   return (
     <div className={classNames(styles.root, classes?.root)}>
@@ -94,7 +94,6 @@ const Textarea = (
         {...rest}
         value={value}
         name={name}
-        defaultValue={defaultValue}
         ref={(refValue: HTMLTextAreaElement | null) => {
           inputRef.current = refValue ? refValue : undefined
           if (ref && refValue) {
