@@ -49,7 +49,7 @@ const InvoiceList = () => {
         const { data } = await getPDF({ variables: { id } })
         setFilenames((state) => ({
           ...state,
-          [id]: `data:application/pdf;base64, ${data.getPdf}`,
+          [id]: `data:application/pdf;base64, ${data?.getPdf}`,
         }))
       }
     },

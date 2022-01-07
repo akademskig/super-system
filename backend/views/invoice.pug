@@ -2,19 +2,19 @@ doctype HTML
 
 html(lang="#{locales.locale}")
   head
-    link(href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet")
+    script(src="https://raw.githubusercontent.com/mozilla/pdf.js/master/web/ui_utils.js")
     style(type="text/css").
       body{
         font-size: 12px;
         margin: 35px;
         font-family: Roboto;
         font-weight: 400;
+        font-select: all;
       }
       .header {
         width: 100%;
         display: flex;
         justify-content: space-between;
-        margin-bottom: 30px
       }
       .align-right {
         text-align: right
@@ -25,12 +25,14 @@ html(lang="#{locales.locale}")
       .invoice-number {
         font-size: 14px;
         font-weight: 700;
+        vertical-align: top;
       }
       .client-name, .company-name{
         white-space: nowrap;
       }
       .title {
         font-weight: 700;
+        margin-bottom: 2px;
       }
       .client-info {
         border: solid 2px #d6e0f5;
@@ -101,13 +103,20 @@ html(lang="#{locales.locale}")
         font-weight: 400;
         font-size: 8px;
       }
+      .footer {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        right: 30px;
+      }
 - var invoice = locals.invoice
+- var logoUrl = invoice.company.logoUrl
 body
   header 
     table.header
       tr
         td.left 
-          img(src="#{invoice.company.logoUrl}")
+          img(src=logoUrl, alt="logo" width="70px")/
         td.align-right.invoice-number #{invoice.invoiceType} Invoice ##{invoice.invoiceNumber} 
     table.table-client-company
       tr 
@@ -147,7 +156,7 @@ body
     table.invoice-info-table 
       tr 
         td
-          div.title Payment type 
+          div.title#text-layer Payment type 
           div #{invoice.paymentMethod}
       tr 
         td
@@ -163,5 +172,4 @@ body
         td
           div.title Transaction details
           div IBAN #{invoice.company.iban}
-
 </html>

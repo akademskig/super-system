@@ -91,6 +91,7 @@ export interface ViewPortSize {
 }
 
 export interface PDFOptions extends CreateOptions {
+  filename?: string;
   viewportSize?: ViewPortSize;
   locals?: Record<string, any>;
 }

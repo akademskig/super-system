@@ -1,20 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { getConnectionName, InjectRepository } from '@nestjs/typeorm';
-import { Repository, getConnection } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { CreateInvoiceInput } from './dto/create-invoice.input';
 import { UpdateInvoiceInput } from './dto/update-invoice.input';
 import { Invoice } from './entities/invoice.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { Client } from 'src/clients/entities/client.entity';
-import { UpdateCompanyInput } from 'src/companies/dto/update-company.input';
-import { InvoiceItem } from './entities/invoice-item.entity';
 import { CalculatePriceInput } from './dto/price.input';
 import getNextInvoiceNumber from './utils/getNextInvoiceNumber';
 import { PDFService } from 'src/lib/nestjs-pdf';
 import { firstValueFrom } from 'rxjs';
-import { AWSS3Service } from 'src/aws/aws-s3.service';
 import { InvoiceItemInput } from './dto/invoice-item.input';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class InvoicesService {
@@ -26,6 +24,7 @@ export class InvoicesService {
     @InjectRepository(Client)
     private readonly clientRepo: Repository<Client>,
     private readonly pdfService: PDFService,
+    private readonly httpService: HttpService,
   ) {}
   async create(
     createInvoiceInput: CreateInvoiceInput & {
@@ -153,7 +152,39 @@ export class InvoicesService {
         },
       },
       format: 'A4',
+      type: 'pdf',
+      // header: {
+      //   height: '10px',
+      //   contents: `<div style='text-align: right; margin-top: 25px; margin-right: 25px; color: #696969"; font-family: Roboto; '>
+      //   ${invoice.invoiceType} invoice ${invoice.invoiceNumber}</div>`,
+      // },
+      footer: {
+        height: '85px',
+        contents: `<footer style="width: 100%; margin-left: 25px; margin-bottom: 25px; ">
+        <table  width="100%" style="font-size: 10px;  font-family: Roboto; width="100%; vertical-align: top;">
+          <tr>
+            <td width="33%" style="vertical-align: top;color: #696969">
+              <div style="font-weight: 700; margin-bottom: 2px;">Address</div>
+              <div>${invoice.company.street}, 
+              ${invoice.company.zipCode} ${invoice.company.city}</div>
+              <div>${invoice.company.country}</div>
+              </td>
+            <td width="33%" style="vertical-align: top;color: #696969">
+              <div style="font-weight: 700; margin-bottom: 2px;">Legal infomation</div>
+              <div>VAT ID: ${invoice.company.vatId}</div>
+              <div>IBAN: ${invoice.company.iban}</div>
+              </td>
+            <td width="33%" style="vertical-align: top;color: #696969">
+              <div style="font-weight: 700; margin-bottom: 2px;">Contacts</div>
+              <div>Phone: ${invoice.company.phoneNumber}</div>
+              <div>Email: ${invoice.company.email}</div>
+              </td>
+          </tr>
+          </table>
+            `,
+      },
     });
+
     const r = await firstValueFrom(o);
     if (r) {
       return r.toString('base64');
