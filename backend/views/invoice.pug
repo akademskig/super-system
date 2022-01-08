@@ -2,7 +2,6 @@ doctype HTML
 
 html(lang="#{locales.locale}")
   head
-    script(src="https://raw.githubusercontent.com/mozilla/pdf.js/master/web/ui_utils.js")
     style(type="text/css").
       body{
         font-size: 12px;
@@ -116,7 +115,8 @@ body
     table.header
       tr
         td.left 
-          img(src=logoUrl, alt="logo" width="70px")/
+          if(logoUrl)
+            img(src=logoUrl, alt="logo" width="70px")/
         td.align-right.invoice-number #{invoice.invoiceType} Invoice ##{invoice.invoiceNumber} 
     table.table-client-company
       tr 
