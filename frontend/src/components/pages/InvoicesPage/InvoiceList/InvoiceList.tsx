@@ -20,10 +20,12 @@ import { FormTypes } from '../../../hooks/useClientForm'
 import ConfirmModal from '../../../modals/ConfirmModal'
 import styles from './InvoiceList.module.scss'
 import EmptyList from '../../../common/EmptyList'
-
+import { useIntl } from 'react-intl'
+import { invoicePageMessages } from '../../../../lang/messages.lang'
 const InvoiceList = () => {
   const { data } = useQuery(GET_INVOICES)
   const [filenames, setFilenames] = useState<Record<string, string>>({})
+  const { formatMessage } = useIntl()
   const [removeInvoice] = useMutation(REMOVE_INVOICE, {
     errorPolicy: 'all',
     update(cache, { data }) {
@@ -90,7 +92,7 @@ const InvoiceList = () => {
               </a>
             )}
             <Modal
-              title={'Edit Invoice'}
+              title={formatMessage(invoicePageMessages.editInvoice)}
               trigger={(onOpen) => (
                 <Button className={styles.deleteButton} link onClick={onOpen}>
                   <FaPencilAlt className={styles.trashIcon} />
@@ -101,7 +103,7 @@ const InvoiceList = () => {
             </Modal>
             <ConfirmModal
               onConfirm={onDelete(invoice.id)}
-              title={'Are you sure you want to delete this invoice?'}
+              title={formatMessage(invoicePageMessages.deleteInvoiceConfirm)}
             />
           </div>
         </li>

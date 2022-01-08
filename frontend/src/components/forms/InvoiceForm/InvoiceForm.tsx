@@ -30,6 +30,10 @@ import PriceItem from './PriceItem'
 import ReactDatePicker from 'react-datepicker'
 import useLocale from '../../hooks/useLocale'
 import { localesDateFormats } from '../../providers/LocaleProvider/LocaleProvider'
+import {
+  commonMessages,
+  invoiceFormMessages,
+} from '../../../lang/messages.lang'
 
 const rowsTop = invoiceFormFields.top.map((field) => field.row)
 const rowsBottom = invoiceFormFields.bottom.map((field) => field.row)
@@ -63,7 +67,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
     name: 'items',
   })
   const { locale } = useLocale()
-  const { formatNumber } = useIntl()
+  const { formatNumber, formatMessage } = useIntl()
   const { onSubmit, loading } = useInvoiceForm(type)
   const { calculatePrice, calculateItemTotal } = useCalculatePrice()
   const { baseCurrency } = useBaseCurrency(watch('company') as string)
@@ -253,7 +257,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
         onSubmit={handleSubmit(submitHandler)}
       >
         <div className="row">
-          <p>Marked fields (*) are required</p>
+          <p>{formatMessage(invoiceFormMessages.requiredNote)}</p>
         </div>
         {uniq(rowsTop)
           .sort()
@@ -265,6 +269,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   if (id === 'company') {
                     return (
                       <CompanySelect
+                        label={formatMessage(
+                          invoiceFormMessages[
+                            id as keyof typeof invoiceFormMessages
+                          ]
+                        )}
                         setDefault
                         value={watch(id) as string}
                         key={idx}
@@ -279,7 +288,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'client') {
                     return (
                       <ClientSelect
-                        label={'Client'}
+                        label={formatMessage(
+                          invoiceFormMessages[
+                            id as keyof typeof invoiceFormMessages
+                          ]
+                        )}
                         setDefault
                         companyId={watch('company') as string}
                         value={watch(id) as string}
@@ -295,6 +308,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'invoiceType') {
                     return (
                       <InvoiceTypeSelect
+                        label={formatMessage(
+                          invoiceFormMessages[
+                            id as keyof typeof invoiceFormMessages
+                          ]
+                        )}
                         setDefault
                         value={watch(id) as string}
                         key={idx}
@@ -309,7 +327,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   } else if (id === 'serviceType' || id === 'paymentMethod') {
                     return (
                       <InvoiceSettingsSelect
-                        label={label}
+                        label={formatMessage(
+                          invoiceFormMessages[
+                            id as keyof typeof invoiceFormMessages
+                          ]
+                        )}
                         setDefault
                         value={watch(id) as string}
                         companyId={watch('company') as string}
@@ -326,6 +348,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                     return (
                       <Textarea
                         value={watch('notes') as string}
+                        label={formatMessage(
+                          invoiceFormMessages[
+                            id as keyof typeof invoiceFormMessages
+                          ]
+                        )}
                         autoExpand
                         defaultValue={(
                           data?.company?.invoiceSettings?.notes || []
@@ -335,7 +362,6 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                           root: classNames('col-lg-12', styles.textarea),
                         }}
                         {...register(`notes`)}
-                        label={'Notes'}
                       />
                     )
                   } else if (
@@ -344,7 +370,13 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   ) {
                     return (
                       <div className={`col-lg-${width}`} key={`${idx}-${id}`}>
-                        <label> {label}</label>
+                        <label>
+                          {formatMessage(
+                            invoiceFormMessages[
+                              id as keyof typeof invoiceFormMessages
+                            ]
+                          )}
+                        </label>
                         <ReactDatePicker
                           showTimeInput={fieldType === 'datetime-local'}
                           className={styles.datepicker}
@@ -374,7 +406,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                         root: `col-lg-${width}`,
                         label: required ? styles.labelRequired : '',
                       }}
-                      label={label}
+                      label={formatMessage(
+                        invoiceFormMessages[
+                          id as keyof typeof invoiceFormMessages
+                        ]
+                      )}
                       {...register(id as keyof IInvoice)}
                       error={errors[id as keyof IInvoice]}
                       type={fieldType || 'text'}
@@ -385,7 +421,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
           ))}
         <div className={classNames('row', styles.accountItems)}>
           <div className={styles.accountItemsHeader}>
-            <h5>Invoice Items</h5>
+            <h5>{formatMessage(invoiceFormMessages.invoiceItems)}</h5>
             <Button
               className={styles.addNewButton}
               type="button"
@@ -431,14 +467,22 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                 }),
                               }}
                               {...register(`items[${index}][${id}]`)}
-                              label={label}
+                              label={formatMessage(
+                                invoiceFormMessages[
+                                  id as keyof typeof invoiceFormMessages
+                                ]
+                              )}
                             />
                           )
                         } else if (id === 'unit') {
                           return (
                             <InvoiceSettingsSelect
                               field={'units'}
-                              label={label}
+                              label={formatMessage(
+                                invoiceFormMessages[
+                                  id as keyof typeof invoiceFormMessages
+                                ]
+                              )}
                               setDefault
                               value={watch(`items[${index}][${id}]`) as string}
                               companyId={watch('company') as string}
@@ -468,7 +512,9 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                         ?.gross || 0
                                     }
                                     currency={currency}
-                                    label={'Total price'}
+                                    label={formatMessage(
+                                      invoiceFormMessages.totalPrice
+                                    )}
                                   />
                                 </div>
                                 {showExchangeRates && (
@@ -502,7 +548,9 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                         )?.tax || 0
                                       }
                                       currency={currency}
-                                      label={'Tax'}
+                                      label={formatMessage(
+                                        invoiceFormMessages.tax
+                                      )}
                                     />
                                   </div>
                                   {showExchangeRates && (
@@ -542,7 +590,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                 label: required ? styles.labelRequired : '',
                               }}
                               watch={onWatch}
-                              label={label}
+                              label={formatMessage(
+                                invoiceFormMessages[
+                                  id as keyof typeof invoiceFormMessages
+                                ]
+                              )}
                               {...register(`items[${index}][${id}]`)}
                               error={
                                 (
@@ -586,7 +638,11 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                         setDefault
                         watch={onWatchCurrency}
                         defaultValue={baseCurrency}
-                        label={label}
+                        label={formatMessage(
+                          invoiceFormMessages[
+                            id as keyof typeof invoiceFormMessages
+                          ]
+                        )}
                         value={watch(id) as string}
                         key={idx}
                         classes={{
@@ -625,7 +681,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
               <PriceItem
                 price={price?.gross}
                 currency={currency}
-                label={`Total price`}
+                label={formatMessage(invoiceFormMessages.totalPrice)}
               />
             </span>
           </div>
@@ -642,14 +698,18 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                 <PriceItem
                   price={price?.tax}
                   currency={currency}
-                  label={`Tax`}
+                  label={formatMessage(invoiceFormMessages.tax)}
                 />
               </span>
             </div>
           )}
         </div>
         <Button className={styles.button} type="submit">
-          {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
+          {loading ? (
+            <ClipLoader size={25} color="white" />
+          ) : (
+            formatMessage(commonMessages.save)
+          )}
         </Button>
       </form>
     </div>

@@ -10,10 +10,16 @@ type Props = {
   classes: Record<string, string>
   onChange: ChangeHandler
   setDefault?: boolean
+  label?: string
   value: string | { label: string; value: string }
 }
 const CompanySelect = (
-  { error, classes, ...rest }: Props & SelectHTMLAttributes<HTMLSelectElement>,
+  {
+    error,
+    classes,
+    label,
+    ...rest
+  }: Props & SelectHTMLAttributes<HTMLSelectElement>,
   ref: ForwardedRef<HTMLSelectElement>
 ) => {
   const { data } = useQuery(GET_COMPANIES)
@@ -33,7 +39,7 @@ const CompanySelect = (
       {...rest}
       ref={ref}
       error={error}
-      label={'Company'}
+      label={label}
     />
   )
 }
