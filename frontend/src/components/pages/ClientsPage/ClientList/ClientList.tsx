@@ -1,13 +1,15 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useCallback } from 'react'
-import { FaBuilding, FaPencilAlt, FaTrash } from 'react-icons/fa'
+import { FaBuilding, FaPencilAlt } from 'react-icons/fa'
 import { GET_CLIENTS, REMOVE_CLIENT } from '../../../../apollo/api/clients'
 import { IClient } from '../../../../types/clients.type'
 import Button from '../../../common/Button'
+import EmptyList from '../../../common/EmptyList'
 import Loader from '../../../common/Loader'
 import Modal from '../../../common/Modal'
 import ClientForm from '../../../forms/ClientForm'
 import { FormTypes } from '../../../hooks/useClientForm'
+import ConfirmModal from '../../../modals/ConfirmModal'
 import styles from './ClientList.module.scss'
 
 const ClientList = () => {
@@ -33,6 +35,7 @@ const ClientList = () => {
   return (
     <ul className={styles.root}>
       {loading && <Loader />}
+      {!data?.clients.length && <EmptyList />}
       {(data?.clients || []).map((client: IClient, idx: number) => (
         <li className={styles.clientListItem} key={idx}>
           <div className={styles.left}>
@@ -50,13 +53,10 @@ const ClientList = () => {
             >
               <ClientForm type={FormTypes.UPDATE} initialValues={client} />
             </Modal>
-            <Button
-              className={styles.deleteButton}
-              link
-              onClick={onDelete(client?.id)}
-            >
-              <FaTrash className={styles.trashIcon} />
-            </Button>
+            <ConfirmModal
+              onConfirm={onDelete(client.id)}
+              title={'Are you sure you want to delete this client?'}
+            />
           </div>
         </li>
       ))}

@@ -4,7 +4,6 @@ import {
   FaBuilding,
   FaFileInvoice,
   FaPencilAlt,
-  FaTrash,
   FaUserCog,
 } from 'react-icons/fa'
 import { GET_COMPANIES, REMOVE_COMPANY } from '../../../../apollo/api/companies'
@@ -16,7 +15,9 @@ import AddClientForm from '../../../forms/AddClientsForm/AddClientsForm'
 import CompanyForm from '../../../forms/CompanyForm'
 import InvoiceSettingsForm from '../../../forms/InvoiceSettingsForm'
 import { FormTypes } from '../../../hooks/useClientForm'
+import ConfirmModal from '../../../modals/ConfirmModal'
 import styles from './CompanyList.module.scss'
+import EmptyList from '../../../common/EmptyList'
 
 const CompanyList = () => {
   const { data, loading } = useQuery(GET_COMPANIES)
@@ -41,6 +42,7 @@ const CompanyList = () => {
   return (
     <ul className={styles.root}>
       {loading && <Loader />}
+      {!data?.companies.length && <EmptyList />}
       {(data?.companies || []).map(
         (company: ICompanyInvoiceSettings, idx: number) => (
           <li className={styles.clientListItem} key={idx}>
@@ -101,13 +103,10 @@ const CompanyList = () => {
               >
                 <CompanyForm type={FormTypes.UPDATE} initialValues={company} />
               </Modal>
-              <Button
-                className={styles.deleteButton}
-                link
-                onClick={onDelete(company?.id)}
-              >
-                <FaTrash className={styles.trashIcon} />
-              </Button>
+              <ConfirmModal
+                onConfirm={onDelete(company.id)}
+                title={'Are you sure you want to delete this company?'}
+              />
             </div>
           </li>
         )

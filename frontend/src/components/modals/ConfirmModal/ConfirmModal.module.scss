@@ -1,0 +1,35 @@
+@import '../../../styles/variables.scss';
+
+.deleteButton {
+  border-radius: 50%;
+}
+
+.root {
+  padding: $padding-l;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button {
+  margin: $padding-m;
+  width: 150px;
+}
+.icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.buttonConfirm {
+  &:hover {
+    background-color: rgb(167, 38, 38);
+  }
+}
+.buttonClose {
+  &:hover {
+    background-color: rgb(23, 126, 23);
+  }
+}
+.modalContent {
+  width: fit-content;
+  min-width: 400px;
+  margin-top: 20vh;
+}

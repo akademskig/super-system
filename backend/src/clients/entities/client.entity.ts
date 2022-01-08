@@ -54,7 +54,9 @@ export class Client {
   user: User;
 
   @Field(() => [Company], { nullable: true })
-  @ManyToMany(() => Company, (company) => company.clients)
+  @ManyToMany(() => Company, (company) => company.clients, {
+    onDelete: 'CASCADE',
+  })
   companies: Company[];
 
   @Field(() => Date)

@@ -6,7 +6,7 @@ type Props = {
   label?: string
   className?: string
 }
-const PriceItem = ({ price, currency, label, className }: Props) => {
+const PriceItem = ({ price = 0, currency, label, className }: Props) => {
   const { formatNumber } = useIntl()
   return (
     <>

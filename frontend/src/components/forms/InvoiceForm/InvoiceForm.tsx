@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Control, FieldError, useFieldArray, useForm } from 'react-hook-form'
 import classNames from 'classnames'
 import { FaMinus, FaPlus } from 'react-icons/fa'
@@ -242,6 +242,10 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
       target: { value: invoiceNumber, name: 'invoiceNumber' },
     })
   }, [invoiceNumber, register])
+  const showExchangeRates = useMemo(
+    () => baseCurrency && currency && baseCurrency !== currency,
+    [baseCurrency, currency]
+  )
   return (
     <div className={styles.root}>
       <form
@@ -339,7 +343,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                     fieldType === 'datetime-local'
                   ) {
                     return (
-                      <div className={`col-lg-${width}`}>
+                      <div className={`col-lg-${width}`} key={`${idx}-${id}`}>
                         <label> {label}</label>
                         <ReactDatePicker
                           showTimeInput={fieldType === 'datetime-local'}
@@ -406,80 +410,102 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   <div className={'row'} key={idx}>
                     {invoiceItemsFields
                       .filter((field) => field.row === row)
-                      .map(
-                        (
-                          { label, id, required, width, fieldType },
-                          idx,
-                          arr
-                        ) => {
-                          if (id === 'description') {
-                            return (
-                              <Textarea
-                                defaultValue={watch('serviceType') as string}
-                                error={
-                                  (
-                                    errors?.items as Record<
-                                      string,
-                                      FieldError
-                                    >[]
-                                  )?.[index]?.[id]
-                                }
-                                key={idx}
-                                classes={{
-                                  root: classNames(
-                                    `col-lg-${width}`,
-                                    styles.textarea
-                                  ),
-                                  label: classNames({
-                                    [styles.labelRequired]: required,
-                                  }),
-                                }}
-                                {...register(`items[${index}][${id}]`)}
-                                label={label}
-                              />
-                            )
-                          } else if (id === 'unit') {
-                            return (
-                              <InvoiceSettingsSelect
-                                field={'units'}
-                                label={label}
-                                setDefault
-                                value={
-                                  watch(`items[${index}][${id}]`) as string
-                                }
-                                companyId={watch('company') as string}
-                                key={idx}
-                                classes={{
-                                  root: `col-lg-${width}`,
-                                  label: styles.labelRequired,
-                                }}
-                                {...register(`items[${index}][${id}]`)}
-                                error={errors[`items[${index}][${id}]`]}
-                              />
-                            )
-                          } else if (id === 'total') {
-                            return (
-                              <div
-                                className={classNames(
-                                  styles.invoiceItemPriceItem,
-                                  'justify-content-end'
-                                )}
-                              >
-                                <span>
+                      .map(({ label, id, required, width, fieldType }, idx) => {
+                        if (id === 'description') {
+                          return (
+                            <Textarea
+                              defaultValue={watch('serviceType') as string}
+                              error={
+                                (
+                                  errors?.items as Record<string, FieldError>[]
+                                )?.[index]?.[id]
+                              }
+                              key={idx}
+                              classes={{
+                                root: classNames(
+                                  `col-lg-${width}`,
+                                  styles.textarea
+                                ),
+                                label: classNames({
+                                  [styles.labelRequired]: required,
+                                }),
+                              }}
+                              {...register(`items[${index}][${id}]`)}
+                              label={label}
+                            />
+                          )
+                        } else if (id === 'unit') {
+                          return (
+                            <InvoiceSettingsSelect
+                              field={'units'}
+                              label={label}
+                              setDefault
+                              value={watch(`items[${index}][${id}]`) as string}
+                              companyId={watch('company') as string}
+                              key={idx}
+                              classes={{
+                                root: `col-lg-${width}`,
+                                label: styles.labelRequired,
+                              }}
+                              {...register(`items[${index}][${id}]`)}
+                              error={errors[`items[${index}][${id}]`]}
+                            />
+                          )
+                        } else if (id === 'total') {
+                          return (
+                            <div
+                              key={idx}
+                              className={classNames(
+                                styles.invoiceItemPriceItem,
+                                'justify-content-end'
+                              )}
+                            >
+                              <span>
+                                <div>
+                                  <PriceItem
+                                    price={
+                                      (watch(`items[${index}].total`) as Price)
+                                        ?.gross || 0
+                                    }
+                                    currency={currency}
+                                    label={'Total price'}
+                                  />
+                                </div>
+                                {showExchangeRates && (
                                   <div>
+                                    (
                                     <PriceItem
                                       price={
                                         (
                                           watch(
                                             `items[${index}].total`
                                           ) as Price
-                                        )?.gross || 0
+                                        )?.exchange?.gross || 0
+                                      }
+                                      currency={baseCurrency}
+                                    />
+                                    )
+                                  </div>
+                                )}
+                              </span>
+
+                              {!!(watch(`items[${index}].total`) as Price)
+                                ?.tax && (
+                                <span key={`${idx}-tax`}>
+                                  <div className={classNames()}>
+                                    <PriceItem
+                                      price={
+                                        (
+                                          watch(
+                                            `items[${index}].total`
+                                          ) as Price
+                                        )?.tax || 0
                                       }
                                       currency={currency}
-                                      label={'Total price'}
+                                      label={'Tax'}
                                     />
                                   </div>
-                                  {baseCurrency !== currency && (
+                                  {showExchangeRates && (
                                     <div>
                                       (
                                       <PriceItem
@@ -488,7 +514,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                             watch(
                                               `items[${index}].total`
                                             ) as Price
-                                          )?.exchange?.gross || 0
+                                          )?.exchange?.tax || 0
                                         }
                                         currency={baseCurrency}
                                       />
@@ -496,90 +522,52 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                     </div>
                                   )}
                                 </span>
-
-                                {!!(watch(`items[${index}].total`) as Price)
-                                  ?.tax && (
-                                  <span>
-                                    <div className={classNames()}>
-                                      <PriceItem
-                                        price={
-                                          (
-                                            watch(
-                                              `items[${index}].total`
-                                            ) as Price
-                                          )?.tax || 0
-                                        }
-                                        currency={currency}
-                                        label={'Tax'}
-                                      />
-                                    </div>
-                                    {baseCurrency !== currency && (
-                                      <div>
-                                        (
-                                        <PriceItem
-                                          price={
-                                            (
-                                              watch(
-                                                `items[${index}].total`
-                                              ) as Price
-                                            )?.exchange?.tax || 0
-                                          }
-                                          currency={baseCurrency}
-                                        />
-                                        )
-                                      </div>
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            )
-                          }
-                          return (
-                            <div className={`col-lg-${width}`}>
-                              <Input
-                                inputAdornment={
-                                  id === 'price'
-                                    ? currency
-                                    : id === 'tax'
-                                    ? '%'
-                                    : undefined
-                                }
-                                key={idx}
-                                defaultValue={fieldType === 'number' ? 0 : ''}
-                                classes={{
-                                  label: required ? styles.labelRequired : '',
-                                }}
-                                watch={onWatch}
-                                label={label}
-                                {...register(`items[${index}][${id}]`)}
-                                error={
-                                  (
-                                    errors?.items as Record<
-                                      string,
-                                      FieldError
-                                    >[]
-                                  )?.[index]?.[id]
-                                }
-                                type={fieldType || 'text'}
-                              />
-                              {id === 'price' && baseCurrency !== currency && (
-                                <span>
-                                  (
-                                  <PriceItem
-                                    price={
-                                      (watch(
-                                        `items[${index}][${id}]`
-                                      ) as unknown as number) * exchangeRate
-                                    }
-                                    currency={baseCurrency}
-                                  />
-                                  )
-                                </span>
                               )}
                             </div>
                           )
                         }
-                      )}
+                        return (
+                          <div className={`col-lg-${width}`} key={idx}>
+                            <Input
+                              inputAdornment={
+                                id === 'price'
+                                  ? currency
+                                  : id === 'tax'
+                                  ? '%'
+                                  : undefined
+                              }
+                              key={idx}
+                              defaultValue={fieldType === 'number' ? 0 : ''}
+                              classes={{
+                                label: required ? styles.labelRequired : '',
+                              }}
+                              watch={onWatch}
+                              label={label}
+                              {...register(`items[${index}][${id}]`)}
+                              error={
+                                (
+                                  errors?.items as Record<string, FieldError>[]
+                                )?.[index]?.[id]
+                              }
+                              type={fieldType || 'text'}
+                            />
+                            {id === 'price' && showExchangeRates && (
+                              <span key={`${idx}-price`}>
+                                (
+                                <PriceItem
+                                  price={
+                                    (watch(
+                                      `items[${index}][${id}]`
+                                    ) as unknown as number) * exchangeRate || 0
+                                  }
+                                  currency={baseCurrency}
+                                />
+                                )
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })}
                   </div>
                 ))}
             </div>
@@ -595,6 +583,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   if (id === 'currency') {
                     return (
                       <CurrencySelect
+                        setDefault
                         watch={onWatchCurrency}
                         defaultValue={baseCurrency}
                         label={label}
@@ -618,7 +607,7 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
           ))}
         <div className={classNames(styles.price)}>
           <div className="row justify-content-end align-items-start">
-            {baseCurrency !== watch('currency') && (
+            {showExchangeRates && (
               <span className={classNames(styles.priceItem, 'col-5')}>
                 <PriceItem
                   price={exchangePrice}

@@ -6,7 +6,6 @@ import {
   FaFileDownload,
   FaFilePdf,
   FaPencilAlt,
-  FaTrash,
 } from 'react-icons/fa'
 import {
   GET_INVOICES,
@@ -18,7 +17,9 @@ import Button from '../../../common/Button'
 import Modal from '../../../common/Modal'
 import InvoiceForm from '../../../forms/InvoiceForm'
 import { FormTypes } from '../../../hooks/useClientForm'
+import ConfirmModal from '../../../modals/ConfirmModal'
 import styles from './InvoiceList.module.scss'
+import EmptyList from '../../../common/EmptyList'
 
 const InvoiceList = () => {
   const { data } = useQuery(GET_INVOICES)
@@ -58,6 +59,7 @@ const InvoiceList = () => {
 
   return (
     <ul className={styles.root}>
+      {!data?.invoices.length && <EmptyList />}
       {(data?.invoices || []).map((invoice: IInvoice, idx: number) => (
         <li className={styles.clientListItem} key={idx}>
           <div className={styles.left}>
@@ -97,13 +99,10 @@ const InvoiceList = () => {
             >
               <InvoiceForm type={FormTypes.UPDATE} initialValues={invoice} />
             </Modal>
-            <Button
-              className={styles.deleteButton}
-              link
-              onClick={onDelete(invoice?.id)}
-            >
-              <FaTrash className={styles.trashIcon} />
-            </Button>
+            <ConfirmModal
+              onConfirm={onDelete(invoice.id)}
+              title={'Are you sure you want to delete this invoice?'}
+            />
           </div>
         </li>
       ))}

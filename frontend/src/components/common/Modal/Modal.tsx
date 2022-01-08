@@ -1,5 +1,11 @@
 import classNames from 'classnames'
-import { cloneElement, PropsWithChildren, useCallback, useState } from 'react'
+import {
+  cloneElement,
+  PropsWithChildren,
+  ReactElement,
+  useCallback,
+  useState,
+} from 'react'
 import { IoClose } from 'react-icons/io5'
 import Button from '../Button'
 import styles from './Modal.module.scss'
@@ -7,8 +13,17 @@ import styles from './Modal.module.scss'
 type Props = {
   title?: string
   trigger: (onOpen: () => void) => JSX.Element
+  classes?: Record<string, string>
+  children?:
+    | (({ onClose }: { onClose: () => void }) => JSX.Element)
+    | JSX.Element
 }
-const Modal = ({ trigger, children, title }: PropsWithChildren<Props>) => {
+const Modal = ({
+  trigger,
+  children,
+  title,
+  classes,
+}: PropsWithChildren<Props>) => {
   const [opened, setOpened] = useState(false)
   const [removed, setRemoved] = useState(true)
   const onOpen = useCallback(() => {
@@ -31,7 +46,7 @@ const Modal = ({ trigger, children, title }: PropsWithChildren<Props>) => {
           { [styles.removed]: removed }
         )}
       >
-        <div className={styles.content}>
+        <div className={classNames(styles.content, classes?.content)}>
           <div
             className={classNames(styles.header, {
               [styles.headerWithTitle]: title,
@@ -42,8 +57,10 @@ const Modal = ({ trigger, children, title }: PropsWithChildren<Props>) => {
               <IoClose />
             </Button>
           </div>
-          {/*@ts-ignore*/}
-          {!removed && cloneElement(children, { onCloseModal: onClose })}
+          {typeof children === 'function'
+            ? !removed && children && children({ onClose })
+            : !removed &&
+              cloneElement(children as ReactElement, { onCloseModal: onClose })}
         </div>
       </div>
     </div>
