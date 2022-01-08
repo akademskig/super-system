@@ -1,0 +1,32 @@
+@import '../../../../../styles/variables.scss';
+
+.clientListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $padding-l;
+  box-shadow: $box-shadow-sm;
+  display: flex;
+}
+.left {
+  display: flex;
+  align-items: center;
+}
+.buildingIcon {
+  font-size: 1.2rem;
+  color: $primary-light;
+  margin-right: 1rem;
+}
+.deleteButton {
+  border-radius: 50%;
+}
+.right {
+  display: flex;
+  align-items: center;
+  & > :nth-child(n) {
+    margin-right: 0.5rem;
+  }
+  & > :last-child {
+    margin-right: 0;
+  }
+}

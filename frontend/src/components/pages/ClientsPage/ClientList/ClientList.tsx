@@ -38,7 +38,7 @@ const ClientList = () => {
   return (
     <ul className={styles.root}>
       {loading && <Loader />}
-      {!data?.clients.length && <EmptyList />}
+      {!data?.clients.length && !loading && <EmptyList />}
       {(data?.clients || []).map((client: IClient, idx: number) => (
         <li className={styles.clientListItem} key={idx}>
           <div className={styles.left}>

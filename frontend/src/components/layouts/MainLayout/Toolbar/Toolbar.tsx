@@ -4,6 +4,7 @@ import {
   FaSignInAlt,
   FaSignOutAlt,
   FaUserAstronaut,
+  FaUserCog,
 } from 'react-icons/fa'
 import Button from '../../../common/Button'
 import MenuButton from '../../../common/MenuButton'
@@ -12,6 +13,7 @@ import LocaleControl from '../../../widgets/LocaleControl'
 import { useIntl } from 'react-intl'
 import styles from './Toolbar.module.scss'
 import messages from '../../../../lang/messages.lang'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   onMobileOpen: () => void
@@ -20,15 +22,21 @@ type Props = {
 const Toolbar = ({ onMobileOpen, onTabletOpen }: Props) => {
   const { logout, isAuth, user } = useAuth()
   const { formatMessage } = useIntl()
+  const navigate = useNavigate()
   const isAuthOptions = useMemo(
     () => [
+      {
+        label: formatMessage(messages.userSettings),
+        icon: <FaUserCog />,
+        action: () => navigate('/user-settings'),
+      },
       {
         label: formatMessage(messages.logout),
         icon: <FaSignOutAlt />,
         action: logout,
       },
     ],
-    [formatMessage, logout]
+    [formatMessage, logout, navigate]
   )
 
   const notAuthOptions = useMemo(

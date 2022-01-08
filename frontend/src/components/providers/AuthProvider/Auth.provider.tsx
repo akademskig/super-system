@@ -67,7 +67,7 @@ export const AuthCtx = createContext<IAuthProviderContextValue>(
 
 export default function AuthProvider({ children }: IAuthProvider): JSX.Element {
   const [user, setUser] = useState<TUser | null>(null)
-  const [isAuth, setIsAuth] = useState(false)
+  const [isAuth, setIsAuth] = useState(hasToken())
 
   const setAuthData = useCallback((authData) => {
     const { user, accessToken } = authData
@@ -94,6 +94,8 @@ export default function AuthProvider({ children }: IAuthProvider): JSX.Element {
   useEffect(() => {
     if (hasToken()) {
       setIsAuth(true)
+    } else {
+      setIsAuth(false)
     }
   }, [])
 

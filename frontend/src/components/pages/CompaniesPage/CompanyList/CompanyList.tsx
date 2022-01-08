@@ -44,7 +44,7 @@ const CompanyList = () => {
   return (
     <ul className={styles.root}>
       {loading && <Loader />}
-      {!data?.companies.length && <EmptyList />}
+      {!data?.companies.length && !loading && <EmptyList />}
       {(data?.companies || []).map(
         (company: ICompanyInvoiceSettings, idx: number) => (
           <li className={styles.clientListItem} key={idx}>
@@ -107,7 +107,9 @@ const CompanyList = () => {
               </Modal>
               <ConfirmModal
                 onConfirm={onDelete(company.id)}
-                title={formatMessage(companiesPageMessages.deleteCompanyConfirm)}
+                title={formatMessage(
+                  companiesPageMessages.deleteCompanyConfirm
+                )}
               />
             </div>
           </li>
