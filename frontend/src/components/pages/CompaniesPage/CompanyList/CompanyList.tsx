@@ -18,10 +18,12 @@ import { FormTypes } from '../../../hooks/useClientForm'
 import ConfirmModal from '../../../modals/ConfirmModal'
 import styles from './CompanyList.module.scss'
 import EmptyList from '../../../common/EmptyList'
+import { companiesPageMessages } from '../../../../lang/messages.lang'
+import { useIntl } from 'react-intl'
 
 const CompanyList = () => {
   const { data, loading } = useQuery(GET_COMPANIES)
-
+  const { formatMessage } = useIntl()
   const [deleteCompany] = useMutation(REMOVE_COMPANY, {
     errorPolicy: 'all',
     update(cache, { data }) {
@@ -52,13 +54,13 @@ const CompanyList = () => {
             </div>
             <div className={styles.right}>
               <Modal
-                title={'Add clients'}
+                title={formatMessage(companiesPageMessages.addClients)}
                 trigger={(onOpen) => (
                   <Button
                     className={styles.deleteButton}
                     link
                     onClick={onOpen}
-                    title="Add clients"
+                    title={formatMessage(companiesPageMessages.addClients)}
                   >
                     <FaUserCog className={styles.trashIcon} />
                   </Button>
@@ -73,13 +75,13 @@ const CompanyList = () => {
                 />
               </Modal>
               <Modal
-                title={'Invoice settings'}
+                title={formatMessage(companiesPageMessages.invoiceSettings)}
                 trigger={(onOpen) => (
                   <Button
                     className={styles.deleteButton}
                     link
                     onClick={onOpen}
-                    title="Invoice settings"
+                    title={formatMessage(companiesPageMessages.invoiceSettings)}
                   >
                     <FaFileInvoice className={styles.trashIcon} />
                   </Button>
@@ -94,7 +96,7 @@ const CompanyList = () => {
                 />
               </Modal>
               <Modal
-                title={'Edit Company'}
+                title={formatMessage(companiesPageMessages.editCompany)}
                 trigger={(onOpen) => (
                   <Button className={styles.deleteButton} link onClick={onOpen}>
                     <FaPencilAlt className={styles.trashIcon} />

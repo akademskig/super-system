@@ -17,6 +17,11 @@ import getSchemaFields from '../../../utils/getSchemaFields'
 import styles from './CompanyForm.module.scss'
 import { ClipLoader } from 'react-spinners'
 import UploadFile from '../../common/UploadFile'
+import {
+  commonMessages,
+  companyFormMessages,
+} from '../../../lang/messages.lang'
+import { useIntl } from 'react-intl'
 
 const rows = companyFormFields.map((field) => field.row)
 
@@ -43,7 +48,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
     },
   })
   const { onSubmit, error, loading } = useCompanyForm(type)
-
+  const { formatMessage } = useIntl()
   const submitHandler = useCallback(
     async (values) => {
       const res = await onSubmit(values)
@@ -68,7 +73,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
         onSubmit={handleSubmit(submitHandler)}
       >
         <div className="row">
-          <p>Marked fields (*) are required</p>
+          <p>{formatMessage(commonMessages.requiredNote)}</p>
         </div>
         {uniq(rows)
           .sort()
@@ -92,7 +97,11 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
                         (fieldType === 'iban' &&
                           errors[id as keyof ICompany]?.type === 'matches'),
                     }}
-                    label={label}
+                    label={formatMessage(
+                      companyFormMessages[
+                        id as keyof typeof companyFormMessages
+                      ]
+                    )}
                     {...register(id as keyof ICompany)}
                     error={errors[id as keyof ICompany]}
                     type={fieldType || 'text'}
@@ -103,7 +112,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
         <div className="row">
           <div className="col-lg-6">
             <UploadFile
-              label={'Upload Logo'}
+              label={formatMessage(companyFormMessages.uploadLogo)}
               value={watch('logoFile')}
               logoUrl={watch('logoUrl')}
               {...register('logoFile' as keyof ICompany)}
@@ -111,7 +120,11 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
           </div>
         </div>
         <Button className={styles.button} type="submit">
-          {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
+          {loading ? (
+            <ClipLoader size={25} color="white" />
+          ) : (
+            formatMessage(commonMessages.save)
+          )}
         </Button>
       </form>
     </div>

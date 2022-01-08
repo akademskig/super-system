@@ -6,16 +6,20 @@ import Modal from '../../common/Modal'
 import ClientList from './ClientList'
 import { FormTypes } from '../../hooks/useClientForm'
 import ClientForm from '../../forms/ClientForm'
+import { useIntl } from 'react-intl'
+import { clientsPageMessages } from '../../../lang/messages.lang'
 
 const ClientsPage = () => {
+  const { formatMessage } = useIntl()
   return (
     <PagesLayout>
       <div className={styles.root}>
         <Modal
-          title={'Add new client'}
+          title={formatMessage(clientsPageMessages.newClient)}
           trigger={(onOpen) => (
             <Button className={styles.button} onClick={onOpen}>
-              <FaPlus /> <span>New Client</span>
+              <FaPlus />{' '}
+              <span>{formatMessage(clientsPageMessages.newClient)}</span>
             </Button>
           )}
         >

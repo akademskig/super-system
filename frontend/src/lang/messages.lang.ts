@@ -13,7 +13,12 @@ export const commonMessages = defineMessages({
     id: 'common.save',
     defaultMessage: 'Save',
   },
+  requiredNote: {
+    id: 'common.requiredNote',
+    defaultMessage: 'Marked fields (*) are required',
+  },
 })
+
 export const invoicePageMessages = defineMessages({
   newInvoice: {
     id: 'InvoiceList.newInvoice',
@@ -26,6 +31,42 @@ export const invoicePageMessages = defineMessages({
   deleteInvoiceConfirm: {
     id: 'InvoiceList.deleteInvoiceConfirm',
     defaultMessage: 'Are you sure you want to delete this invoice?',
+  },
+})
+export const clientsPageMessages = defineMessages({
+  newClient: {
+    id: 'ClientList.newClient',
+    defaultMessage: 'New client',
+  },
+  editClient: {
+    id: 'ClientList.editClient',
+    defaultMessage: 'Edit Client',
+  },
+  deleteClientConfirm: {
+    id: 'ClientList.deleteClientConfirm',
+    defaultMessage: 'Are you sure you want to delete this client?',
+  },
+})
+export const companiesPageMessages = defineMessages({
+  newCompany: {
+    id: 'CompanyList.newCompany',
+    defaultMessage: 'New Client',
+  },
+  editCompany: {
+    id: 'CompanyList.editCompany',
+    defaultMessage: 'Edit Company',
+  },
+  deleteCompanyConfirm: {
+    id: 'CompanyList.deleteCompanyConfirm',
+    defaultMessage: 'Are you sure you want to delete this company?',
+  },
+  addClients: {
+    id: 'CompanyList.addClients',
+    defaultMessage: 'Add clients',
+  },
+  invoiceSettings: {
+    id: 'CompanyList.invoiceSettings',
+    defaultMessage: 'Invoice settings',
   },
 })
 export const invoiceFormMessages = defineMessages({
@@ -110,7 +151,74 @@ export const invoiceFormMessages = defineMessages({
     defaultMessage: 'Currency',
   },
 })
-
+export const clientFormMessages = defineMessages({
+  name: {
+    id: 'ClientForm.name',
+    defaultMessage: 'Name',
+  },
+  vatId: {
+    id: 'ClientForm.vatId',
+    defaultMessage: 'VAT ID',
+  },
+  street: {
+    id: 'ClientForm.street',
+    defaultMessage: 'Street',
+  },
+  city: {
+    id: 'ClientForm.city',
+    defaultMessage: 'City',
+  },
+  zipCode: {
+    id: 'ClientForm.zipCode',
+    defaultMessage: 'Zip Code',
+  },
+  country: {
+    id: 'ClientForm.country',
+    defaultMessage: 'Country',
+  },
+})
+export const companyFormMessages = defineMessages({
+  name: {
+    id: 'CompanyForm.name',
+    defaultMessage: 'Name',
+  },
+  vatId: {
+    id: 'CompanyForm.vatId',
+    defaultMessage: 'VAT ID',
+  },
+  street: {
+    id: 'CompanyForm.street',
+    defaultMessage: 'Street',
+  },
+  city: {
+    id: 'CompanyForm.city',
+    defaultMessage: 'City',
+  },
+  zipCode: {
+    id: 'CompanyForm.zipCode',
+    defaultMessage: 'Zip Code',
+  },
+  country: {
+    id: 'CompanyForm.country',
+    defaultMessage: 'Country',
+  },
+  email: {
+    id: 'CompanyForm.email',
+    defaultMessage: 'Email',
+  },
+  phoneNumber: {
+    id: 'CompanyForm.phoneNumber',
+    defaultMessage: 'Phone number',
+  },
+  iban: {
+    id: 'CompanyForm.iban',
+    defaultMessage: 'IBAN',
+  },
+  uploadLogo: {
+    id: 'CompanyForm.uploadLogo',
+    defaultMessage: 'Upload Logo',
+  },
+})
 export default defineMessages({
   dashboard: {
     id: 'Sidebar.dashboard',

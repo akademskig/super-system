@@ -1,7 +1,9 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useCallback } from 'react'
 import { FaBuilding, FaPencilAlt } from 'react-icons/fa'
+import { useIntl } from 'react-intl'
 import { GET_CLIENTS, REMOVE_CLIENT } from '../../../../apollo/api/clients'
+import { clientsPageMessages } from '../../../../lang/messages.lang'
 import { IClient } from '../../../../types/clients.type'
 import Button from '../../../common/Button'
 import EmptyList from '../../../common/EmptyList'
@@ -14,6 +16,7 @@ import styles from './ClientList.module.scss'
 
 const ClientList = () => {
   const { data, loading } = useQuery(GET_CLIENTS)
+  const { formatMessage } = useIntl()
 
   const [deleteClient] = useMutation(REMOVE_CLIENT, {
     errorPolicy: 'all',
@@ -44,7 +47,7 @@ const ClientList = () => {
           </div>
           <div className={styles.right}>
             <Modal
-              title={'Edit Client'}
+              title={formatMessage(clientsPageMessages.editClient)}
               trigger={(onOpen) => (
                 <Button className={styles.deleteButton} link onClick={onOpen}>
                   <FaPencilAlt className={styles.trashIcon} />
@@ -55,7 +58,7 @@ const ClientList = () => {
             </Modal>
             <ConfirmModal
               onConfirm={onDelete(client.id)}
-              title={'Are you sure you want to delete this client?'}
+              title={formatMessage(clientsPageMessages.deleteClientConfirm)}
             />
           </div>
         </li>

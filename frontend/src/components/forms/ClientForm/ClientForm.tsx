@@ -10,6 +10,8 @@ import getErrorMessage from '../../../utils/getErrorMessage'
 import useClientForm, { FormTypes } from '../../hooks/useClientForm'
 import { IClient } from '../../../types/clients.type'
 import { ClipLoader } from 'react-spinners'
+import { clientFormMessages, commonMessages } from '../../../lang/messages.lang'
+import { useIntl } from 'react-intl'
 
 const rows = clientFormFields.map((field) => field.row)
 
@@ -27,7 +29,7 @@ const ClientForm = ({ onCloseModal, type, initialValues }: Props) => {
     defaultValues: omit(initialValues, ['__typename']),
   })
   const { onSubmit, error, loading } = useClientForm(type)
-
+  const { formatMessage } = useIntl()
   const submitHandler = useCallback(
     async (values) => {
       const res = await onSubmit(values)
@@ -53,7 +55,7 @@ const ClientForm = ({ onCloseModal, type, initialValues }: Props) => {
         onSubmit={handleSubmit(submitHandler)}
       >
         <div className="row">
-          <p>Marked fields (*) are required</p>
+          <p>{formatMessage(commonMessages.requiredNote)}</p>
         </div>
         {uniq(rows)
           .sort()
@@ -68,7 +70,9 @@ const ClientForm = ({ onCloseModal, type, initialValues }: Props) => {
                       root: `col-lg-${width}`,
                       label: required ? styles.labelRequired : '',
                     }}
-                    label={label}
+                    label={formatMessage(
+                      clientFormMessages[id as keyof typeof clientFormMessages]
+                    )}
                     {...register(id as keyof IClient, {
                       required: required && 'This field is required',
                     })}
@@ -79,7 +83,11 @@ const ClientForm = ({ onCloseModal, type, initialValues }: Props) => {
             </div>
           ))}
         <Button className={styles.button} type="submit">
-          {loading ? <ClipLoader size={25} color="white" /> : 'Save'}
+          {loading ? (
+            <ClipLoader size={25} color="white" />
+          ) : (
+            formatMessage(commonMessages.save)
+          )}
         </Button>
       </form>
     </div>

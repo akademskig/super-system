@@ -45,15 +45,7 @@
     width: auto;
   }
 }
-.error {
-  border: 1px solid red;
-  &:focus-visible {
-    border: 1px solid red;
-  }
-  &:focus {
-    border: 1px solid red;
-  }
-}
+
 .errorMessage {
   color: red;
 }
@@ -72,6 +64,15 @@
   border-radius: 4px;
   padding: 8px;
   align-items: center;
+}
+.error {
+  border: 1px solid red;
+  &:focus-visible {
+    border: 1px solid red;
+  }
+  &:focus {
+    border: 1px solid red;
+  }
 }
 .inputAdornment {
   margin-left: 8px;

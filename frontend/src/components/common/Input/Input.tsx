@@ -61,14 +61,14 @@ const Input = (
       <label className={classNames(styles.label, classes?.label)}>
         {label}
       </label>
-      <div className={styles.inputBox}>
+      <div className={classNames(styles.inputBox, { [styles.error]: error })}>
         <input
           {...rest}
           type={type}
           ref={ref}
           name={name}
           onChange={handleChange}
-          className={classNames(styles.input, { [styles.error]: error })}
+          className={classNames(styles.input)}
         />
         {type === 'date' && <FaCalendar className={styles.calendarIcon} />}
         {type === 'datetime-local' && (
