@@ -107,7 +107,7 @@ const CompanyList = () => {
               </Modal>
               <ConfirmModal
                 onConfirm={onDelete(company.id)}
-                title={'Are you sure you want to delete this company?'}
+                title={formatMessage(companiesPageMessages.deleteCompanyConfirm)}
               />
             </div>
           </li>

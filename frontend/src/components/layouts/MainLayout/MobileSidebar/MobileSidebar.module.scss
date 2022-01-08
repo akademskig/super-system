@@ -15,6 +15,7 @@
   box-shadow: $box-shadow-bottom-right-sm;
   transition: $transtion-2;
   overflow: hidden;
+  z-index: 1;
 }
 .opened {
   width: 100%;
