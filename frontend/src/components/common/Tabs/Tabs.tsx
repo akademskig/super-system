@@ -16,11 +16,12 @@ const Tabs = ({ tabs }: Props) => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const activeTab = useMemo(
-    () => tabs.findIndex((tab) => tab.hash === location.hash),
-    [location.hash, tabs]
-  )
-  const [activeIndex, setActiveIndex] = useState(activeTab > -1 ? activeTab : 0)
+  const activeTab = useMemo(() => {
+    const activeByHash = tabs.findIndex((tab) => tab.hash === location.hash)
+    return activeByHash > -1 ? activeByHash : 0
+  }, [location.hash, tabs])
+
+  const [activeIndex, setActiveIndex] = useState(activeTab)
   const handleClick = useCallback(
     (idx) => {
       return () => {
