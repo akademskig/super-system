@@ -1,0 +1,22 @@
+@import '../../../../styles/variables.scss';
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & > :nth-child(n) {
+    margin-right: 0.5rem;
+    @media screen and(max-width: $xs) {
+      margin-right: 0;
+    }
+  }
+  & > :last-child {
+    margin-right: 0;
+  }
+  @media screen and(max-width: $xs) {
+    flex-wrap: wrap;
+  }
+}
+.deleteButton {
+  border-radius: 50%;
+}

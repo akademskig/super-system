@@ -1,0 +1,31 @@
+@import '../../../styles/variables.scss';
+
+.root {
+  padding: 1rem 0;
+  width: 100%;
+  overflow: auto;
+}
+
+.table {
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid $gray-1;
+  box-shadow: $box-shadow-sm;
+  border-radius: 4px;
+
+  tr {
+    :last-child {
+      td {
+        border-bottom: 0;
+      }
+    }
+  }
+
+  th,
+  td {
+    margin: 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid $gray-1;
+    border-right: 1px solid $gray-1;
+  }
+}

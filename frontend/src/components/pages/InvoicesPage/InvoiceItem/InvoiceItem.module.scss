@@ -11,6 +11,10 @@
 .left {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  > span {
+    white-space: nowrap;
+  }
 }
 .buildingIcon {
   font-size: 1.2rem;
@@ -23,6 +27,7 @@
 .right {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   & > :nth-child(n) {
     margin-right: 0.5rem;
   }

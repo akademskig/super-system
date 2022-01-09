@@ -5,8 +5,8 @@ import styles from './MainLayout.module.scss'
 import MobileSidebar from './MobileSidebar'
 
 const MainLayout = ({ children }: PropsWithChildren<any>) => {
-  const [mobileOpened, setMobileOpened] = useState(true)
-  const [tabletOpened, setTabletOpened] = useState(true)
+  const [mobileOpened, setMobileOpened] = useState(false)
+  const [tabletOpened, setTabletOpened] = useState(false)
   return (
     <div>
       <Toolbar

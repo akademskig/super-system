@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  & > :nth-child(n) {
+    margin-right: 0.5rem;
+  }
+  & > :last-child {
+    margin-right: 0;
+  }
+}
+.deleteButton {
+  border-radius: 50%;
+}

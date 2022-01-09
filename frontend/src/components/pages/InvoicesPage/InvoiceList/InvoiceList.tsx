@@ -4,19 +4,66 @@ import { IInvoice } from '../../../../types/invoices.type'
 import styles from './InvoiceList.module.scss'
 import EmptyList from '../../../common/EmptyList'
 import Loader from '../../../common/Loader'
-import InvoiceItem from './InvoiceItem'
+import { useMemo } from 'react'
+import { Column, useSortBy, useTable } from 'react-table'
+import moment from 'moment'
+import Table from '../../../common/Table'
+import InvoiceActions from '../InvoiceActions'
+import formatHeader from '../../../../utils/formatHeader'
+import useScreenSize from '../../../hooks/useScreenSize'
+
+const tableColumns = ['invoiceNumber', 'client', 'company', 'date']
+const tableColumnsMobile = ['invoiceNumber', 'client']
 
 const InvoiceList = () => {
   const { data, loading } = useQuery(GET_INVOICES)
+  const { width } = useScreenSize()
+  const isSmall = useMemo(() => width < 700, [width])
+
+  const { columns, tableData } = useMemo(() => {
+    const columns: Column<object>[] = Object.keys(data?.invoices?.[0] || {})
+      .filter((key) =>
+        !isSmall ? tableColumns.includes(key) : tableColumnsMobile.includes(key)
+      )
+      .map((key) => ({
+        Header: formatHeader(key),
+        accessor: key,
+      }))
+    columns.push({
+      Header: '',
+      accessor: 'actions',
+    })
+    const tableData = (data?.invoices || []).map((invoice: IInvoice) => ({
+      invoiceNumber: invoice.invoiceNumber,
+      client: <span className={styles.td}>{invoice?.client?.name}</span>,
+      ...(!isSmall
+        ? {
+            company: invoice?.company?.name,
+            date: moment(invoice?.date).format('DD/MM/YY, hh:mm:ss').toString(),
+          }
+        : {}),
+      actions: <InvoiceActions invoice={invoice} />,
+    }))
+    return {
+      columns,
+      tableData,
+    }
+  }, [data?.invoices, isSmall])
+
+  const tableInstance = useTable({ columns, data: tableData }, useSortBy)
 
   return (
-    <ul className={styles.root}>
+    <>
       {loading && <Loader />}
       {!data?.invoices.length && !loading && <EmptyList />}
-      {(data?.invoices || []).map((invoice: IInvoice, idx: number) => (
-        <InvoiceItem invoice={invoice} key={idx} />
-      ))}
-    </ul>
+      {data?.invoices?.length && (
+        <Table
+          tableInstance={tableInstance}
+          tableColumns={tableColumns}
+          Actions={InvoiceActions}
+        />
+      )}
+    </>
   )
 }
 export default InvoiceList

@@ -7,17 +7,18 @@ import {
   FaFilePdf,
   FaPencilAlt,
 } from 'react-icons/fa'
-import { GET_PDF, REMOVE_INVOICE } from '../../../../../apollo/api/invoices'
-import { IInvoice } from '../../../../../types/invoices.type'
-import Button from '../../../../common/Button'
-import Modal from '../../../../common/Modal'
-import InvoiceForm from '../../../../forms/InvoiceForm'
-import { FormTypes } from '../../../../hooks/useClientForm'
-import ConfirmModal from '../../../../modals/ConfirmModal'
+import { GET_PDF, REMOVE_INVOICE } from '../../../../apollo/api/invoices'
+import { IInvoice } from '../../../../types/invoices.type'
+import Button from '../../../common/Button'
+import Modal from '../../../common/Modal'
+import InvoiceForm from '../../../forms/InvoiceForm'
+import { FormTypes } from '../../../hooks/useClientForm'
+import ConfirmModal from '../../../modals/ConfirmModal'
 import styles from './InvoiceItem.module.scss'
 import { useIntl } from 'react-intl'
-import { invoicePageMessages } from '../../../../../lang/messages.lang'
+import { invoicePageMessages } from '../../../../lang/messages.lang'
 import { ClipLoader } from 'react-spinners'
+import classNames from 'classnames'
 
 type Props = {
   invoice: IInvoice
@@ -55,16 +56,21 @@ const InvoiceItem = ({ invoice }: Props) => {
     [getPDF]
   )
   return (
-    <li className={styles.clientListItem}>
-      <div className={styles.left}>
-        <FaBuilding className={styles.buildingIcon} />
-        <span>{invoice.client.name}</span> &nbsp; &#8226; &nbsp;
-        <span>{invoice.company.name}</span> &nbsp; &#8226; &nbsp;
-        <span>
+    <li className={classNames(styles.clientListItem, 'row')}>
+      <div className={classNames(styles.left, 'col-lg-11')}>
+        <span className={styles.clientName}>
+          <FaBuilding className={styles.buildingIcon} />
+          <span> {invoice.client.name} </span>
+        </span>
+        <span className={styles.companyName}>
+          &nbsp;&#8226;&nbsp;{invoice.company.name}{' '}
+        </span>
+        <span className={styles.date}>
+          &nbsp;&#8226;&nbsp;
           {moment(invoice?.date).format('DD/MM/YY, hh:mm:ss').toString()}
         </span>
       </div>
-      <div className={styles.right}>
+      <div className={classNames(styles.right, 'col-lg-1')}>
         <Button
           className={styles.deleteButton}
           link
