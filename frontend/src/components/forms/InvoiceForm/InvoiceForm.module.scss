@@ -84,12 +84,12 @@
 }
 .priceItem {
   display: flex;
-  justify-content: center;
-  flex-direction: column;
+  justify-content: flex-end;
   text-align: right;
   label {
     font-weight: bold;
     text-align: right;
+    margin-right: 8px;
   }
 }
 .currencySelectRoot {
@@ -120,5 +120,12 @@
   border: 1px solid $gray-3;
   &:hover {
     cursor: pointer;
+  }
+}
+.exchangeRate {
+  label {
+    font-weight: bold;
+    display: block;
+    text-align: left;
   }
 }

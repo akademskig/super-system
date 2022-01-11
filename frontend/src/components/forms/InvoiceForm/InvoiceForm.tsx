@@ -571,6 +571,42 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                                   )}
                                 </span>
                               )}
+                              {!!(watch(`items[${index}].total`) as Price)
+                                ?.tax && (
+                                <span key={`${idx}-net`}>
+                                  <div className={classNames()}>
+                                    <PriceItem
+                                      price={
+                                        (
+                                          watch(
+                                            `items[${index}].total`
+                                          ) as Price
+                                        )?.net || 0
+                                      }
+                                      currency={currency}
+                                      label={formatMessage(
+                                        invoiceFormMessages.net
+                                      )}
+                                    />
+                                  </div>
+                                  {showExchangeRates && (
+                                    <div>
+                                      (
+                                      <PriceItem
+                                        price={
+                                          (
+                                            watch(
+                                              `items[${index}].total`
+                                            ) as Price
+                                          )?.exchange?.net || 0
+                                        }
+                                        currency={baseCurrency}
+                                      />
+                                      )
+                                    </div>
+                                  )}
+                                </span>
+                              )}
                             </div>
                           )
                         }
@@ -628,7 +664,12 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
         {uniq(rowsBottom)
           .sort()
           .map((row, idx) => (
-            <div className={'row justify-content-end'} key={idx}>
+            <div className={'row justify-content-between'} key={idx}>
+              <div className={classNames(styles.exchangeRate, 'col-lg-5')}>
+                <label>Exchange rate</label>
+                <PriceItem price={1} currency={currency} /> {' = '}
+                <PriceItem price={exchangeRate} currency={baseCurrency} />
+              </div>
               {invoiceFormFields.bottom
                 .filter((field) => field.row === row)
                 .map(({ label, id, width }, idx, arr) => {
@@ -662,47 +703,72 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
             </div>
           ))}
         <div className={classNames(styles.price)}>
-          <div className="row justify-content-end align-items-start">
-            {showExchangeRates && (
-              <span className={classNames(styles.priceItem, 'col-5')}>
+          <div className={styles.invoiceItemPriceItem}>
+            <span>
+              <div>
                 <PriceItem
-                  price={exchangePrice}
-                  currency={baseCurrency}
-                  label={`In ${baseCurrency}`}
+                  price={price?.gross}
+                  currency={currency}
+                  label={formatMessage(invoiceFormMessages.totalPrice)}
                 />
                 <div>
-                  (
-                  <PriceItem price={1} currency={currency} /> {' = '}
-                  <PriceItem price={exchangeRate} currency={baseCurrency} />)
+                  {showExchangeRates && (
+                    <div>
+                      (
+                      <PriceItem
+                        price={exchangePrice}
+                        currency={baseCurrency}
+                      />
+                      )
+                    </div>
+                  )}
                 </div>
-              </span>
-            )}
-            <span className={classNames(styles.priceItem, 'col-3')}>
-              <PriceItem
-                price={price?.gross}
-                currency={currency}
-                label={formatMessage(invoiceFormMessages.totalPrice)}
-              />
+              </div>
             </span>
+            {hasTax && (
+              <>
+                {' '}
+                <span>
+                  <PriceItem
+                    price={price?.net}
+                    currency={currency}
+                    label={`Net`}
+                  />
+                  <div>
+                    {showExchangeRates && (
+                      <div>
+                        (
+                        <PriceItem
+                          price={price?.net * exchangeRate}
+                          currency={baseCurrency}
+                        />
+                        )
+                      </div>
+                    )}
+                  </div>
+                </span>
+                <span>
+                  <PriceItem
+                    price={price?.tax}
+                    currency={currency}
+                    label={formatMessage(invoiceFormMessages.tax)}
+                  />
+                  <div>
+                    {showExchangeRates && (
+                      <div>
+                        (
+                        <PriceItem
+                          price={price?.tax * exchangeRate}
+                          currency={baseCurrency}
+                        />
+                        )
+                      </div>
+                    )}
+                  </div>
+                </span>
+              </>
+            )}
           </div>
-          {hasTax && (
-            <div className="row justify-content-end">
-              <span className={classNames(styles.priceItem, 'col-3')}>
-                <PriceItem
-                  price={price?.net}
-                  currency={currency}
-                  label={`Net`}
-                />
-              </span>
-              <span className={classNames(styles.priceItem, 'col-3')}>
-                <PriceItem
-                  price={price?.tax}
-                  currency={currency}
-                  label={formatMessage(invoiceFormMessages.tax)}
-                />
-              </span>
-            </div>
-          )}
         </div>
         <Button className={styles.button} type="submit">
           {loading ? (

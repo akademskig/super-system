@@ -142,6 +142,10 @@ export const invoiceFormMessages = defineMessages({
     id: 'InvoiceForm.tax',
     defaultMessage: 'Tax',
   },
+  net: {
+    id: 'InvoiceForm.net',
+    defaultMessage: 'Net',
+  },
   totalPrice: {
     id: 'InvoiceForm.totalPrice',
     defaultMessage: 'Total price',

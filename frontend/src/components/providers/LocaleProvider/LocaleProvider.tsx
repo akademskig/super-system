@@ -15,7 +15,7 @@ export const localesDateFormats = {
   [Locales.EN]: 'MM/dd/yyyy',
 }
 const getDefaultLocale = () => {
-  return navigator.languages[0] as Locales
+  return Locales.EN
 }
 const initialValue = {
   locale: getDefaultLocale(),

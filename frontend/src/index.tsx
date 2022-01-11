@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals'
 import 'bootstrap/scss/bootstrap.scss'
 import './styles/globals.scss'
 import 'react-datepicker/dist/react-datepicker.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 ReactDOM.render(
   <React.StrictMode>

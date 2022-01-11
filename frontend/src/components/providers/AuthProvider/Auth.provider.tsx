@@ -8,7 +8,6 @@ import React, {
   useEffect,
   useCallback,
 } from 'react'
-
 interface IAuthProvider {
   children: ReactElement | ReactElement[]
 }
@@ -19,6 +18,7 @@ interface IAuthProviderContextValue {
   setAuthData: Dispatch<SetStateAction<any | null>>
   isAuth: boolean
   logout: () => void
+  checkAuth: () => boolean
 }
 
 export type TUser = {
@@ -59,6 +59,7 @@ const initialValue = {
   accessToken: '',
   setAuthData: (v: SetStateAction<any | null>) => (value: any | null) => value,
   isAuth: false,
+  checkAuth: () => false,
 }
 
 export const AuthCtx = createContext<IAuthProviderContextValue>(
@@ -91,23 +92,28 @@ export default function AuthProvider({ children }: IAuthProvider): JSX.Element {
     }
   }, [])
 
+  const checkAuth = useCallback(() => {
+    return !!hasToken()
+  }, [])
+
   useEffect(() => {
     if (hasToken()) {
       setIsAuth(true)
     } else {
       setIsAuth(false)
     }
-  }, [])
+  }, [isAuth])
 
   const ctxValue = useMemo(
     () => ({
       user,
       setAuthData,
       logout,
+      checkAuth,
       accessToken,
       isAuth,
     }),
-    [user, setAuthData, accessToken, isAuth, logout]
+    [user, setAuthData, logout, checkAuth, accessToken, isAuth]
   )
 
   return <AuthCtx.Provider value={ctxValue}>{children}</AuthCtx.Provider>
