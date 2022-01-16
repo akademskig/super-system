@@ -5,7 +5,14 @@ import styles from './InvoiceList.module.scss'
 import EmptyList from '../../../common/EmptyList'
 import Loader from '../../../common/Loader'
 import { useMemo } from 'react'
-import { Column, useSortBy, useTable } from 'react-table'
+import {
+  Column,
+  TableInstance,
+  usePagination,
+  UsePaginationInstanceProps,
+  useSortBy,
+  useTable,
+} from 'react-table'
 import moment from 'moment'
 import Table from '../../../common/Table'
 import InvoiceActions from '../InvoiceActions'
@@ -13,18 +20,21 @@ import formatHeader from '../../../../utils/formatHeader'
 import useScreenSize from '../../../hooks/useScreenSize'
 
 const tableColumns = ['invoiceNumber', 'client', 'company', 'date']
-const tableColumnsMobile = ['invoiceNumber', 'client']
+const hiddenColumnsKeys = ['company', 'date']
 
 const InvoiceList = () => {
   const { data, loading } = useQuery(GET_INVOICES)
   const { width } = useScreenSize()
   const isSmall = useMemo(() => width < 700, [width])
 
+  const hiddenColumns = useMemo(
+    () => (isSmall ? hiddenColumnsKeys : []),
+    [isSmall]
+  )
+
   const { columns, tableData } = useMemo(() => {
     const columns: Column<object>[] = Object.keys(data?.invoices?.[0] || {})
-      .filter((key) =>
-        !isSmall ? tableColumns.includes(key) : tableColumnsMobile.includes(key)
-      )
+      .filter((key) => tableColumns.includes(key))
       .map((key) => ({
         Header: formatHeader(key),
         accessor: key,
@@ -36,33 +46,26 @@ const InvoiceList = () => {
     const tableData = (data?.invoices || []).map((invoice: IInvoice) => ({
       invoiceNumber: invoice.invoiceNumber,
       client: <span className={styles.td}>{invoice?.client?.name}</span>,
-      ...(!isSmall
-        ? {
-            company: invoice?.company?.name,
-            date: moment(invoice?.date).format('DD/MM/YY, hh:mm:ss').toString(),
-          }
-        : {}),
+      company: invoice?.company?.name,
+      date: moment(invoice?.date).format('DD/MM/YY, hh:mm:ss').toString(),
       actions: <InvoiceActions invoice={invoice} />,
     }))
     return {
       columns,
       tableData,
     }
-  }, [data?.invoices, isSmall])
+  }, [data?.invoices])
 
-  const tableInstance = useTable({ columns, data: tableData }, useSortBy)
-
+  const tableInstance = useTable(
+    { columns, data: tableData, initialState: { hiddenColumns } },
+    useSortBy,
+    usePagination
+  ) as TableInstance<object> & UsePaginationInstanceProps<any>
   return (
     <>
       {loading && <Loader />}
       {!data?.invoices.length && !loading && <EmptyList />}
-      {data?.invoices?.length && (
-        <Table
-          tableInstance={tableInstance}
-          tableColumns={tableColumns}
-          Actions={InvoiceActions}
-        />
-      )}
+      {data?.invoices?.length && <Table tableInstance={tableInstance} />}
     </>
   )
 }

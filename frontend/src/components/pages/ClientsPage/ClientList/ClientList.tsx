@@ -36,34 +36,36 @@ const ClientList = () => {
     [deleteClient]
   )
   return (
-    <ul className={styles.root}>
+    <>
       {loading && <Loader />}
       {!data?.clients.length && !loading && <EmptyList />}
-      {(data?.clients || []).map((client: IClient, idx: number) => (
-        <li className={styles.clientListItem} key={idx}>
-          <div className={styles.left}>
-            <FaBuilding className={styles.buildingIcon} />
-            <span>{client?.name}</span>
-          </div>
-          <div className={styles.right}>
-            <Modal
-              title={formatMessage(clientsPageMessages.editClient)}
-              trigger={(onOpen) => (
-                <Button className={styles.deleteButton} link onClick={onOpen}>
-                  <FaPencilAlt className={styles.trashIcon} />
-                </Button>
-              )}
-            >
-              <ClientForm type={FormTypes.UPDATE} initialValues={client} />
-            </Modal>
-            <ConfirmModal
-              onConfirm={onDelete(client.id)}
-              title={formatMessage(clientsPageMessages.deleteClientConfirm)}
-            />
-          </div>
-        </li>
-      ))}
-    </ul>
+      <ul className={styles.root}>
+        {(data?.clients || []).map((client: IClient, idx: number) => (
+          <li className={styles.clientListItem} key={idx}>
+            <div className={styles.left}>
+              <FaBuilding className={styles.buildingIcon} />
+              <span>{client?.name}</span>
+            </div>
+            <div className={styles.right}>
+              <Modal
+                title={formatMessage(clientsPageMessages.editClient)}
+                trigger={(onOpen) => (
+                  <Button className={styles.deleteButton} link onClick={onOpen}>
+                    <FaPencilAlt className={styles.trashIcon} />
+                  </Button>
+                )}
+              >
+                <ClientForm type={FormTypes.UPDATE} initialValues={client} />
+              </Modal>
+              <ConfirmModal
+                onConfirm={onDelete(client.id)}
+                title={formatMessage(clientsPageMessages.deleteClientConfirm)}
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }
 export default ClientList

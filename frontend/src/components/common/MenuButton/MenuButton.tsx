@@ -54,6 +54,7 @@ const MenuButton = ({
   return (
     <div className={classNames(styles.root, classes?.root)}>
       <Button
+        link
         type="button"
         className={classNames(classes?.menuButton)}
         onClick={onOpen}

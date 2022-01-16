@@ -42,80 +42,91 @@ const CompanyList = () => {
     [deleteCompany]
   )
   return (
-    <ul className={styles.root}>
+    <>
       {loading && <Loader />}
       {!data?.companies.length && !loading && <EmptyList />}
-      {(data?.companies || []).map(
-        (company: ICompanyInvoiceSettings, idx: number) => (
-          <li className={styles.clientListItem} key={idx}>
-            <div className={styles.left}>
-              <FaBuilding className={styles.buildingIcon} />
-              <span>{company?.name}</span>
-            </div>
-            <div className={styles.right}>
-              <Modal
-                title={formatMessage(companiesPageMessages.addClients)}
-                trigger={(onOpen) => (
-                  <Button
-                    className={styles.deleteButton}
-                    link
-                    onClick={onOpen}
-                    title={formatMessage(companiesPageMessages.addClients)}
-                  >
-                    <FaUserCog className={styles.trashIcon} />
-                  </Button>
-                )}
-              >
-                <AddClientForm
-                  type={FormTypes.UPDATE}
-                  initialValues={{
-                    id: company.id,
-                    clients: company.clients,
-                  }}
+      <ul className={styles.root}>
+        {(data?.companies || []).map(
+          (company: ICompanyInvoiceSettings, idx: number) => (
+            <li className={styles.clientListItem} key={idx}>
+              <div className={styles.left}>
+                <FaBuilding className={styles.buildingIcon} />
+                <span>{company?.name}</span>
+              </div>
+              <div className={styles.right}>
+                <Modal
+                  title={formatMessage(companiesPageMessages.addClients)}
+                  trigger={(onOpen) => (
+                    <Button
+                      className={styles.deleteButton}
+                      link
+                      onClick={onOpen}
+                      title={formatMessage(companiesPageMessages.addClients)}
+                    >
+                      <FaUserCog className={styles.trashIcon} />
+                    </Button>
+                  )}
+                >
+                  <AddClientForm
+                    type={FormTypes.UPDATE}
+                    initialValues={{
+                      id: company.id,
+                      clients: company.clients,
+                    }}
+                  />
+                </Modal>
+                <Modal
+                  title={formatMessage(companiesPageMessages.invoiceSettings)}
+                  trigger={(onOpen) => (
+                    <Button
+                      className={styles.deleteButton}
+                      link
+                      onClick={onOpen}
+                      title={formatMessage(
+                        companiesPageMessages.invoiceSettings
+                      )}
+                    >
+                      <FaFileInvoice className={styles.trashIcon} />
+                    </Button>
+                  )}
+                >
+                  <InvoiceSettingsForm
+                    type={FormTypes.UPDATE}
+                    initialValues={{
+                      id: company.id,
+                      invoiceSettings: company.invoiceSettings,
+                    }}
+                  />
+                </Modal>
+                <Modal
+                  title={formatMessage(companiesPageMessages.editCompany)}
+                  trigger={(onOpen) => (
+                    <Button
+                      className={styles.deleteButton}
+                      link
+                      onClick={onOpen}
+                    >
+                      <FaPencilAlt className={styles.trashIcon} />
+                    </Button>
+                  )}
+                >
+                  <CompanyForm
+                    type={FormTypes.UPDATE}
+                    initialValues={company}
+                  />
+                </Modal>
+                <ConfirmModal
+                  onConfirm={onDelete(company.id)}
+                  title={formatMessage(
+                    companiesPageMessages.deleteCompanyConfirm
+                  )}
                 />
-              </Modal>
-              <Modal
-                title={formatMessage(companiesPageMessages.invoiceSettings)}
-                trigger={(onOpen) => (
-                  <Button
-                    className={styles.deleteButton}
-                    link
-                    onClick={onOpen}
-                    title={formatMessage(companiesPageMessages.invoiceSettings)}
-                  >
-                    <FaFileInvoice className={styles.trashIcon} />
-                  </Button>
-                )}
-              >
-                <InvoiceSettingsForm
-                  type={FormTypes.UPDATE}
-                  initialValues={{
-                    id: company.id,
-                    invoiceSettings: company.invoiceSettings,
-                  }}
-                />
-              </Modal>
-              <Modal
-                title={formatMessage(companiesPageMessages.editCompany)}
-                trigger={(onOpen) => (
-                  <Button className={styles.deleteButton} link onClick={onOpen}>
-                    <FaPencilAlt className={styles.trashIcon} />
-                  </Button>
-                )}
-              >
-                <CompanyForm type={FormTypes.UPDATE} initialValues={company} />
-              </Modal>
-              <ConfirmModal
-                onConfirm={onDelete(company.id)}
-                title={formatMessage(
-                  companiesPageMessages.deleteCompanyConfirm
-                )}
-              />
-            </div>
-          </li>
-        )
-      )}
-    </ul>
+              </div>
+            </li>
+          )
+        )}
+      </ul>
+    </>
   )
 }
 export default CompanyList

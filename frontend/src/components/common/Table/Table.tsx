@@ -1,18 +1,42 @@
-import { ReactElement } from 'react'
-import { TableInstance } from 'react-table'
+/* @ts-nocheck */
+import { useEffect } from 'react'
+import { TableInstance, UsePaginationInstanceProps } from 'react-table'
+import Pagination from './Pagination'
 import styles from './Table.module.scss'
 
 type Props = {
-  tableInstance: TableInstance<object>
-  tableColumns: string[]
-  Actions?: (data: any) => ReactElement
+  tableInstance: UsePaginationInstanceProps<any> & TableInstance<object>
+  withPagination?: boolean
 }
 
-const Table = ({ tableInstance }: Props) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance
+const Table = ({ tableInstance, withPagination }: Props) => {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    columns,
+    initialState,
+    toggleHideColumn,
+    ...paginationProps
+  } = tableInstance
+
+  console.log(paginationProps)
+  useEffect(() => {
+    const columnKeys = columns.map((c) => c.id)
+    ;(columnKeys || []).map((hc) => {
+      if ((initialState?.hiddenColumns || []).includes(hc)) {
+        return toggleHideColumn(hc, true)
+      } else {
+        return toggleHideColumn(hc, false)
+      }
+    })
+  }, [columns, initialState?.hiddenColumns, toggleHideColumn])
+
   return (
     <div className={styles.root}>
+      <Pagination paginationProps={{ ...paginationProps, page }} />
       <table className={styles.table} {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -27,7 +51,7 @@ const Table = ({ tableInstance }: Props) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
+          {page.map((row) => {
             prepareRow(row)
             return (
               <tr {...row.getRowProps()}>
