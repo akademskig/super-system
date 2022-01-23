@@ -22,7 +22,6 @@ const Table = ({ tableInstance, withPagination }: Props) => {
     ...paginationProps
   } = tableInstance
 
-  console.log(paginationProps)
   useEffect(() => {
     const columnKeys = columns.map((c) => c.id)
     ;(columnKeys || []).map((hc) => {

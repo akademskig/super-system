@@ -24,7 +24,6 @@ export class InvoicesService {
     @InjectRepository(Client)
     private readonly clientRepo: Repository<Client>,
     private readonly pdfService: PDFService,
-    private readonly httpService: HttpService,
   ) {}
   async create(
     createInvoiceInput: CreateInvoiceInput & {

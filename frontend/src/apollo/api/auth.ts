@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { USER_FRAGMENT } from './user'
 
 const AUTH_FRAGMENT = gql`
   fragment AuthFragment on Auth {
@@ -8,11 +9,7 @@ const AUTH_FRAGMENT = gql`
     accessToken
   }
 `
-const USER_FRAGMENT = gql`
-  fragment UserFragment on User {
-    username
-  }
-`
+
 export const SIGN_IN = gql`
   mutation signIn($input: SignInInput!) {
     signIn(signInInput: $input) {
