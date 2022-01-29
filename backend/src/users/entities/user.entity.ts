@@ -45,7 +45,6 @@ export class User {
   email: string;
 
   @Field(() => String, { nullable: true })
-  @IsEmail()
   @Column({ type: 'text', nullable: true })
   fullName: string;
 

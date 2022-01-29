@@ -1,3 +1,9 @@
+@import '../../../styles/variables.scss';
+
 .root {
   max-width: 500px;
+}
+.saveBtn {
+  margin-top: $padding-l;
+  width: 100%;
 }

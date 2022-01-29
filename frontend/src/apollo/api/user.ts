@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 
 export const USER_FRAGMENT = gql`
   fragment UserFragment on User {
+    id
     username
     fullName
     password
@@ -17,8 +18,8 @@ export const GET_CURRENT_USER = gql`
   ${USER_FRAGMENT}
 `
 export const UPDATE_USER = gql`
-  mutation updateUser($input: UpdateUserInput) {
-    user(updateUserInput: $input) {
+  mutation updateUser($input: UpdateUserInput!) {
+    updateUser(updateUserInput: $input) {
       ...UserFragment
     }
   }

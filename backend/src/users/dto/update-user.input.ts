@@ -6,17 +6,20 @@ export class UpdateUserInput {
   @Field(() => String)
   id: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   username: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  fullName: string;
+
+  @Field(() => String, { nullable: true })
   password: string;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   isVerified: boolean;
 
   @IsEmail()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   email: string;
 
   constructor(userData: Partial<UpdateUserInput>) {

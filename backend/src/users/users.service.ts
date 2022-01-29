@@ -62,12 +62,13 @@ export class UsersService {
     updateUserInput: Partial<UpdateUserInput>,
     queryRunner?: QueryRunner,
   ) {
-    const user = new UpdateUserInput(updateUserInput);
-    const errors = await validate(user);
+    const user = await this.userRepo.findOne(query);
+    const newUser = { ...user, ...updateUserInput };
+    const errors = await validate(newUser);
     if (errors.length) {
       throw new ValidationErrors(errors);
     }
-    const { id: _extractedId, ...userValues } = user;
+    const { id: _extractedId, ...userValues } = newUser;
     if (queryRunner) {
       await queryRunner.manager.update('user', query, userValues);
     } else {
