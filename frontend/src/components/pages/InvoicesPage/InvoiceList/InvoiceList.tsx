@@ -64,8 +64,10 @@ const InvoiceList = () => {
   return (
     <>
       {loading && <Loader />}
-      {!data?.invoices.length && !loading && <EmptyList />}
-      {data?.invoices?.length && <Table tableInstance={tableInstance} />}
+      {!Boolean(data?.invoices.length) && !loading && <EmptyList />}
+      {Boolean(data?.invoices?.length) && (
+        <Table tableInstance={tableInstance} />
+      )}
     </>
   )
 }

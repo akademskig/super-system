@@ -9,9 +9,9 @@ export const dbConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5432,
-  username: 'dbadmin',
-  password: 'dbadmin#123',
-  database: 'dbex',
+  username: 'postgres',
+  password: 'postgres',
+  database: 'invoicemaker',
   entities: [User, VerificationToken, Client, Company, Invoice],
   synchronize: true,
 };

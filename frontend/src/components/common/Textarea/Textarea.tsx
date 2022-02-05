@@ -84,7 +84,9 @@ const Textarea = (
   }, [autoExpand, autoResize, inputRef, value])
   // set default value
   useEffect(() => {
-    !value && handleChange({ target: { value: defaultValue, name } })
+    !value &&
+      defaultValue &&
+      handleChange({ target: { value: defaultValue, name } })
   }, [defaultValue, handleChange, name, value])
 
   return (

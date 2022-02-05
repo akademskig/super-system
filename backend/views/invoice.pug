@@ -161,7 +161,7 @@ body
       tr 
         td
           div.title Operator
-          div #{invoice.user.username}
+          div #{invoice.user.fullName || invoice.user.username}
       tr 
         td
           div.title Notes

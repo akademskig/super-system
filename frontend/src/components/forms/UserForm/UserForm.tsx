@@ -28,14 +28,13 @@ const UserForm = () => {
       })
     },
   })
-  const { register, handleSubmit } = useForm({
-    defaultValues: omit(userData?.user, ['__typename', 'password']),
-  })
+
+  const { register, handleSubmit } = useForm()
 
   const onSubmit = useCallback(
     async (data) => {
       await updateUser({
-        variables: { input: { ...data, ...{ id: userData?.user?.id } } },
+        variables: { input: { ...data, id: userData?.user?.id } },
       })
     },
     [updateUser, userData]
@@ -46,9 +45,22 @@ const UserForm = () => {
         className={classNames(styles.form)}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Input label={'Username'} {...register('username')} />
-        <Input label={'Email'} type="email" {...register('email')} />
-        <Input label={'Full name'} {...register('fullName')} />
+        <Input
+          label={'Username'}
+          {...register('username')}
+          defaultValue={userData?.user?.username}
+        />
+        <Input
+          label={'Email'}
+          type="email"
+          {...register('email')}
+          defaultValue={userData?.user?.email}
+        />
+        <Input
+          label={'Full name'}
+          {...register('fullName')}
+          defaultValue={userData?.user?.fullName}
+        />
         <Button className={styles.saveBtn}>Save</Button>
       </form>
     </div>

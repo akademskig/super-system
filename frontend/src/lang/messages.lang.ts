@@ -50,7 +50,7 @@ export const clientsPageMessages = defineMessages({
 export const companiesPageMessages = defineMessages({
   newCompany: {
     id: 'CompanyList.newCompany',
-    defaultMessage: 'New Client',
+    defaultMessage: 'New Company',
   },
   editCompany: {
     id: 'CompanyList.editCompany',

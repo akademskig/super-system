@@ -676,7 +676,6 @@ const InvoiceForm = ({ type, onCloseModal, initialValues }: Props) => {
                   if (id === 'currency') {
                     return (
                       <CurrencySelect
-                        setDefault
                         watch={onWatchCurrency}
                         defaultValue={baseCurrency}
                         label={formatMessage(

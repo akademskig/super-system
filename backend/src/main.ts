@@ -11,7 +11,7 @@ async function bootstrap() {
   app.enableCors();
   app.use(cookieParser());
   app.use(graphqlUploadExpress());
-  const port = config().parsed['APP_PORT'];
+  const port = config().parsed['PORT'];
   await app.listen(port);
 }
 bootstrap();
