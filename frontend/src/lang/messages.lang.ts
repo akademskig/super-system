@@ -212,7 +212,7 @@ export const companyFormMessages = defineMessages({
   },
   phoneNumber: {
     id: 'CompanyForm.phoneNumber',
-    defaultMessage: 'Phone number',
+    defaultMessage: 'Phone number (+385...)',
   },
   iban: {
     id: 'CompanyForm.iban',

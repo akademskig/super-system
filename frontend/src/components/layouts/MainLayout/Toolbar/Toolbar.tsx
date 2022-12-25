@@ -14,13 +14,18 @@ import { useIntl } from 'react-intl'
 import styles from './Toolbar.module.scss'
 import messages from '../../../../lang/messages.lang'
 import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+import { GET_CURRENT_USER } from '../../../../apollo/api/user'
 
 type Props = {
   onMobileOpen: () => void
   onTabletOpen: () => void
 }
 const Toolbar = ({ onMobileOpen, onTabletOpen }: Props) => {
-  const { logout, isAuth, user } = useAuth()
+  const { logout, isAuth } = useAuth()
+  const { data: userData } = useQuery(GET_CURRENT_USER)
+  const user = userData?.user
+
   const { formatMessage } = useIntl()
   const navigate = useNavigate()
   const isAuthOptions = useMemo(

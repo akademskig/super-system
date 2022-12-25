@@ -56,6 +56,7 @@ const Input = (
     },
     [name, onChange, type, watch]
   )
+
   return (
     <div className={classNames(styles.root, classes?.root)}>
       <label className={classNames(styles.label, classes?.label)}>

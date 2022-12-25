@@ -1,6 +1,10 @@
 import * as yup from 'yup'
-import { ibanRegex, phoneRegExpNotRequired } from '../config/fieldRegex'
+import { ibanRegex } from './fieldRegex'
+import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
+// yup.addMethod(yup.string, 'isPhoneNumber', (errorMsg) => {
+
+// })
 const getSchemaFields = (formFields: any[]) => {
   const schemaFields = formFields.reduce((acc, curr) => {
     let field: yup.AnySchema = yup.string()
@@ -10,7 +14,13 @@ const getSchemaFields = (formFields: any[]) => {
     if (curr.fieldType === 'phone') {
       field = yup
         .string()
-        .matches(phoneRegExpNotRequired, 'Phone number is not valid')
+        .test('isPhoneNumber', 'Phone number is not valid', (value) => {
+          if (!value) {
+            return true
+          } else {
+            return !!parsePhoneNumberFromString(value)?.isValid()
+          }
+        })
     }
     if (curr.fieldType === 'number') {
       field = yup.number()
