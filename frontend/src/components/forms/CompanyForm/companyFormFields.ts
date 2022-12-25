@@ -50,7 +50,7 @@ const companyFormFields = [
     fieldType: 'email',
   },
   {
-    label: 'Phone number',
+    label: 'Phone number (+385...)',
     id: 'phoneNumber',
     fieldType: 'phone',
     row: 4,

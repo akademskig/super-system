@@ -48,6 +48,7 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
     },
   })
   const { onSubmit, error, loading } = useCompanyForm(type)
+
   const { formatMessage } = useIntl()
   const submitHandler = useCallback(
     async (values) => {
@@ -93,7 +94,8 @@ const CompanyForm = ({ onCloseModal, type, initialValues }: Props) => {
                         (fieldType === 'email' &&
                           errors[id as keyof ICompany]?.type === 'email') ||
                         (fieldType === 'phone' &&
-                          errors[id as keyof ICompany]?.type === 'matches') ||
+                          errors[id as keyof ICompany]?.type ===
+                            'isPhoneNumber') ||
                         (fieldType === 'iban' &&
                           errors[id as keyof ICompany]?.type === 'matches'),
                     }}
