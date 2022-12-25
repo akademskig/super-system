@@ -6,6 +6,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { UseGuards } from '@nestjs/common';
 import { GQLAuthGuard } from 'src/guards/GQLAuthGuard';
 import { GetUser } from 'src/decorators/getUser';
+import { ChangePasswordInput } from './dto/change-password-input';
 
 @UseGuards(GQLAuthGuard)
 @Resolver(() => User)
@@ -43,5 +44,13 @@ export class UsersResolver {
   @Mutation(() => User)
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.remove(id);
+  }
+  @Mutation(() => User)
+  changePassword(
+    @GetUser() user,
+    @Args('changePasswordInput', { type: () => ChangePasswordInput })
+    changePasswordInput: ChangePasswordInput,
+  ) {
+    return this.usersService.updatePassword(user.id, changePasswordInput);
   }
 }

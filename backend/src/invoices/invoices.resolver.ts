@@ -1,9 +1,9 @@
-import { Resolver, Query, Mutation, Args, PartialType } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { InvoicesService } from './invoices.service';
 import { Invoice } from './entities/invoice.entity';
 import { UpdateInvoiceInput } from './dto/update-invoice.input';
 import { CreateInvoiceInput } from './dto/create-invoice.input';
-import { UploadedFile, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GQLAuthGuard } from 'src/guards/GQLAuthGuard';
 import { GetUser } from 'src/decorators/getUser';
 import { User } from 'src/users/entities/user.entity';
@@ -12,8 +12,8 @@ import { Price } from './entities/price.entity';
 import { InvoiceItemInput } from './dto/invoice-item.input';
 import { Locale } from 'src/decorators/locale';
 
-@Resolver(() => Invoice)
 @UseGuards(GQLAuthGuard)
+@Resolver(() => Invoice)
 export class InvoicesResolver {
   constructor(private readonly invoicesService: InvoicesService) {}
 

@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthUtils } from './auth.utils';
@@ -7,6 +12,8 @@ import { getConnection, createQueryBuilder } from 'typeorm';
 import { RegisterInput } from './dto/register.input';
 import { SignInInput } from './dto/signIn.input';
 import { pick } from 'lodash';
+import { User } from 'src/users/entities/user.entity';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -25,8 +32,7 @@ export class AuthService {
         hashedPassword: user.password,
       }))
     ) {
-      const { password: _pwd, ...result } = user;
-      return result;
+      return user;
     } else if (
       user &&
       !(await this.authUtils.comparePasswords({
@@ -34,15 +40,29 @@ export class AuthService {
         hashedPassword: user.password,
       }))
     ) {
-      throw new NotFoundException('Invalid username or password');
+      throw new UnauthorizedException('Invalid username or password');
     } else if (!user) {
       throw new NotFoundException("User doesn't exist!");
     }
   }
+  async validateToken(email: string, hashedPassword: string): Promise<any> {
+    const user = await this.usersService.findOne({ email });
+    if (!user) {
+      throw new NotFoundException("User doesn't exist!");
+    } else if (hashedPassword !== user.password) {
+      throw new NotFoundException('Invalid password');
+    } else return user;
+  }
 
   async signIn(user: SignInInput) {
     const dbUser = await this.validateUser(user.email, user.password);
-    const payload = pick(dbUser, ['username', 'id', 'role', 'email']);
+    const payload = pick(dbUser, [
+      'username',
+      'id',
+      'role',
+      'email',
+      'password',
+    ]);
     return {
       user: {
         ...payload,
@@ -51,7 +71,7 @@ export class AuthService {
     };
   }
 
-  async register(user: RegisterInput) {
+  async register(user: RegisterInput): Promise<Omit<User, 'password'>> {
     const connection = getConnection();
     const queryRunner = connection.createQueryRunner();
     await queryRunner.startTransaction();

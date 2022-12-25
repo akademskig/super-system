@@ -88,10 +88,11 @@ export class UsersService {
         hashedPassword: user.password,
       }))
     ) {
-      throw new UnauthorizedException('Invalid password');
+      throw new BadRequestException('Invalid password');
     }
     user.password = await this.authUtils.hashPassword(newPassword);
-    this.userRepo.update({ id }, user);
+    await this.userRepo.update({ id }, user);
+    return user;
   }
 
   remove(id: number) {

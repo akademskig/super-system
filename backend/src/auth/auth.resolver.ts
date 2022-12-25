@@ -14,8 +14,7 @@ export class AuthResolver {
   @UseGuards(GQLCustomGuard)
   @Mutation(() => Auth)
   async signIn(@Args('signInInput') signInInput: SignInInput) {
-    const res = await this.authService.signIn(signInInput);
-    return res;
+    return this.authService.signIn(signInInput);
   }
   @Mutation(() => User)
   register(@Args('registerInput') registerInput: RegisterInput) {
